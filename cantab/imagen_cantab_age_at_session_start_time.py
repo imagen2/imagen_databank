@@ -65,7 +65,7 @@ def main():
             continue
         session_start_time = session_start_times.pop()
         if session_start_time < date(2007, 1, 1):
-            logger.error('Bogus "Session start time" %s: %s'
+            logger.error('Bogus "Session start time" %s: %s',
                          session_start_time, datasheet)
             continue
         age = (session_start_time - dob).days
