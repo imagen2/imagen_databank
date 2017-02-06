@@ -99,18 +99,18 @@ WITHDRAWN_DAWBA_CODES = {
     '129500',
 }
 
-import logging
-logging.basicConfig(level=logging.INFO)
-
 import os
 from datetime import datetime
 
 # import ../imagen_databank
 import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
-from imagen_databank import PSC2_FROM_PSC1, PSC1_FROM_PSC2
+from imagen_databank import PSC1_FROM_PSC2
 from imagen_databank import PSC2_FROM_DAWBA
 from imagen_databank import DOB_FROM_PSC2
+
+import logging
+logging.basicConfig(level=logging.INFO)
 
 
 def _create_psc2_file(psc2_from_dawba, dawba_path, psc2_path):
@@ -143,8 +143,8 @@ def _create_psc2_file(psc2_from_dawba, dawba_path, psc2_path):
                 dawba = items[0]
                 if dawba in psc2_from_dawba:
                     psc2 = psc2_from_dawba[dawba]
-                    logging.info('converting subject {0} from DAWBA to PSC2'
-                                 .format(PSC1_FROM_PSC2[psc2]))
+                    logging.info('converting subject %s from DAWBA to PSC2',
+                                 PSC1_FROM_PSC2[psc2])
                     items[0] = psc2
                     # convert dates to subject age in days
                     for i in convert:
@@ -154,19 +154,20 @@ def _create_psc2_file(psc2_from_dawba, dawba_path, psc2_path):
                                                               '%d.%m.%y').date()
                                 birthdate = DOB_FROM_PSC2[psc2]
                                 age = startdate - birthdate
-                                logging.info('age of subject {0}: {1}'
-                                             .format(PSC1_FROM_PSC2[psc2], age.days))
+                                logging.info('age of subject %s: %d',
+                                             PSC1_FROM_PSC2[psc2], age.days)
                                 items[i] = str(age.days)
                             else:
                                 items[i] = ''
                     psc2_file.write('\t'.join(items))
                 else:
                     if dawba in WITHDRAWN_DAWBA_CODES:
-                        logging.info('withdrawn DAWBA code: {0}'.format(dawba))
+                        logging.info('withdrawn DAWBA code: %s', dawba)
                     elif dawba in MISSING_DAWBA1_CODES:
-                        logging.warning('missing DAWBA1 codes: {0}'.format(dawba))
+                        logging.warning('missing DAWBA1 codes: %s', dawba)
                     else:
-                        logging.error('DAWBA code missing from conversion table: {0}'.format(dawba))
+                        logging.error('DAWBA code missing from conversion table: %s',
+                                      dawba)
                     continue
 
 
