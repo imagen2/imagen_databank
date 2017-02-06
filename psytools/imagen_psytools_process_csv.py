@@ -47,7 +47,6 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 import os
-from datetime import time
 from datetime import datetime
 
 # import ../imagen_databank
@@ -99,8 +98,7 @@ def _create_psc2_file(psc2_from_psc1, psytools_path, psc2_path):
                     # Psytools files to end users, we need to remove these
                     # items sooner, before importing the data into the
                     # CubicWeb database.
-                    logging.debug('skipping line with "id_check" from {0}'
-                                  .format(psc1))
+                    logging.debug('skipping line with "id_check" from %s', psc1)
                     continue
                 # subject ID is PSC1 followed by either of:
                 #   -C  Child
@@ -119,13 +117,13 @@ def _create_psc2_file(psc2_from_psc1, psytools_path, psc2_path):
                                   .format(psc1))
                     continue
                 elif psc1 in psc2_from_psc1:
-                    logging.debug('converting subject {0} from PSC1 to PSC2'
-                                  .format(psc1))
+                    logging.debug('converting subject %s from PSC1 to PSC2',
+                                  psc1)
                     psc2 = psc2_from_psc1[psc1]
                     items[0] = '-'.join((psc2, suffix))
                 else:
-                    logging.error('PSC1 code missing from conversion table: {0}'
-                                  .format(items[0]))
+                    logging.error('PSC1 code missing from conversion table: %s',
+                                  items[0])
                     continue
                 for i in convert:
                     if psc2 is None or psc2 not in DOB_FROM_PSC2:

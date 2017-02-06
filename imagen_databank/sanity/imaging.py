@@ -36,14 +36,12 @@ try:
     from zipfile import BadZipFile
 except ImportError:
     from zipfile import BadZipfile as BadZipFile  # Python 2
-from zipfile import is_zipfile
 
 from ..core import PSC2_FROM_PSC1
 from ..core import Error
 from ..behavioral import (MID_CSV, FT_CSV, SS_CSV, RECOG_CSV)
 from ..behavioral import (read_mid, read_ft, read_ss, read_recog)
-from ..image_data import (SEQUENCE_LOCALIZER_CALIBRATION,
-                          SEQUENCE_T2, SEQUENCE_T2_FLAIR,
+from ..image_data import (SEQUENCE_T2, SEQUENCE_T2_FLAIR,
                           SEQUENCE_ADNI_MPRAGE,
                           SEQUENCE_MID, SEQUENCE_FT, SEQUENCE_SST,
                           SEQUENCE_B0_MAP, SEQUENCE_DTI,
@@ -158,7 +156,7 @@ class ZipTree:
         ziptree = ZipTree()
         with ZipFile(path, 'r') as z:
             for zipinfo in z.infolist():
-                ziptree._add(zipinfo)
+                ziptree._add(zipinfo)  # pylint: disable=W0212
         return ziptree
 
     def _add(self, zipinfo):
@@ -182,27 +180,27 @@ class ZipTree:
     def pprint(self, indent=''):
         self._print_children(indent, True)
 
-    def _print_children(self, indent='', last=True):
+    def _print_children(self, indent=''):
         directories = list(self.directories.items())
         if directories:
             last_directory = directories.pop()
             for d, ziptree in directories:
-                ziptree._print(d, indent, False)
+                ziptree._print(d, indent, False)  # pylint: disable=W0212
         else:
             last_directory = None
         files = list(self.files.items())
         if files:
             if last_directory:
                 d, ziptree = last_directory
-                ziptree._print(d, indent, False)
+                ziptree._print(d, indent, False)  # pylint: disable=W0212
             last_file = files.pop()
-            for f, zipinfo in files:
+            for f, zipinfo in files:  # pylint: disable=unused-variable
                 print(indent + '├── ' + f)
             f, zipinfo = last_file
             print(indent + '└── ' + f)
         elif last_directory:
             d, ziptree = last_directory
-            ziptree._print(d, indent, True)
+            ziptree._print(d, indent, True)  # pylint: disable=W0212
 
     def _print(self, name, indent='', last=True):
         if last:
@@ -297,7 +295,7 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
     error_list = []
 
     if ziptree.directories:
-        for d, z in ziptree.directories.items():
+        for z in ziptree.directories.values():
             error_list.append(Error(z.filename,
                                     'Folder "Scanning" should not contain subfolders'))
 
@@ -459,9 +457,9 @@ def _files(ziptree):
     f: str
 
     """
-    for f, zipinfo in ziptree.files.items():
+    for f in ziptree.files:
         yield ziptree.filename + f
-    for d, ziptree in ziptree.directories.items():
+    for ziptree in ziptree.directories.values():
         for f in _files(ziptree):
             yield f
 
@@ -478,15 +476,16 @@ def _check_empty_files(ziptree):
     error: Error
 
     """
-    for f, zipinfo in ziptree.files.items():
+    for zipinfo in ziptree.files.values():
         if zipinfo.file_size == 0:
             yield Error(zipinfo.filename, 'File is empty')
-    for d, ziptree in ziptree.directories.items():
+    for ziptree in ziptree.directories.values():
         for error in _check_empty_files(ziptree):
             yield error
 
 
 def _check_image_data(path, ziptree, suffix, psc1, date, expected):
+    #pylint: disable=unused-argument
     """Check the "ImageData" folder of a ZipTree.
 
     Parameters
@@ -530,7 +529,7 @@ def _check_image_data(path, ziptree, suffix, psc1, date, expected):
                     dicom_file = z.extract(f, tempdir)
                     try:
                         metadata = read_metadata(dicom_file, force=True)
-                    except:
+                    except IOError:
                         continue
                     else:
                         for x in ('StudyComments',  # DUBLIN

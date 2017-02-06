@@ -159,22 +159,6 @@ CSV_DATASETS = (
     ('IMGN_PDS_FU2', IMAGEN_DIGEST),  # (Physical Development)
     ('IMGN_PALP_3_1_FU2', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
     ('IMGN_PALP_3_2_FU2', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
-    # FU3
-    #~ ('IMGN_SRC_FU3', IMAGEN_DIGEST),  # (SRC)
-    #~ ('IMGN_PALP_1_1_FU3', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
-    #~ ('IMGN_PALP_1_2_FU3', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
-    #~ ('IMGN_PALP_1_3_FU3', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
-    #~ ('IMGN_PALP_1_4_FU3', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
-    #~ ('IMGN_PALP_2_1_FU3', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
-    #~ ('IMGN_PALP_2_2_FU3', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
-    #~ ('IMGN_PALP_2_3_FU3', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
-    #~ ('IMGN_PALP_2_4_FU3', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
-    #~ ('IMGN_PALP_3_3_FU3', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
-    #~ ('IMGN_PALP_3_4_FU3', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
-    #~ ('IMGN_TLFB_FU3', IMAGEN_DIGEST),  # (TLFB)
-    #~ ('IMGN_PALP_3_1_FU3', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
-    #~ ('IMGN_PALP_3_2_FU3', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
-    #~ ('IMGN_MINI5_FU3', IMAGEN_DIGEST),  # (MINI)
 )
 
 QUOTED_PATTERN = re.compile(r'".*?"', re.DOTALL)
@@ -184,7 +168,7 @@ def download_csv(base_url, datasets):
     for task, digest in datasets:
         digest = digest.upper().replace(' ', '_')
         dataset = 'IMAGEN-{task}-{digest}.csv'.format(task=task, digest=digest)
-        logging.info('downloading: {0}'.format(dataset))
+        logging.info('downloading: %s', dataset)
         url = base_url + dataset + '.gz'
         # let Requests use ~/.netrc instead of passing an auth parameter
         #     auth = requests.auth.HTTPBasicAuth('...', '...')
@@ -209,12 +193,11 @@ def download_csv(base_url, datasets):
             if os.path.isfile(psytools_path):
                 with open(psytools_path, 'r') as uncompressed_file:
                     if uncompressed_file.read() == data:
-                        logging.info('skip unchanged file: {0}'
-                                     .format(psytools_path))
+                        logging.info('skip unchanged file: %s', psytools_path)
                         continue
             # write downloaded data into file
             with open(psytools_path, 'w') as uncompressed_file:
-                logging.info('write file: {0}'.format(psytools_path))
+                logging.info('write file: %s', psytools_path)
                 uncompressed_file.write(data)
 
 

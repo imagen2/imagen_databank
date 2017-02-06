@@ -97,16 +97,16 @@ class LimeSurveySession(object):
         }
 
     def _post(self, request):
-        logging.debug('JSON-RPC request: {0}'.format(request))
+        logging.debug('JSON-RPC request: %s', request)
         assert 'method' in request and 'params' in request and 'id' in request
         response = self.session.post(self.url, data=json.dumps(request))
         response = response.json()
-        logging.debug('JSON-RPC response: {0}'.format(response))
+        logging.debug('JSON-RPC response: %s', response)
         assert response['id'] == request['id']
         result = response['result']
         error = response['error']
         if error:
-            logging.error('JSON-RPC error: {0}'.format(error))
+            logging.error('JSON-RPC error: %s', error)
         return result, error
 
     def _get_session_key(self, username, password):
@@ -122,7 +122,7 @@ class LimeSurveySession(object):
                 logging.error('LSRC2 failed to create a session key')
                 response = None
             else:
-                logging.info('LSRC2 new session key: {0}'.format(response))
+                logging.info('LSRC2 new session key: %s', response)
         else:
             logging.error(status)
             error = {
@@ -135,7 +135,7 @@ class LimeSurveySession(object):
 
     def _release_session_key(self, key):
         request = self._request('release_session_key', [key])
-        logging.info('LSRC2 release session key: {0}'.format(key))
+        logging.info('LSRC2 release session key: %s', key)
         response, error = self._post(request)  # returns ('OK', None) even if bogus key
 
     @error2exception
@@ -286,13 +286,12 @@ def download_json(base_url):
             if os.path.isfile(psytools_path):
                 with open(psytools_path, 'r') as psytools:
                     if psytools.read() == data:
-                        logging.info('skip unchanged file: {0}'
-                                     .format(psytools_path))
+                        logging.info('skip unchanged file: %s', psytools_path)
                         continue
 
             # write survey into JSON file
             with open(psytools_path, 'w') as psytools:
-                logging.info('write file: {0}'.format(psytools_path))
+                logging.info('write file: %s', psytools_path)
                 psytools.write(data)
 
 

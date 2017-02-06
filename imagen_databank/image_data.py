@@ -263,7 +263,7 @@ def report_image_data(path, force=False):
     """
     series_dict = {}
 
-    for (image_data, relpath) in walk_image_data(path, force=True):
+    for (image_data, relpath) in walk_image_data(path, force=force):
         # extract DICOM tags of interest, throw exceptions if missing tags!
         series_uid = image_data['SeriesInstanceUID']
         image_uid = image_data['SOPInstanceUID']

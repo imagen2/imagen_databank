@@ -28,10 +28,8 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license and that you accept its terms.
 
-import os
 import re
 import datetime
-import xlrd
 
 import logging
 logger = logging.getLogger(__name__)
@@ -134,7 +132,7 @@ def _initialize_dob():
     dob_from_psc2 = {}
     with open(_DOB, 'rU') as f:
         for line in f:
-            psc2, dob, when = line.strip('\n').split('=')
+            psc2, dob, _when = line.strip('\n').split('=')
             match = _REGEX_DOB.match(dob)
             if match:
                 day = int(match.group(1))
