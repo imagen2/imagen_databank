@@ -194,9 +194,9 @@ class ZipTree:
                 d, ziptree = last_directory
                 ziptree._print(d, indent, False)  # pylint: disable=W0212
             last_file = files.pop()
-            for f, zipinfo in files:  # pylint: disable=unused-variable
+            for f, dummy_zipinfo in files:
                 print(indent + '├── ' + f)
-            f, zipinfo = last_file
+            f, dummy_zipinfo = last_file
             print(indent + '└── ' + f)
         elif last_directory:
             d, ziptree = last_directory

@@ -475,7 +475,8 @@ def main():
                                  for b in os.listdir(behavioral_path)
                                  if 'ss_' in b)
                 for ss_file in ss_files:
-                    (psc1, _timestamp, onsets, errors) = read_ss(ss_file, False)  # pylint: disable=unused-variable
+                    (psc1, timestamp, onsets, errors) = read_ss(ss_file,  # pylint: disable=unused-variable
+                                                                False)
                     print('▸ {0} SS {1}'.format(psc1, len(onsets)))
                     for error in errors:
                         print('  ✗ {0}: {1}'.format(error.message,
@@ -484,7 +485,7 @@ def main():
                                  #~ for b in os.listdir(behavioral_path)
                                  #~ if 'recog_' in b)
                 #~ for recog_file in recog_files:
-                    #~ (psc1, _timestamp, onsets, errors) = read_recog(recog_file, False)
+                    #~ (psc1, timestamp, onsets, errors) = read_recog(recog_file, False)
                     #~ print('▸ {0} RECOG {1}'.format(psc1, len(onsets)))
                     #~ for error in errors:
                         #~ print('  ✗ {0}: {1}'.format(error.message,

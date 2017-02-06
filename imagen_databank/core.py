@@ -132,7 +132,7 @@ def _initialize_dob():
     dob_from_psc2 = {}
     with open(_DOB, 'rU') as f:
         for line in f:
-            psc2, dob, _when = line.strip('\n').split('=')  # pylint: disable=unused-variable
+            psc2, dob, dummy_when = line.strip('\n').split('=')
             match = _REGEX_DOB.match(dob)
             if match:
                 day = int(match.group(1))
