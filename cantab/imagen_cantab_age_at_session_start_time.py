@@ -45,11 +45,11 @@ def main():
     logger.info('finished globing datasheet_*.csv files')
 
     for datasheet in datasheets:
-        subject_ids, row, cols, session_start_times, titles = read_datasheet(datasheet)
+        subject_ids, session_start_times, row, cols, titles = read_datasheet(datasheet)
         if len(subject_ids) != 1:
             logger.warning('Proper "Subject ID" not found: %s', datasheet)
             continue
-        psc1 = subject_ids.pop()
+        psc1 = subject_ids.pop()[:12]
         if psc1 not in PSC2_FROM_PSC1:
             logger.error('unknown PSC1 code %s: %s', psc1, datasheet)
             continue
