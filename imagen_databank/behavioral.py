@@ -49,30 +49,30 @@ RECOG_CSV = 'recog'
 
 
 def _parse_behavioral_datetime(date_string):
-        """Read date in the format found in CSV files.
+    """Read date in the format found in CSV files.
 
-        * LONDON      01/02/2015 01:02:03
-        * NOTTINGHAM  01/02/2015 01:02:03
-        * DUBLIN      01/02/2015 01:02:03  2/1/2015 1:02:03 AM
-        * BERLIN      01.02.2015 01:02:03
-        * HAMBURG     01.02.2015 01:02:03
-        * MANNHEIM    01.02.2015 01:02:03
-        * PARIS       01/02/2015 01:02:03
-        * DRESDEN     01.02.2015 01:02:03
+    * LONDON      01/02/2015 01:02:03
+    * NOTTINGHAM  01/02/2015 01:02:03
+    * DUBLIN      01/02/2015 01:02:03  2/1/2015 1:02:03 AM
+    * BERLIN      01.02.2015 01:02:03
+    * HAMBURG     01.02.2015 01:02:03
+    * MANNHEIM    01.02.2015 01:02:03
+    * PARIS       01/02/2015 01:02:03
+    * DRESDEN     01.02.2015 01:02:03
 
-        """
-        DATE_FORMATS = (
-            '%d.%m.%Y %H:%M:%S',
-            '%d/%m/%Y %H:%M:%S',
-            '%m/%d/%Y %I:%M:%S %p',
-        )
-        for date_format in DATE_FORMATS:
-            try:
-                dt = datetime.strptime(date_string, date_format)
-                return dt
-            except ValueError:
-                pass
-        return None
+    """
+    DATE_FORMATS = (
+        '%d.%m.%Y %H:%M:%S',
+        '%d/%m/%Y %H:%M:%S',
+        '%m/%d/%Y %I:%M:%S %p',
+    )
+    for date_format in DATE_FORMATS:
+        try:
+            dt = datetime.strptime(date_string, date_format)
+            return dt
+        except ValueError:
+            pass
+    return None
 
 
 def _fix_spurious_quotes(s):
@@ -225,9 +225,9 @@ def _read_generic_behavioral(path, task, strict=True):
         if len(header) > 3:
             COLUMN = 'Task type: Scanning'
             if header[3] != COLUMN:
-                    errors.append(Error(path, 'Column 4 of line 1 must be "{0}" '
-                                              'instead of "{1}"'
-                                              .format(COLUMN, header[3]), header))
+                errors.append(Error(path, 'Column 4 of line 1 must be "{0}" '
+                                          'instead of "{1}"'
+                                          .format(COLUMN, header[3]), header))
         if len(header) > 2:
             COLUMN = 'Subject ID:'
             if header[2].startswith(COLUMN):

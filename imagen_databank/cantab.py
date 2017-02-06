@@ -84,32 +84,32 @@ def read_cant(path):
 
 
 def _parse_csv_datetime(date_string):
-        """Read date in the format found in CSV files.
+    """Read date in the format found in CSV files.
 
-        * LONDON      01-Feb-2015 12:34:56
-        * NOTTINGHAM  01-Feb-2015 12:34:56   01/02/2015 12:34
-        * DUBLIN      01-Feb-2015 12:34:56
-        * BERLIN      01.02.2015 12:34:56
-        * HAMBURG     01.02.2015 12:34:56
-        * MANNHEIM    01.02.2015 12:34:56
-        * PARIS       01 Feb 2015 12:34:56
-        * DRESDEN     12:34:56 01.02.2015
+    * LONDON      01-Feb-2015 12:34:56
+    * NOTTINGHAM  01-Feb-2015 12:34:56   01/02/2015 12:34
+    * DUBLIN      01-Feb-2015 12:34:56
+    * BERLIN      01.02.2015 12:34:56
+    * HAMBURG     01.02.2015 12:34:56
+    * MANNHEIM    01.02.2015 12:34:56
+    * PARIS       01 Feb 2015 12:34:56
+    * DRESDEN     12:34:56 01.02.2015
 
-        """
-        DATE_FORMATS = (
-            '%d-%b-%Y %H:%M:%S',  # 01-Feb-2015 12:34:56
-            '%d/%m/%Y %H:%M',     # 01/02/2015 12:34
-            '%d.%m.%Y %H:%M:%S',  # 01.02.2015 12:34:56
-            '%d %b %Y %H:%M:%S',  # 01 Feb 2015 12:34:56
-            '%H:%M:%S %d.%m.%Y',  # 12:34:56 01.02.2015
-        )
-        for date_format in DATE_FORMATS:
-            try:
-                dt = datetime.datetime.strptime(date_string, date_format)
-                return dt
-            except ValueError:
-                pass
-        return None
+    """
+    DATE_FORMATS = (
+        '%d-%b-%Y %H:%M:%S',  # 01-Feb-2015 12:34:56
+        '%d/%m/%Y %H:%M',     # 01/02/2015 12:34
+        '%d.%m.%Y %H:%M:%S',  # 01.02.2015 12:34:56
+        '%d %b %Y %H:%M:%S',  # 01 Feb 2015 12:34:56
+        '%H:%M:%S %d.%m.%Y',  # 12:34:56 01.02.2015
+    )
+    for date_format in DATE_FORMATS:
+        try:
+            dt = datetime.datetime.strptime(date_string, date_format)
+            return dt
+        except ValueError:
+            pass
+    return None
 
 
 def read_datasheet(path):
