@@ -31,8 +31,6 @@
 import csv
 from datetime import datetime
 
-from .core import detect_psc1
-from .core import PSC2_FROM_PSC1
 from .core import Error
 
 import logging
@@ -294,7 +292,7 @@ def _read_generic_behavioral(path, task, strict=True):
                         sequence = []  # start new ascending sequence
             sequence.append(current)
             last = current
-        except ValueError as e:
+        except ValueError:
             errors.append(Error(path, 'Column {0} of line {1} "{2}" should contain '
                                       'only numbers'
                                       .format(_TASK_SPECIFICS[task][2] + 1, n, current), row))
@@ -459,7 +457,7 @@ def main():
                                  #~ for b in os.listdir(behavioral_path)
                                  #~ if 'mid_' in b)
                 #~ for mid_file in mid_files:
-                    #~ (psc1, timestamp, onsets, errors) = read_mid(mid_file, False)
+                    #~ (psc1, _timestamp, onsets, errors) = read_mid(mid_file, False)
                     #~ print('▸ {0} MID {1}'.format(psc1, len(onsets)))
                     #~ for error in errors:
                         #~ print('  ✗ {0}: {1}'.format(error.message,
@@ -468,7 +466,7 @@ def main():
                                  #~ for b in os.listdir(behavioral_path)
                                  #~ if 'ft_' in b)
                 #~ for ft_file in ft_files:
-                    #~ (psc1, timestamp, onsets, errors) = read_ft(ft_file, False)
+                    #~ (psc1, _timestamp, onsets, errors) = read_ft(ft_file, False)
                     #~ print('▸ {0} FT {1}'.format(psc1, len(onsets)))
                     #~ for error in errors:
                         #~ print('  ✗ {0}: {1}'.format(error.message,
@@ -477,7 +475,7 @@ def main():
                                  for b in os.listdir(behavioral_path)
                                  if 'ss_' in b)
                 for ss_file in ss_files:
-                    (psc1, timestamp, onsets, errors) = read_ss(ss_file, False)
+                    (psc1, _timestamp, onsets, errors) = read_ss(ss_file, False)
                     print('▸ {0} SS {1}'.format(psc1, len(onsets)))
                     for error in errors:
                         print('  ✗ {0}: {1}'.format(error.message,
@@ -486,7 +484,7 @@ def main():
                                  #~ for b in os.listdir(behavioral_path)
                                  #~ if 'recog_' in b)
                 #~ for recog_file in recog_files:
-                    #~ (psc1, timestamp, onsets, errors) = read_recog(recog_file, False)
+                    #~ (psc1, _timestamp, onsets, errors) = read_recog(recog_file, False)
                     #~ print('▸ {0} RECOG {1}'.format(psc1, len(onsets)))
                     #~ for error in errors:
                         #~ print('  ✗ {0}: {1}'.format(error.message,

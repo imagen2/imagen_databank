@@ -30,8 +30,6 @@
 
 import os
 import re
-import time
-import sys
 
 from .cantab import (CANTAB_CCLAR, DETAILED_DATASHEET_CSV, DATASHEET_CSV,
                      REPORT_HTML,
@@ -188,7 +186,7 @@ def report_additional_data(path, psc1, exact=False):
     if DATASHEET_CSV in additional_files:
         for f in additional_files[DATASHEET_CSV]:
             f_path = os.path.join(path, f)
-            subject_ids, rows, columns_min, start_times = read_datasheet(f_path)
+            subject_ids, _rows, _columns_min, _start_times = read_datasheet(f_path)
             if psc1 in subject_ids:
                 subject_ids.remove(psc1)
             additional_data.setdefault(DATASHEET_CSV, {})[f] = subject_ids

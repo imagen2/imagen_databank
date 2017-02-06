@@ -36,7 +36,7 @@ import re
 import sys
 
 if sys.version_info < (3, 0):
-    from codecs import open
+    from codecs import open as open
 
 from .core import detect_psc1
 
