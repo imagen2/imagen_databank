@@ -5,7 +5,10 @@ import re
 import time
 import sys
 
-from .cantab import (CANTAB_CCLAR, DETAILED_DATASHEET_CSV, DATASHEET_CSV, REPORT_HTML)
+from .cantab import (CANTAB_CCLAR, DETAILED_DATASHEET_CSV, DATASHEET_CSV,
+                     REPORT_HTML,
+                     read_cant, read_datasheet, read_detailed_datasheet,
+                     read_report)
 from .behavioral import (MID_CSV, FT_CSV, SS_CSV, RECOG_CSV)
 
 import logging
@@ -148,7 +151,7 @@ def report_additional_data(path, psc1, exact=False):
     if CANTAB_CCLAR in additional_files:
         for f in additional_files[CANTAB_CCLAR]:
             f_path = os.path.join(path, f)
-            subject_ids = fu2.read_cantab(f_path)
+            subject_ids = read_cantab(f_path)
             if psc1 in subject_ids:
                 subject_ids.remove(psc1)
             additional_data.setdefault(CANTAB_CCLAR, {})[f] = subject_ids
@@ -156,7 +159,7 @@ def report_additional_data(path, psc1, exact=False):
     if DATASHEET_CSV in additional_files:
         for f in additional_files[DATASHEET_CSV]:
             f_path = os.path.join(path, f)
-            subject_ids, rows, columns_min, start_times = fu2.read_datasheet(f_path)
+            subject_ids, rows, columns_min, start_times = read_datasheet(f_path)
             if psc1 in subject_ids:
                 subject_ids.remove(psc1)
             additional_data.setdefault(DATASHEET_CSV, {})[f] = subject_ids
@@ -164,7 +167,7 @@ def report_additional_data(path, psc1, exact=False):
     if DETAILED_DATASHEET_CSV in additional_files:
         for f in additional_files[DETAILED_DATASHEET_CSV]:
             f_path = os.path.join(path, f)
-            subject_ids = fu2.read_detailed_datasheet(f_path)
+            subject_ids = read_detailed_datasheet(f_path)
             if psc1 in subject_ids:
                 subject_ids.remove(psc1)
             additional_data.setdefault(DETAILED_DATASHEET_CSV, {})[f] = subject_ids
@@ -172,7 +175,7 @@ def report_additional_data(path, psc1, exact=False):
     if REPORT_HTML in additional_files:
         for f in additional_files[REPORT_HTML]:
             f_path = os.path.join(path, f)
-            subject_ids = fu2.read_report(f_path)
+            subject_ids = read_report(f_path)
             if psc1 in subject_ids:
                 subject_ids.remove(psc1)
             additional_data.setdefault(REPORT_HTML, {})[f] = subject_ids

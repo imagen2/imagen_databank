@@ -33,7 +33,6 @@ from datetime import date
 import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 from imagen_databank import PSC2_FROM_PSC1
-from imagen_databank import PSC2_FROM_PSC1
 from imagen_databank import DOB_FROM_PSC2
 from imagen_databank import read_datasheet
 
