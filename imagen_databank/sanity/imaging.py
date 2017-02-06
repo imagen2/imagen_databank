@@ -178,7 +178,7 @@ class ZipTree:
                 raise BadZipFile('duplicate file entry in zipfile')
 
     def pprint(self, indent=''):
-        self._print_children(indent, True)
+        self._print_children(indent)
 
     def _print_children(self, indent=''):
         directories = list(self.directories.items())
@@ -209,7 +209,7 @@ class ZipTree:
         else:
             print(indent + '├── ' + name)
             indent += '│   '
-        self._print_children(indent, last)
+        self._print_children(indent)
 
 
 class TemporaryDirectory(object):
