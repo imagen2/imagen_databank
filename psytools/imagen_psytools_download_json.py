@@ -136,7 +136,7 @@ class LimeSurveySession(object):
     def _release_session_key(self, key):
         request = self._request('release_session_key', [key])
         logging.info('LSRC2 release session key: %s', key)
-        response, error = self._post(request)  # returns ('OK', None) even if bogus key
+        dummy_response, dummy_error = self._post(request)  # returns ('OK', None) even if bogus key
 
     @error2exception
     def surveys(self):
@@ -257,7 +257,7 @@ def download_json(base_url):
             psc1_from_token = {}
             participants = session.participants(sid, ['attribute_1'])
             for participant in participants:
-                tid = participant['tid']
+                dummy_tid = participant['tid']
                 token = participant['token']
                 psc1_from_token[token] = participant['attribute_1']
 

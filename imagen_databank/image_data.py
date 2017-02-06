@@ -211,7 +211,7 @@ def walk_image_data(path, force=False):
 
     logger.info('start processing files: %s', path)
 
-    for root, dirs, files in os.walk(path):
+    for root, dummy_dirs, files in os.walk(path):
         n += len(files)
         for filename in files:
             abspath = os.path.join(root, filename)

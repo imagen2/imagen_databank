@@ -41,11 +41,6 @@ from ..core import PSC2_FROM_PSC1
 from ..core import Error
 from ..behavioral import (MID_CSV, FT_CSV, SS_CSV, RECOG_CSV)
 from ..behavioral import (read_mid, read_ft, read_ss, read_recog)
-from ..image_data import (SEQUENCE_T2, SEQUENCE_T2_FLAIR,
-                          SEQUENCE_ADNI_MPRAGE,
-                          SEQUENCE_MID, SEQUENCE_FT, SEQUENCE_SST,
-                          SEQUENCE_B0_MAP, SEQUENCE_DTI,
-                          SEQUENCE_RESTING_STATE)
 from ..dicom_utils import read_metadata
 
 import logging

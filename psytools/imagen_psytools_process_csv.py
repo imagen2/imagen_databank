@@ -113,8 +113,7 @@ def _create_psc2_file(psc2_from_psc1, psytools_path, psc2_path):
                         psc1.startswith('FOLLOWUP') or
                         psc1.startswith('THOMAS_PRONK') or
                         psc1.startswith('MAREN')):
-                    logging.debug('skipping test subject {0}'
-                                  .format(psc1))
+                    logging.debug('skipping test subject %s', psc1)
                     continue
                 elif psc1 in psc2_from_psc1:
                     logging.debug('converting subject %s from PSC1 to PSC2',
