@@ -78,7 +78,7 @@ def _initialize_psc1_dawba_psc2():
                 continue
             if psc2 in psc2_from_psc1:
                 if psc2_from_psc1[psc1] != psc2:
-                    logger.critical('inconsistent PSC1/PSC2 mapping: %s', path)
+                    logger.critical('inconsistent PSC1/PSC2 mapping: %s', _PSC2PSC)
                     raise Exception('inconsistent PSC1/PSC2 mapping')
             else:
                 psc2_from_psc1[psc1] = psc2

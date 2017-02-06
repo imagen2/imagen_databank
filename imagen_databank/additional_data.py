@@ -9,7 +9,8 @@ from .cantab import (CANTAB_CCLAR, DETAILED_DATASHEET_CSV, DATASHEET_CSV,
                      REPORT_HTML,
                      read_cant, read_datasheet, read_detailed_datasheet,
                      read_report)
-from .behavioral import (MID_CSV, FT_CSV, SS_CSV, RECOG_CSV)
+from .behavioral import (MID_CSV, FT_CSV, SS_CSV, RECOG_CSV,
+                         read_mid, read_ft, read_ss, read_recog)
 
 import logging
 logger = logging.getLogger(__name__)
@@ -183,7 +184,7 @@ def report_additional_data(path, psc1, exact=False):
     if FT_CSV in additional_files:
         for f in additional_files[FT_CSV]:
             f_path = os.path.join(path, f)
-            subject_ids = imagen.read_scanning(f_path)
+            subject_ids = read_ft(f_path)
             if psc1 in subject_ids:
                 subject_ids.remove(psc1)
             additional_data.setdefault(FT_CSV, {})[f] = subject_ids
@@ -191,7 +192,7 @@ def report_additional_data(path, psc1, exact=False):
     if MID_CSV in additional_files:
         for f in additional_files[MID_CSV]:
             f_path = os.path.join(path, f)
-            subject_ids = imagen.read_scanning(f_path)
+            subject_ids = read_mid(f_path)
             if psc1 in subject_ids:
                 subject_ids.remove(psc1)
             additional_data.setdefault(MID_CSV, {})[f] = subject_ids
@@ -199,7 +200,7 @@ def report_additional_data(path, psc1, exact=False):
     if RECOG_CSV in additional_files:
         for f in additional_files[RECOG_CSV]:
             f_path = os.path.join(path, f)
-            subject_ids = imagen.read_scanning(f_path)
+            subject_ids = read_recog(f_path)
             if psc1 in subject_ids:
                 subject_ids.remove(psc1)
             additional_data.setdefault(RECOG_CSV, {})[f] = subject_ids
@@ -207,7 +208,7 @@ def report_additional_data(path, psc1, exact=False):
     if SS_CSV in additional_files:
         for f in additional_files[SS_CSV]:
             f_path = os.path.join(path, f)
-            subject_ids = imagen.read_scanning(f_path)
+            subject_ids = read_ss(f_path)
             if psc1 in subject_ids:
                 subject_ids.remove(psc1)
             additional_data.setdefault(SS_CSV, {})[f] = subject_ids

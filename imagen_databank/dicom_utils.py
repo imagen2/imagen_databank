@@ -7,8 +7,10 @@ try:
     import dicom
 except ImportError:
     HAS_DICOM = False
+    InvalidDicomError = None
 else:
     HAS_DICOM = True
+    from dicom.filereader import InvalidDicomError  # noqa # pylint: disable=unused-import
 
 import logging
 logger = logging.getLogger(__name__)

@@ -281,7 +281,7 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
                 error_list.extend([Error(z.filename, 'Incorrect behavioral file name: ' + message)
                                    for message in _check_psc1(subject_id, suffix, psc1)])
             else:
-                error_list.append(Error(z.filename, 'Incorrect behavioral file name: ' + message))
+                error_list.append(Error(z.filename, 'Unexpected behavioral file name'))
         else:
             physiological_type, subject_id = _check_physiological_name(f)
             if physiological_type:
