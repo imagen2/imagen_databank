@@ -44,11 +44,11 @@ setup(
     version='0.1.0',
     author='Dimitri Papadopoulos',
     author_email='imagendatabase@cea.fr',
-    description='Imagen project library and database',
+    description='Imagen project databank software',
     long_description=readme(),
     license='CeCILL',
     url='https://github.com/imagen2/imagen_databank',
-    packages=['imagen'],
+    packages=['imagen_databank'],
     scripts=[
         'cantab/imagen_cantab_age_at_session_start_time.py',
         'dawba/imagen_dawba_process.py',
@@ -66,14 +66,11 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Unix Shell",
         "Operating System :: OS Independent",
         "Topic :: Scientific/Engineering :: Medical Science Apps.",
         "Topic :: Utilities",
     ],
     install_requires=[
         'pydicom',
-        'pandas',
-        'numpy',
     ],
 )
