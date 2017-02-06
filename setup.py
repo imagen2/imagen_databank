@@ -40,7 +40,7 @@ def license():
 
 
 setup(
-    name='imagen',
+    name='imagen_databank',
     version='0.1.0',
     author='Dimitri Papadopoulos',
     author_email='imagendatabase@cea.fr',
