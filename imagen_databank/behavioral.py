@@ -39,7 +39,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 __all__ = ['MID_COLUMNS', 'FT_COLUMNS', 'SS_COLUMNS', 'RECOG_COLUMNS',
-           'read_mid', 'read_ft_', 'read_ss', 'read_recog']
+           'read_mid', 'read_ft', 'read_ss', 'read_recog']
 
 #
 # types of files we expect to be find under AdditionalData/Scanning
