@@ -180,7 +180,7 @@ def report_additional_data(path, psc1, exact=False):
     if CANTAB_CCLAR in additional_files:
         for f in additional_files[CANTAB_CCLAR]:
             f_path = os.path.join(path, f)
-            subject_ids = read_cantab(f_path)
+            subject_ids = read_cant(f_path)
             if psc1 in subject_ids:
                 subject_ids.remove(psc1)
             additional_data.setdefault(CANTAB_CCLAR, {})[f] = subject_ids
