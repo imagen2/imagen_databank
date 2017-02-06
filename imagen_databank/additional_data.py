@@ -126,7 +126,7 @@ def walk_additional_data(path):
 
     """
 
-    for root, dirs, files in os.walk(path):
+    for root, dirs, files in os.walk(path):  # pylint: disable=unused-variable
         for filename in files:
             relpath = os.path.relpath(os.path.join(root, filename), path)
             yield filename, relpath
@@ -186,7 +186,7 @@ def report_additional_data(path, psc1, exact=False):
     if DATASHEET_CSV in additional_files:
         for f in additional_files[DATASHEET_CSV]:
             f_path = os.path.join(path, f)
-            subject_ids, _rows, _columns_min, _start_times = read_datasheet(f_path)
+            subject_ids, _start_times, _rows, _cols, _titles = read_datasheet(f_path)  # pylint: disable=unused-variable
             if psc1 in subject_ids:
                 subject_ids.remove(psc1)
             additional_data.setdefault(DATASHEET_CSV, {})[f] = subject_ids

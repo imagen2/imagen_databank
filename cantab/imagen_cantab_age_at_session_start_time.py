@@ -45,7 +45,7 @@ def main():
     logger.info('finished globing datasheet_*.csv files')
 
     for datasheet in datasheets:
-        subject_ids, session_start_times, row, cols, titles = read_datasheet(datasheet)
+        subject_ids, session_start_times, _row, _cols, _titles = read_datasheet(datasheet)  # pylint: disable=unused-variable
         if len(subject_ids) != 1:
             logger.warning('Proper "Subject ID" not found: %s', datasheet)
             continue

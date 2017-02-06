@@ -36,7 +36,7 @@ import re
 import sys
 
 if sys.version_info < (3, 0):
-    from codecs import open as open
+    from codecs import open as open  # pylint: disable=redefined-builtin
 
 import logging
 logger = logging.getLogger(__name__)
@@ -157,8 +157,8 @@ def read_datasheet(path):
                 session_start_time = _parse_csv_datetime(row[fields["Session start time"]])
                 if session_start_time is not None:
                     if session_start_time < datetime.datetime(2007, 1, 1):
-                        logger.warning('"Session start time" for {0} anterior to 2007: {1}'
-                                       .format(subject_id, session_start_time.date()))
+                        logger.warning('"Session start time" for %s anterior to 2007: %s',
+                                       subject_id, session_start_time.date())
                     session_start_times.add(session_start_time)
             columns_min = min(len(row), columns_min)
             columns_max = max(len(row), columns_max)
