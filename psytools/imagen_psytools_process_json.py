@@ -60,7 +60,7 @@ def _tmp_cleanup_FU3(items):
 
 
 def _tmp_detect_test(k):
-    if 'TEST' in k.upper() or '060000123456' in k:
+    if 'TEST' in k.upper():
         return True
     else:
         return False
