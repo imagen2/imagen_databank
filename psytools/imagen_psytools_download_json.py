@@ -240,6 +240,18 @@ def _get_netrc_auth(url):
         return
 
 
+def _psc1_response_from_id_reponse(id_response, psc1_from_token):
+    psc1_response = {}
+    for k, v in id_response.items():
+        if v['token'] in psc1_from_token:
+            psc1 = psc1_from_token[v['token']]
+            psc1_response[psc1] = v
+        else:
+            logging.error('Orphan token "%s" in response "%s"',
+                          v['token'], k)
+    return psc1_response
+
+
 def download_json(base_url):
     """JSON RPC calls to retrieve new questionnaires.
 
@@ -257,7 +269,6 @@ def download_json(base_url):
             psc1_from_token = {}
             participants = session.participants(sid, ['attribute_1'])
             for participant in participants:
-                dummy_tid = participant['tid']
                 token = participant['token']
                 psc1_from_token[token] = participant['attribute_1']
 
@@ -268,8 +279,7 @@ def download_json(base_url):
             # * change "tid" into PSC1 code
             # * keep "token"
             if 'responses' in responses:
-                responses['responses'] = [{psc1_from_token[v['token']]: v
-                                           for k, v in r.items()}
+                responses['responses'] = [_psc1_response_from_id_reponse(r, psc1_from_token)
                                           for r in responses['responses']]
             data = json.dumps(responses,
                               indent=4, separators=(',', ': '), sort_keys=True)
