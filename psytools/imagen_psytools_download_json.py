@@ -262,7 +262,7 @@ def download_json(base_url):
         for survey in surveys:
             title = survey['surveyls_title']
             sid = survey['sid']
-            print('▶', sid, '▶',  title)
+            print('▶',  title)
 
             # subjects in surveys are identified by "sid" and "token"
             # retrieve correlation between "token" and PSC1 code
