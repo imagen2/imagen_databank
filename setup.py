@@ -27,6 +27,10 @@
 # knowledge of the CeCILL license and that you accept its terms.
 
 from setuptools import setup
+from imagen_databank import __version__
+from imagen_databank import __author__
+from imagen_databank import __email__
+from imagen_databank import __license__
 
 
 def readme():
@@ -41,12 +45,12 @@ def license():
 
 setup(
     name='imagen_databank',
-    version='0.1.0',
-    author='Dimitri Papadopoulos',
-    author_email='imagendatabase@cea.fr',
+    version=__version__,
+    author=__author__,
+    author_email=__email__,
     description='Imagen project databank software',
     long_description=readme(),
-    license='CeCILL',
+    license=__license__,
     url='https://github.com/imagen2/imagen_databank',
     packages=['imagen_databank'],
     scripts=[

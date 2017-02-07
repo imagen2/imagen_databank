@@ -72,4 +72,10 @@ from . import scanning
 from .scanning import read_scanning
 
 from . import sanity
-__all__.extend(sanity.__all__)
+
+__author__ = 'Dimitri Papadopoulos'
+__copyright__ = 'Copyright (c) 2014-2017 CEA'
+__license__ = 'CeCILL'
+__version__ = '0.1.0'
+__email__ = 'imagendatabase@cea.fr'
+__status__ = 'Development'
