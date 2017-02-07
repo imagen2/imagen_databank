@@ -45,25 +45,28 @@ def _anonymize(response, psc1):
             del response[k]
     for k in ('startdate', 'datestamp', 'submitdate'):
         if k in response and response[k]:
-            if psc1 in PSC2_FROM_PSC1:
-                date = datetime.strptime(response[k], '%Y-%m-%d %H:%M:%S').date()
-                birth = DOB_FROM_PSC2[PSC2_FROM_PSC1[psc1]]
-                age = date - birth
-                response[k] = age.days
-            else:
-                response[k] = None
+            date = datetime.strptime(response[k], '%Y-%m-%d %H:%M:%S').date()
+            birth = DOB_FROM_PSC2[PSC2_FROM_PSC1[psc1]]
+            age = date - birth
+            response[k] = age.days
     return response
 
 
-def _tmp_cleanup_FU3(items):
-    return [(k.replace('FU3', ''), v) for k, v in items]
-
-
-def _tmp_detect_test(k):
-    if 'TEST' in k.upper():
-        return True
-    else:
-        return False
+def _psc2_response_from_psc1_reponse(psc1_response):
+    """
+    """
+    psc2_response = {}
+    for k, v in psc1_response.items():
+        if 'TEST' in k.upper():
+            continue
+        if (k[-3:] == 'FU3' or k[-3:] == 'FU2'):
+            # 'FU2' for outstanding FU2 Parent questionnaires
+            k = k[:-3]
+        if k in PSC2_FROM_PSC1:
+            psc2_response[PSC2_FROM_PSC1[k]] = _anonymize(v, k)
+        else:
+             logging.error('Unknown subject identifier "%s"', k)
+    return psc2_response
 
 
 def _create_psc2_file(psytools_path, psc2_path):
@@ -83,9 +86,7 @@ def _create_psc2_file(psytools_path, psc2_path):
         responses = json.load(psytools_file)
 
         if 'responses' in responses:
-            responses['responses'] = [{PSC2_FROM_PSC1[k]: _anonymize(v, k)
-                                       for k, v in _tmp_cleanup_FU3(r.items())
-                                       if not _tmp_detect_test(k)}
+            responses['responses'] = [_psc2_response_from_psc1_reponse(r)
                                       for r in responses['responses']]
         with open(psc2_path, 'w') as psc2_file:
             json.dump(responses, psc2_file,
