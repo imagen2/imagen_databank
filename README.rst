@@ -15,7 +15,7 @@ Software reference documentation_ is published on line.
 
 ``dawba``
   Remove identifying data and convert PSC1 to PSC2 in Dawba data,
-  after manual downloading from youthinmind server.
+  after manual download from youthinmind server.
 
 ``psytools``
   Download Psytools data as CSV and JSON files from Delosis servers.
