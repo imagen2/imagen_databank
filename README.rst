@@ -19,6 +19,6 @@ Software reference documentation_ is published on line.
 
 ``psytools``
   Download Psytools data as CSV and JSON files from Delosis servers.
-  Removing identifying data and convert PSC1 to PSC2.
+  Remove identifying data and convert PSC1 to PSC2.
 
 .. _documentation: http://imagen-databank.readthedocs.io
