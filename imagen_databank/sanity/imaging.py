@@ -526,6 +526,9 @@ def _check_image_data(path, ziptree, suffix, psc1, date, expected):
                         metadata = read_metadata(dicom_file, force=True)
                     except IOError:
                         continue
+                    except AttributeError as e:
+                        error_list.append(Error(f, 'This is not a valid DICOM file'))
+                        break
                     else:
                         for x in ('StudyComments',  # DUBLIN
                                   'ImageComments',  # HAMBURG, DRESDEN
