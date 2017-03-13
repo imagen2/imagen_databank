@@ -532,16 +532,18 @@ def _check_image_data(path, ziptree, suffix, psc1, date, expected):
                     else:
                         for x in ('StudyComments',  # DUBLIN
                                   'ImageComments',  # HAMBURG, DRESDEN
-                                  'PatientID'):  # LONDON, NOTTINGHAM, BERLIN, MANNHEIM, PARIS
+                                  'PatientName',  # NOTTINGHAM
+                                  'PatientID'):  # LONDON, BERLIN, MANNHEIM, PARIS
                             if x in metadata:
                                 subject_id = metadata[x]
-                                if subject_id[-len(suffix):] == suffix:
-                                    subject_id = subject_id[:-len(suffix)]
-                                subject_ids.add(subject_id)
-                                if subject_id != psc1:
-                                    error_list.append(Error(f, 'PSC1 code "{0}" was expected to be "{1}"'
-                                                               .format(subject_id, psc1)))
-                                break
+                                if subject_id:
+                                    if subject_id[-len(suffix):] == suffix:
+                                        subject_id = subject_id[:-len(suffix)]
+                                    subject_ids.add(subject_id)
+                                    if subject_id != psc1:
+                                        error_list.append(Error(f, 'PSC1 code "{0}" was expected to be "{1}"'
+                                                                   .format(subject_id, psc1)))
+                                    break
                         else:
                             subject_id = None
                             error_list.append(Error(f, 'Missing PSC1 code "{0}"'

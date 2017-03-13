@@ -288,9 +288,9 @@ def read_metadata(path, force=False):
         metadata['StudyComments'] = _decode(dataset.StudyComments)
     if 'ImageComments' in dataset:  # HAMBURG, DRESDEN
         metadata['ImageComments'] = _decode(dataset.ImageComments)
-    if 'PatientID' in dataset:  # LONDON, NOTTINGHAM, BERLIN, MANNHEIM, PARIS
-        metadata['PatientID'] = _decode(dataset.PatientID)
-    if 'PatientName' in dataset:  # LONDON, NOTTINGHAM, BERLIN, MANNHEIM, PARIS
+    if 'PatientName' in dataset:  # NOTTINGHAM
         metadata['PatientName'] = _decode(dataset.PatientName)
+    if 'PatientID' in dataset:  # LONDON, BERLIN, MANNHEIM, PARIS
+        metadata['PatientID'] = _decode(dataset.PatientID)
 
     return metadata
