@@ -68,6 +68,7 @@ __all__ = ['SEQUENCE_LOCALIZER_CALIBRATION', 'SEQUENCE_T2',
 #  12. B0 Map
 #  13. DTI (duration is heart-rate dependent at sites with cardiac gating)
 #  14. Resting State
+#  14. NODDI (optional)
 #
 # the following constants attempt to describe each of these sequences
 #
@@ -81,6 +82,7 @@ SEQUENCE_SST = 11
 SEQUENCE_B0_MAP = 12
 SEQUENCE_DTI = 13
 SEQUENCE_RESTING_STATE = 14
+SEQUENCE_NODDI = 15
 
 #
 # from sequence ID to sequence name
@@ -96,6 +98,7 @@ SEQUENCE_NAME = {
     SEQUENCE_B0_MAP: 'B0 Map',
     SEQUENCE_DTI: 'DTI',
     SEQUENCE_RESTING_STATE: 'Resting State',
+    SEQUENCE_NODDI: 'NODDI',
 }
 
 #

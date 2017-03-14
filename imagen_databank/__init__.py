@@ -62,7 +62,8 @@ from .image_data import (SEQUENCE_LOCALIZER_CALIBRATION,
                          SEQUENCE_ADNI_MPRAGE,
                          SEQUENCE_MID, SEQUENCE_FT, SEQUENCE_SST,
                          SEQUENCE_B0_MAP, SEQUENCE_DTI,
-                         SEQUENCE_RESTING_STATE)
+                         SEQUENCE_RESTING_STATE,
+                         SEQUENCE_NODDI)
 from .image_data import SEQUENCE_NAME
 from .image_data import NONSTANDARD_DICOM
 from .image_data import series_type_from_description
