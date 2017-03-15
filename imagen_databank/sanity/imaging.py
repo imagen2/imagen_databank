@@ -195,7 +195,7 @@ class ZipTree:
             print(indent + '└── ' + f)
         elif last_directory:
             d, ziptree = last_directory
-            ziptree._print(d, indent, True)  # pylint: disable=W0212
+            ziptree._print(d, indent)  # pylint: disable=W0212
 
     def _print(self, name, indent='', last=True):
         if last:
@@ -210,11 +210,11 @@ class ZipTree:
 class TemporaryDirectory(object):
     """Backport from Python 3.
     """
-    def __init__(self, suffix="", prefix=tempfile.gettempprefix(), dir=None):
+    def __init__(self, suffix='', prefix=tempfile.gettempprefix(), dir=None):
         self.pathname = tempfile.mkdtemp(suffix, prefix, dir)
 
     def __repr__(self):
-        return "<{} {!r}>".format(self.__class__.__name__, self.name)
+        return '<{} {!r}>'.format(self.__class__.__name__, self.name)
 
     def __enter__(self):
         return self.pathname
@@ -501,10 +501,9 @@ def _check_image_data(path, ziptree, suffix, psc1, date, expected):
     Returns
     -------
     result: tuple
-        In case of errors, return the tuple (psc1, errors) where psc1 is
-        a collection of PSC1 codes found in the ZIP file and errors is an
-        empty list if the ZIP file passes the check and a list of errors
-        otherwise.
+        In case of errors, return the tuple ([], errors) where errors is
+        a list of errors. Oterwise return the tuple (psc1, errors) where psc1
+        is a list of dectected PSC1 code and errors is an empty list.
 
     """
     subject_ids = set()
