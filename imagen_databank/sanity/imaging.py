@@ -328,7 +328,7 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
                     else:
                         error_list.append(Error(z.filename, 'Missing subject ID'))
                     subject_ids.add(subject_id)
-                    if trials[-1] != 42:
+                    if trials and trials[-1] != 42:
                         error_list.append(Error(z.filename, 'Behavioral file contains {0} trials instead of 42'
                                                             .format(trials[-1])))
                     if date and date != timestamp.date():
@@ -360,7 +360,7 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
                     else:
                         error_list.append(Error(z.filename, 'Missing subject ID'))
                     subject_ids.add(subject_id)
-                    if trials[-1] != 360:
+                    if trials and trials[-1] != 360:
                         error_list.append(Error(z.filename, 'Behavioral file contains {0} trials instead of 360'
                                                             .format(trials[-1])))
                     if date and date != timestamp.date():
