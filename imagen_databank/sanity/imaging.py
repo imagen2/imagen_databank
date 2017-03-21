@@ -320,68 +320,81 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
                     error_list.append(Error(z.filename, 'Unexpected behavioral file'))
                 behavioral_path = zip_file.extract(z.filename, path=temp_directory)
                 if behavioral_type == MID_CSV:
+                    actual_tests.add(behavioral_type)
                     subject_id, timestamp, trials, errors = read_mid(behavioral_path)
                     if subject_id:
                         error_list.extend([Error(z.filename, 'Incorrect behavioral file content: ' + message)
                                            for message in _check_psc1(subject_id, suffix, psc1)])
-                        actual_tests.add(behavioral_type)
                     else:
                         error_list.append(Error(z.filename, 'Missing subject ID'))
                     subject_ids.add(subject_id)
                     if trials and trials[-1] != 42:
                         error_list.append(Error(z.filename, 'Behavioral file contains {0} trials instead of 42'
                                                             .format(trials[-1])))
-                    if date and date != timestamp.date():
-                        error_list.append(Error(z.filename, 'Date was expected to be "{0}" instead of "{1}"'
-                                                            .format(date, timestamp.date())))
+                    if timestamp:
+                        if date and date != timestamp.date():
+                            error_list.append(Error(z.filename, 'Date was expected to be "{0}" instead of "{1}"'
+                                                                .format(date, timestamp.date())))
+                    else:
+                        error_list.append(Error(z.filename, 'Missing acquisition date'))
                     error_list.extend(errors)
                 elif behavioral_type == FT_CSV:
+                    actual_tests.add(behavioral_type)
                     subject_id, timestamp, trials, errors = read_ft(behavioral_path)
                     if subject_id:
                         error_list.extend([Error(z.filename, 'Incorrect behavioral file content: ' + message)
                                            for message in _check_psc1(subject_id, suffix, psc1)])
-                        actual_tests.add(behavioral_type)
                     else:
                         error_list.append(Error(z.filename, 'Missing subject ID'))
                     subject_ids.add(subject_id)
                     if len(trials) != 24:
                         error_list.append(Error(z.filename, 'Behavioral file contains {0} trials instead of 24'
                                                             .format(len(trials))))
-                    if date and date != timestamp.date():
-                        error_list.append(Error(z.filename, 'Date was expected to be "{0}" instead of "{1}"'
-                                                            .format(date, timestamp.date())))
+                    if timestamp:
+                        if date and date != timestamp.date():
+                            error_list.append(Error(z.filename, 'Date was expected to be "{0}" instead of "{1}"'
+                                                                .format(date, timestamp.date())))
+                    else:
+                        error_list.append(Error(z.filename, 'Missing acquisition date'))
                     error_list.extend(errors)
                 elif behavioral_type == SS_CSV:
+                    actual_tests.add(behavioral_type)
                     subject_id, timestamp, trials, errors = read_ss(behavioral_path)
                     if subject_id:
                         error_list.extend([Error(z.filename, 'Incorrect behavioral file content: ' + message)
                                            for message in _check_psc1(subject_id, suffix, psc1)])
-                        actual_tests.add(behavioral_type)
                     else:
                         error_list.append(Error(z.filename, 'Missing subject ID'))
                     subject_ids.add(subject_id)
                     if trials and trials[-1] != 360:
                         error_list.append(Error(z.filename, 'Behavioral file contains {0} trials instead of 360'
                                                             .format(trials[-1])))
-                    if date and date != timestamp.date():
-                        error_list.append(Error(z.filename, 'Date was expected to be "{0}" instead of "{1}"'
-                                                            .format(date, timestamp.date())))
+                    if timestamp:
+                        if date and date != timestamp.date():
+                            error_list.append(Error(z.filename, 'Date was expected to be "{0}" instead of "{1}"'
+                                                                .format(date, timestamp.date())))
+                    else:
+                        error_list.append(Error(z.filename, 'Missing acquisition date'))
                     error_list.extend(errors)
                 elif behavioral_type == RECOG_CSV:
+                    actual_tests.add(behavioral_type)
                     subject_id, timestamp, trials, errors = read_recog(behavioral_path)
                     if subject_id:
                         error_list.extend([Error(z.filename, 'Incorrect behavioral file content: ' + message)
                                            for message in _check_psc1(subject_id, suffix, psc1)])
-                        actual_tests.add(behavioral_type)
                     else:
                         error_list.append(Error(z.filename, 'Missing subject ID'))
                     subject_ids.add(subject_id)
                     if len(trials) != 5:
                         error_list.append(Error(z.filename, 'Behavioral file contains {0} trials instead of 5'
                                                             .format(len(trials))))
-                    if date and date != timestamp.date():
-                        error_list.append(Error(z.filename, 'Date was expected to be "{0}" instead of "{1}"'
-                                                            .format(date, timestamp.date())))
+                    if timestamp:
+                        if date and date != timestamp.date():
+                            error_list.append(Error(z.filename, 'Date was expected to be "{0}" instead of "{1}"'
+                                                                .format(date, timestamp.date())))
+                    else:
+                        error_list.append(Error(z.filename, 'Missing acquisition date'))
+                        
                     error_list.extend(errors)
 
     if expected_tests:
