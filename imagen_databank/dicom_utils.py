@@ -289,8 +289,14 @@ def read_metadata(path, force=False):
     if 'ImageComments' in dataset:  # HAMBURG, DRESDEN
         metadata['ImageComments'] = _decode(dataset.ImageComments)
     if 'PatientName' in dataset:  # NOTTINGHAM
-        metadata['PatientName'] = _decode(dataset.PatientName)
-    if 'PatientID' in dataset:  # LONDON, BERLIN, MANNHEIM, PARIS
+        tmp = _decode(dataset.PatientName)
+        if tmp != 'anon':  # LONDON
+            metadata['PatientName'] = _decode(dataset.PatientName)
+    if 'StudyDescription' in dataset:  # LONDON
+        metadata['StudyDescription'] = _decode(dataset.StudyDescription)
+    if 'PerformedProcedureStepDescription' in dataset:  # LONDON
+        metadata['PerformedProcedureStepDescription'] = _decode(dataset.PerformedProcedureStepDescription)
+    if 'PatientID' in dataset:  # BERLIN (?), MANNHEIM, PARIS
         metadata['PatientID'] = _decode(dataset.PatientID)
 
     return metadata

@@ -545,7 +545,9 @@ def _check_image_data(path, ziptree, suffix, psc1, date, expected):
                         for x in ('StudyComments',  # DUBLIN
                                   'ImageComments',  # HAMBURG, DRESDEN
                                   'PatientName',  # NOTTINGHAM
-                                  'PatientID'):  # LONDON, BERLIN, MANNHEIM, PARIS
+                                  'StudyDescription',  # LONDON
+                                  'PerformedProcedureStepDescription',  # LONDON
+                                  'PatientID'):  # BERLIN, MANNHEIM, PARIS
                             if x in metadata:
                                 subject_id = metadata[x]
                                 if subject_id:

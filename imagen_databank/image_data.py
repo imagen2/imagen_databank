@@ -288,7 +288,7 @@ def report_image_data(path, force=False):
                 timestamp = datetime.datetime(acquisition_date.year,
                                               acquisition_date.month,
                                               acquisition_date.day)
-        # Find PSC1 code
+        # FIXME: this is obviously wrong! # find PSC1 code
         if 'CommentsOnThePerformedProcedureStep' in image_data:  # DUBLIN
             psc1 = image_data['CommentsOnThePerformedProcedureStep']
         elif 'ImageComments' in image_data:  # HAMBURG, DRESDEN
