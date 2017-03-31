@@ -58,8 +58,8 @@ setup(
         'dawba/imagen_dawba_process.py',
         'psytools/imagen_psytools_download_csv.py',
         'psytools/imagen_psytools_download_json.py',
-        'psytools/imagen_psytools_process_csv.py',
-        'psytools/imagen_psytools_process_json.py',
+        'psytools/imagen_psytools_deidentify_csv.py',
+        'psytools/imagen_psytools_deidentify_json.py',
     ],
     classifiers=[
         "License :: OSI Approved :: CEA CNRS Inria Logiciel Libre License, version 2.1 (CeCILL-2.1)",
