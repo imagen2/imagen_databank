@@ -68,7 +68,7 @@ __all__ = ['SEQUENCE_LOCALIZER_CALIBRATION', 'SEQUENCE_T2',
 #  12. B0 Map
 #  13. DTI (duration is heart-rate dependent at sites with cardiac gating)
 #  14. Resting State
-#  14. NODDI (optional)
+#  14. NODDI (optional, added in Follow-up 3)
 #
 # the following constants attempt to describe each of these sequences
 #
@@ -267,12 +267,14 @@ def report_image_data(path, force=False):
     series_dict = {}
 
     for (image_data, relpath) in walk_image_data(path, force=force):
+        if str(image_data['SOPClassUID']) in _IGNORED_SOP_CLASS_UIDS:
+            continue
         # extract DICOM tags of interest, throw exceptions if missing tags!
         series_uid = image_data['SeriesInstanceUID']
         image_uid = image_data['SOPInstanceUID']
         series_number = image_data['SeriesNumber']
         series_description = image_data['SeriesDescription']
-        image_types = image_data['ImageType']
+        image_types = image_data.get('ImageType', [])
         station_name = image_data.get('StationName', None)
         manufacturer = image_data.get('Manufacturer', None)
         manufacturer_model_name = image_data.get('ManufacturerModelName', None)
@@ -288,6 +290,8 @@ def report_image_data(path, force=False):
                 timestamp = datetime.datetime(acquisition_date.year,
                                               acquisition_date.month,
                                               acquisition_date.day)
+        else:
+            logger.error('missing acquisition time: %s', relpath)
         # FIXME: this is obviously wrong! # find PSC1 code
         if 'CommentsOnThePerformedProcedureStep' in image_data:  # DUBLIN
             psc1 = image_data['CommentsOnThePerformedProcedureStep']

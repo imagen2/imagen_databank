@@ -31,43 +31,13 @@
 import re
 import datetime
 import dateutil.tz
-try:
-    import dicom
-except ImportError:
-    HAS_DICOM = False
-    InvalidDicomError = None
-else:
-    HAS_DICOM = True
-    from dicom.filereader import InvalidDicomError  # noqa # pylint: disable=unused-import
+import dicom
+from dicom.filereader import InvalidDicomError
 
 import logging
 logger = logging.getLogger(__name__)
 
 __all__ = ['read_metadata']
-
-
-def _decode(attribute):
-    """Decode DICOM data elements from ISO_IR 100.
-
-    DICOM strings are routinely encoded with ISO_IR 100 which is
-    equivalent to IS0 8859-1.
-
-    We currently expect DICOM strings to be encoded using ISO_IR 100.
-    In this context DICOM strings returned by pydicom are 8-bit strings
-    encoded with ISO_IR 100.
-
-    Parameters
-    ----------
-    attribute  : str
-        The 8-bit string to decode from ISO_IR 100.
-
-    Returns
-    -------
-    unicode
-        The decoded string.
-
-    """
-    return attribute.decode('latin_1')
 
 
 #
@@ -211,10 +181,10 @@ def read_metadata(path, force=False):
         - SeriesInstanceUID
         - SeriesNumber
         - SeriesDescription
-        - ImageType
         - SOPInstanceUID
 
     We also attempt to read the following DICOM tags if they are present:
+        - ImageType
         - AcquisitionDateTime
         - AcquisitionDate
         - AcquisitionTime
@@ -237,12 +207,9 @@ def read_metadata(path, force=False):
     dict
 
     """
-    if HAS_DICOM:
-        dataset = dicom.read_file(path, force=force)
-    else:
-        return {}
+    dataset = dicom.read_file(path, force=force)
 
-    # missing compulsary tags will raise exceptions
+    # missing compulsory tags will raise exceptions
     if 'SeriesDescription' in dataset:
         description = dataset.SeriesDescription
     elif 'ProtocolName' in dataset:
@@ -251,14 +218,16 @@ def read_metadata(path, force=False):
         description = dataset.SeriesDescription  # raise an exception!
 
     metadata = {
+        'SOPClassUID': dataset.SOPClassUID,
         'SOPInstanceUID': dataset.SOPInstanceUID,
         'SeriesInstanceUID': dataset.SeriesInstanceUID,
         'SeriesNumber': dataset.SeriesNumber,
-        'SeriesDescription': _decode(description),
-        'ImageType': [_decode(x) for x in dataset.ImageType],
+        'SeriesDescription': description,
     }
 
     # optional tags
+    if 'ImageType' in dataset:
+        metadata['ImageType'] = dataset.ImageType
     if 'AcquisitionDateTime' in dataset:
         dt = _datetime_from_dt(dataset.AcquisitionDateTime)
         metadata['AcquisitionDate'] = dt.date()
@@ -269,34 +238,34 @@ def read_metadata(path, force=False):
         if 'AcquisitionTime' in dataset:
             metadata['AcquisitionTime'] = _time_from_tm(dataset.AcquisitionTime)
     if 'StationName' in dataset:
-        metadata['StationName'] = _decode(dataset.StationName)
+        metadata['StationName'] = dataset.StationName
     if 'Manufacturer' in dataset:
-        metadata['Manufacturer'] = _decode(dataset.Manufacturer)
+        metadata['Manufacturer'] = dataset.Manufacturer
     if 'ManufacturerModelName' in dataset:
-        metadata['ManufacturerModelName'] = _decode(dataset.ManufacturerModelName)
+        metadata['ManufacturerModelName'] = dataset.ManufacturerModelName
     if 'DeviceSerialNumber' in dataset:
-        metadata['DeviceSerialNumber'] = _decode(dataset.DeviceSerialNumber)
+        metadata['DeviceSerialNumber'] = dataset.DeviceSerialNumber
     if 'SoftwareVersions' in dataset:
         if dicom.dataelem.isMultiValue(dataset.SoftwareVersions):
             # usually the last part is the more informative
             # for example on Philips scanners:
             # ['3.2.1', '3.2.1.1'] → '3.2.1.1'
-            metadata['SoftwareVersions'] = _decode(dataset.SoftwareVersions[-1])
+            metadata['SoftwareVersions'] = dataset.SoftwareVersions[-1]
         else:
-            metadata['SoftwareVersions'] = _decode(dataset.SoftwareVersions)
+            metadata['SoftwareVersions'] = dataset.SoftwareVersions
     if 'StudyComments' in dataset:  # DUBLIN
-        metadata['StudyComments'] = _decode(dataset.StudyComments)
+        metadata['StudyComments'] = dataset.StudyComments
     if 'ImageComments' in dataset:  # HAMBURG, DRESDEN
-        metadata['ImageComments'] = _decode(dataset.ImageComments)
+        metadata['ImageComments'] = dataset.ImageComments
     if 'PatientName' in dataset:  # NOTTINGHAM
-        tmp = _decode(dataset.PatientName)
+        tmp = dataset.PatientName
         if tmp != 'anon':  # LONDON
-            metadata['PatientName'] = _decode(dataset.PatientName)
+            metadata['PatientName'] = dataset.PatientName
     if 'StudyDescription' in dataset:  # LONDON
-        metadata['StudyDescription'] = _decode(dataset.StudyDescription)
+        metadata['StudyDescription'] = dataset.StudyDescription
     if 'PerformedProcedureStepDescription' in dataset:  # LONDON
-        metadata['PerformedProcedureStepDescription'] = _decode(dataset.PerformedProcedureStepDescription)
+        metadata['PerformedProcedureStepDescription'] = dataset.PerformedProcedureStepDescription
     if 'PatientID' in dataset:  # BERLIN (?), MANNHEIM, PARIS
-        metadata['PatientID'] = _decode(dataset.PatientID)
+        metadata['PatientID'] = dataset.PatientID
 
     return metadata
