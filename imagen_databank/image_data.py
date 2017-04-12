@@ -113,6 +113,8 @@ _LOOSE_IMAGE_DATA_REGEXES = (
     (re.compile(r'LOCALI[ZS]ER', re.IGNORECASE), SEQUENCE_LOCALIZER_CALIBRATION),
     # LONDON calibration
     (re.compile(r'ASSET[- ]Cal', re.IGNORECASE), SEQUENCE_LOCALIZER_CALIBRATION),
+    # NOTTINGHAM 3-plane scout
+    (re.compile(r'Survey_SHC'), SEQUENCE_LOCALIZER_CALIBRATION),
     # first search for "FLAIR" then for "T2"
     (re.compile(r'FLAIR', re.IGNORECASE), SEQUENCE_T2_FLAIR),
     (re.compile(r'T2', re.IGNORECASE), SEQUENCE_T2),
