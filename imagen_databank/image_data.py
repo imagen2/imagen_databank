@@ -212,7 +212,7 @@ def walk_image_data(path, force=False):
     n = 0
     start = time.time()
 
-    logger.info('start processing files: %s', path)
+    logger.info('start processing files under: %s', path)
 
     for root, dummy_dirs, files in os.walk(path):
         n += len(files)
