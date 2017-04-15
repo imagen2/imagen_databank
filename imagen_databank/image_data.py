@@ -336,14 +336,14 @@ def report_image_data(path, force=False):
                              '"%s" / "%s":\n  %s\n  %s',
                              series_dict[series_uid][0]['SeriesNumber'],
                              series_number,
-                             series_dict[series_uid][1].values()[0],
+                             next(iter(series_dict[series_uid][1].values())),
                              relpath)
             elif series_description != series_dict[series_uid][0]['SeriesDescription']:
                 logger.error('inconsistent series description '
                              '"%s" / "%s":\n  %s\n  %s',
                              series_dict[series_uid][0]['SeriesDescription'],
                              series_description,
-                             series_dict[series_uid][1].values()[0],
+                             next(iter(series_dict[series_uid][1].values())),
                              relpath)
             if station_name:
                 if 'StationName' in series_dict[series_uid][0]:
@@ -352,7 +352,7 @@ def report_image_data(path, force=False):
                                      '"%s" / "%s":\n  %s\n  %s',
                                      series_dict[series_uid][0]['StationName'],
                                      station_name,
-                                     series_dict[series_uid][1].values()[0],
+                                     next(iter(series_dict[series_uid][1].values())),
                                      relpath)
                 else:
                     series_dict[series_uid][0]['StationName'] = station_name
@@ -363,7 +363,7 @@ def report_image_data(path, force=False):
                                      '"%s" / "%s":\n  %s\n  %s',
                                      series_dict[series_uid][0]['Manufacturer'],
                                      manufacturer,
-                                     series_dict[series_uid][1].values()[0],
+                                     next(iter(series_dict[series_uid][1].values())),
                                      relpath)
                 else:
                     series_dict[series_uid][0]['Manufacturer'] = manufacturer
@@ -374,7 +374,7 @@ def report_image_data(path, force=False):
                                      '"%s" / "%s":\n  %s\n  %s',
                                      series_dict[series_uid][0]['ManufacturerModelName'],
                                      manufacturer_model_name,
-                                     series_dict[series_uid][1].values()[0],
+                                     next(iter(series_dict[series_uid][1].values())),
                                      relpath)
                 else:
                     series_dict[series_uid][0]['ManufacturerModelName'] = manufacturer_model_name
@@ -385,7 +385,7 @@ def report_image_data(path, force=False):
                                      '"%s" / "%s":\n  %s\n  %s',
                                      series_dict[series_uid][0]['SoftwareVersions'],
                                      software_versions,
-                                     series_dict[series_uid][1].values()[0],
+                                     next(iter(series_dict[series_uid][1].values())),
                                      relpath)
                 else:
                     series_dict[series_uid][0]['SoftwareVersions'] = software_versions
@@ -396,7 +396,7 @@ def report_image_data(path, force=False):
                                      '"%s" / "%s":\n  %s\n  %s',
                                      series_dict[series_uid][0]['DeviceSerialNumber'],
                                      device_serial_number,
-                                     series_dict[series_uid][1].values()[0],
+                                     next(iter(series_dict[series_uid][1].values())),
                                      relpath)
                 else:
                     series_dict[series_uid][0]['DeviceSerialNumber'] = device_serial_number
@@ -408,7 +408,7 @@ def report_image_data(path, force=False):
                                      '"%s" / "%s":\n  %s\n  %s',
                                      series_dict[series_uid][0]['PSC1'],
                                      psc1,
-                                     series_dict[series_uid][1].values()[0],
+                                     next(iter(series_dict[series_uid][1].values())),
                                      relpath)
                 else:
                     series_dict[series_uid][0]['PSC1'] = psc1
