@@ -24,7 +24,6 @@ PSYTOOLS_FU3_MASTER_DIR : str
 """
 
 import logging
-logging.basicConfig(level=logging.INFO)
 
 import requests
 from io import BytesIO, TextIOWrapper
@@ -43,12 +42,12 @@ CSV_BASE_URL = 'https://www.delosis.com/psytools-server/dataservice/dataset/'
 BASIC_DIGEST = 'Basic digest'
 IMAGEN_DIGEST = 'Imagen digest'
 IMAGEN_SURVEY_DIGEST = 'Imagen survey digest'
+IMAGEN_KIRBY_DIGEST = 'Imagen kirby digest'
 
 CSV_DATASETS = (
     ('IMGN_ESPAD_PARENT_RC5', BASIC_DIGEST),  # (Drug Use Questionnaire)
     ('IMGN_GEN_RC5', BASIC_DIGEST),  # (Family history)
     ('IMGN_IDENT_RC5', IMAGEN_DIGEST),  # (Faces Task)
-    ('IMGN_KIRBY_RC5', IMAGEN_DIGEST),  # (Now or later?)
     ('IMGN_MAST_PARENT_RC5', BASIC_DIGEST),  # (Alcohol questionnaire II)
     ('IMGN_NEO_FFI_PARENT_RC5', BASIC_DIGEST),  # (Personality I)
     ('IMGN_NI_DATA_RC5', BASIC_DIGEST),  # (NI data entry)
@@ -81,7 +80,6 @@ CSV_DATASETS = (
     ('IMGN_AUDIT_PARENT_FU_RC5', BASIC_DIGEST),  # (Alcohol Questionnaire I)
     ('IMGN_CONSENT_FU_RC1', IMAGEN_DIGEST),  # (Further information about the study)
     ('IMGN_ESPAD_PARENT_FU_RC5', BASIC_DIGEST),  # (Drug Use Questionnaire)
-    ('IMGN_KIRBY_FU_RC5', IMAGEN_DIGEST),  # (Now or later?)
     ('IMGN_MAST_PARENT_FU_RC5', BASIC_DIGEST),  # (Alcohol questionnaire II)
     ('IMGN_NEO_FFI_CHILD_FU_RC5', IMAGEN_SURVEY_DIGEST),  # (Personality I)
     ('IMGN_NEO_FFI_PARENT_FU_RC5', BASIC_DIGEST),  # (Personality I)
@@ -112,7 +110,6 @@ CSV_DATASETS = (
     ('IMGN_ESPAD_CHILD_FU2', IMAGEN_DIGEST),  # (Drug Use Questionnaire)
     ('IMGN_TCI_CHILD_FU2', IMAGEN_DIGEST),  # (Personality II)
     ('IMGN_SURPS_FU2', IMAGEN_SURVEY_DIGEST),  # (Personality III)
-    ('IMGN_KIRBY_FU2', IMAGEN_DIGEST),  # (Now or later?)
     ('IMGN_LEQ_FU2', IMAGEN_DIGEST),  # (Life Events)
     ('IMGN_PAAQ_CHILD_FU2', IMAGEN_DIGEST),  # (Childhood Relationships Questionnaire )
     ('IMGN_SRC_FU2', IMAGEN_DIGEST),  # (SRC)
@@ -159,6 +156,11 @@ CSV_DATASETS = (
     ('IMGN_PDS_FU2', IMAGEN_DIGEST),  # (Physical Development)
     ('IMGN_PALP_3_1_FU2', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
     ('IMGN_PALP_3_2_FU2', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
+    ('IMGN_JVQ_CHILD_FU2', IMAGEN_DIGEST),  # (JVQ)
+    ('IMGN_RELIABILITY_FU3', BASIC_DIGEST),  # (Reliability)
+    ('IMGN_KIRBY_RC5', IMAGEN_KIRBY_DIGEST),  # (Now or later?)
+    ('IMGN_KIRBY_FU_RC5', IMAGEN_KIRBY_DIGEST),  # (Now or later?)
+    ('IMGN_KIRBY_FU2', IMAGEN_KIRBY_DIGEST),  # (Now or later?)
 )
 
 QUOTED_PATTERN = re.compile(r'".*?"', re.DOTALL)

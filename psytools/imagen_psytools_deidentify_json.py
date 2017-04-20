@@ -108,9 +108,11 @@ def create_psc2_files(master_dir, psc2_dir):
 
     """
     for master_file in os.listdir(master_dir):
-        master_path = os.path.join(master_dir, master_file)
-        psc2_path = os.path.join(psc2_dir, master_file)
-        _create_psc2_file(master_path, psc2_path)
+        (_, ext) = os.path.splitext(master_file)
+        if ext == '.json':
+            master_path = os.path.join(master_dir, master_file)
+            psc2_path = os.path.join(psc2_dir, master_file)
+            _create_psc2_file(master_path, psc2_path)
 
 
 def main():
