@@ -68,7 +68,9 @@ __all__ = ['SEQUENCE_LOCALIZER_CALIBRATION', 'SEQUENCE_T2',
 #  12. B0 Map
 #  13. DTI (duration is heart-rate dependent at sites with cardiac gating)
 #  14. Resting State
-#  14. NODDI (optional, added in Follow-up 3)
+#  15. Short MPRAGE (baseline only)
+#  16. EPI Global (JBP suggestion followed by a few centres at baseline)
+#  17. NODDI (optional, added in Follow-up 3)
 #
 # the following constants attempt to describe each of these sequences
 #
@@ -110,8 +112,8 @@ SEQUENCE_NAME = {
 # the type of a sequence from its name
 #
 # in some case order is important, for example:
-# - first match 'FLAIR'
-# - then match 'T2'
+# - first match 'FLAIR' and 'short MPRAGE'
+# - then match 'T2' and 'MPRAGE'
 #
 _LOOSE_IMAGE_DATA_REGEXES = (
     (re.compile(r'LOCALI[ZS]ER', re.IGNORECASE), SEQUENCE_LOCALIZER_CALIBRATION),
@@ -119,16 +121,21 @@ _LOOSE_IMAGE_DATA_REGEXES = (
     (re.compile(r'ASSET[- ]Cal', re.IGNORECASE), SEQUENCE_LOCALIZER_CALIBRATION),
     # NOTTINGHAM 3-plane scout
     (re.compile(r'Survey_SHC'), SEQUENCE_LOCALIZER_CALIBRATION),
+    # LONDON FU3 3-plane Localizer
+    (re.compile(r'3Plane'), SEQUENCE_LOCALIZER_CALIBRATION),
     # first search for "FLAIR" then for "T2"
     (re.compile(r'FLAIR', re.IGNORECASE), SEQUENCE_T2_FLAIR),
     (re.compile(r'T2', re.IGNORECASE), SEQUENCE_T2),
-    (re.compile(r'SHORT', re.IGNORECASE), SEQUENCE_SHORT_MPRAGE),
+    (re.compile(r'short MPRAGE', re.IGNORECASE), SEQUENCE_SHORT_MPRAGE),
     (re.compile(r'MPRAGE', re.IGNORECASE), SEQUENCE_ADNI_MPRAGE),
     (re.compile(r'MID', re.IGNORECASE), SEQUENCE_MID),
+    # "EPI short reward" and "EPI reward short" are the same as "EPI short MID"
+    (re.compile(r'reward', re.IGNORECASE), SEQUENCE_MID),
     (re.compile(r'face', re.IGNORECASE), SEQUENCE_FT),
     (re.compile(r'stop[- ]signal', re.IGNORECASE), SEQUENCE_SST),
     # LONDON stop signal DICOM files contain "SST"
     (re.compile(r'SST', re.IGNORECASE), SEQUENCE_SST),
+    (re.compile(r'global', re.IGNORECASE), SEQUENCE_GLOBAL),
     (re.compile(r'B0'), SEQUENCE_B0_MAP),
     # LONDON B0 maps made of 3 DICOM files containing "FIELDMAP"
     (re.compile(r'FIELDMAP', re.IGNORECASE), SEQUENCE_B0_MAP),
