@@ -82,7 +82,9 @@ SEQUENCE_SST = 11
 SEQUENCE_B0_MAP = 12
 SEQUENCE_DTI = 13
 SEQUENCE_RESTING_STATE = 14
-SEQUENCE_NODDI = 15
+SEQUENCE_SHORT_MPRAGE = 15
+SEQUENCE_GLOBAL = 16
+SEQUENCE_NODDI = 17
 
 #
 # from sequence ID to sequence name
@@ -98,6 +100,8 @@ SEQUENCE_NAME = {
     SEQUENCE_B0_MAP: 'B0 Map',
     SEQUENCE_DTI: 'DTI',
     SEQUENCE_RESTING_STATE: 'Resting State',
+    SEQUENCE_SHORT_MPRAGE: 'Short MPRAGE',
+    SEQUENCE_GLOBAL: 'EPI Global',
     SEQUENCE_NODDI: 'NODDI',
 }
 
@@ -118,7 +122,8 @@ _LOOSE_IMAGE_DATA_REGEXES = (
     # first search for "FLAIR" then for "T2"
     (re.compile(r'FLAIR', re.IGNORECASE), SEQUENCE_T2_FLAIR),
     (re.compile(r'T2', re.IGNORECASE), SEQUENCE_T2),
-    (re.compile(r'ADNI[- ]MPRAGE', re.IGNORECASE), SEQUENCE_ADNI_MPRAGE),
+    (re.compile(r'SHORT', re.IGNORECASE), SEQUENCE_SHORT_MPRAGE),
+    (re.compile(r'MPRAGE', re.IGNORECASE), SEQUENCE_ADNI_MPRAGE),
     (re.compile(r'MID', re.IGNORECASE), SEQUENCE_MID),
     (re.compile(r'face', re.IGNORECASE), SEQUENCE_FT),
     (re.compile(r'stop[- ]signal', re.IGNORECASE), SEQUENCE_SST),
