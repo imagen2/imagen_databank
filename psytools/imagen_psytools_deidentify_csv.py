@@ -80,6 +80,8 @@ def _create_psc2_file(psc2_from_psc1, psytools_path, psc2_path):
                 line = line.strip()
                 items = line.split(',')
                 psc1 = items[0]
+                trial = items[7]
+                trial_result = items[8]
                 if 'id_check' in line:
                     # Psytools files contain identifying data,
                     # specifically lines containing items:
@@ -124,15 +126,46 @@ def _create_psc2_file(psc2_from_psc1, psytools_path, psc2_path):
                     logging.error('PSC1 code missing from conversion table: %s',
                                   items[0])
                     continue
+
                 for i in convert:
-                    if psc2 is None or psc2 not in DOB_FROM_PSC2:
-                        items[i] = ''
+                    if psc2 and psc2 in DOB_FROM_PSC2:
+                        try:
+                            timestamp = datetime.strptime(items[i],
+                                                          '%Y-%m-%d %H:%M:%S.%f').date()
+                        except ValueError:
+                            items[8] = ''
+                        else:
+                            birth = DOB_FROM_PSC2[psc2]
+                            age = timestamp - birth
+                            items[i] = str(age.days)
                     else:
-                        timestamp = datetime.strptime(items[i],
-                                                      '%Y-%m-%d %H:%M:%S.%f').date()
-                        birth = DOB_FROM_PSC2[psc2]
-                        age = timestamp - birth
-                        items[i] = str(age.days)
+                        items[i] = ''
+
+                # FU2 / ESPAD CHILD
+                if items[7] == 'education_end':
+                    if psc2 and psc2 in DOB_FROM_PSC2:
+                        try:
+                            education_end = datetime.strptime(items[8],
+                                                              '%d-%m-%Y').date()
+                        except ValueError:
+                            items[8] = ''
+                        else:
+                            birth = DOB_FROM_PSC2[psc2]
+                            age = education_end - birth
+                            items[8] = str(age.days)
+                    else:
+                        items[8] = ''
+                # FU2 / NI DATA
+                elif items[7] == 'ni_period' or items[7] == 'ni_date':
+                    try:
+                        event = datetime.strptime(items[8], '%d-%m-%Y').date()
+                    except ValueError:
+                        items[8] = ''
+                    else:
+                        # last 'timestamp' ought to be 'Processed timestamp'
+                        interval = timestamp - event
+                        items[8] = str(interval.days)
+
                 psc2_file.write(','.join(items) + '\n')
 
 
