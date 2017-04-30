@@ -69,104 +69,110 @@ def _create_psc2_file(psc2_from_psc1, psytools_path, psc2_path):
         Output: PSC2-encoded Psytools file.
 
     """
-    with open(psytools_path, 'r') as psytools_file:
-        # identify columns to anonymize in header
-        header = psytools_file.readline().strip()
-        convert = [i for i, field in enumerate(header.split(','))
-                   if 'Timestamp' in field]
+    with open(psytools_path, 'r') as psc1_file:
+        psc1_reader = DictReader(psc1_file, dialect='excel')
+
+        # de-identify columns that contain dates
+        ANONYMIZED_COLUMNS = {
+            'Completed Timestamp': '%Y-%m-%d %H:%M:%S.%f',
+            'Processed Timestamp': '%Y-%m-%d %H:%M:%S.%f',
+        }
+        convert = [fieldname for fieldname in psc1_reader.fieldnames
+                   if fieldname in ANONYMIZED_COLUMNS]
+
         with open(psc2_path, 'w') as psc2_file:
-            psc2_file.write(header + '\n')
-            for line in psytools_file:
-                line = line.strip()
-                items = line.split(',')
-                psc1 = items[0]
-                trial = items[7]
-                trial_result = items[8]
-                if 'id_check' in line:
-                    # Psytools files contain identifying data,
-                    # specifically lines containing items:
-                    # - id_check_dob
-                    # - id_check_gender
-                    #
-                    # As the name implies, the purpose of these items is
-                    # cross-checking and error detection. They should not
-                    # be used for scientific purposes.
-                    #
-                    # These items should therefore not be exposed to Imagen
-                    # users.
-                    #
-                    # The Scito anoymization pipeline used not to filter
-                    # these items out. Since the Imagen V2 server exposes raw
-                    # Psytools files to end users, we need to remove these
-                    # items sooner, before importing the data into the
-                    # CubicWeb database.
-                    logging.debug('skipping line with "id_check" from %s', psc1)
+            psc2_writer = DictWriter(psc2_file, psc1_reader.fieldnames, dialect='excel')
+            psc2_writer.writeheader()
+            for row in psc1_reader:
+                trial = row['Trial']
+                # Psytools files contain identifying data,
+                # specifically lines containing items:
+                # - id_check_dob
+                # - id_check_gender
+                #
+                # As the name implies, the purpose of these items is
+                # cross-checking and error detection. They should not
+                # be used for scientific purposes.
+                #
+                # These items should therefore not be exposed to Imagen
+                # users.
+                #
+                # The Scito anoymization pipeline used not to filter
+                # these items out. Since the Imagen V2 server exposes raw
+                # Psytools files to end users, we need to remove these
+                # items sooner, before importing the data into the
+                # CubicWeb database.
+                if 'id_check_' in trial:
+                    logging.debug('skipping line with "id_check_" for %s',
+                                  row['User code'])
                     continue
+
                 # subject ID is PSC1 followed by either of:
                 #   -C  Child
                 #   -P  Parent
                 #   -I  Institute
-                if '-' in psc1:
-                    psc1, suffix = psc1.rsplit('-', 1)
-                else:
-                    suffix = None
-                psc2 = None
-                if (psc1.startswith('TEST') or
-                        psc1.startswith('FOLLOWUP') or
-                        psc1.startswith('THOMAS_PRONK') or
-                        psc1.startswith('MAREN')):
-                    logging.debug('skipping test subject %s', psc1)
-                    continue
-                elif psc1 in psc2_from_psc1:
-                    logging.debug('converting subject %s from PSC1 to PSC2',
-                                  psc1)
-                    psc2 = psc2_from_psc1[psc1]
-                    items[0] = '-'.join((psc2, suffix))
-                else:
-                    logging.error('PSC1 code missing from conversion table: %s',
-                                  items[0])
-                    continue
-
-                for i in convert:
-                    if psc2 and psc2 in DOB_FROM_PSC2:
-                        try:
-                            timestamp = datetime.strptime(items[i],
-                                                          '%Y-%m-%d %H:%M:%S.%f').date()
-                        except ValueError:
-                            items[8] = ''
-                        else:
-                            birth = DOB_FROM_PSC2[psc2]
-                            age = timestamp - birth
-                            items[i] = str(age.days)
+                psc1_suffix = row['User code'].rsplit('-', 1)
+                psc1 = psc1_suffix[0]
+                if psc1 in PSC2_FROM_PSC1:
+                    psc2 = PSC2_FROM_PSC1[psc1]
+                    if len(psc1_suffix) > 1:
+                        psc2_suffix = '-'.join((psc2, psc1_suffix[1]))
                     else:
-                        items[i] = ''
+                        psc2_suffix = psc2
+                    logging.debug('converting from %s to %s',
+                                  row['User code'], psc2_suffix)
+                    row['User code'] = psc2_suffix
+                else:
+                    u = psc1.upper()
+                    if ('FOLLOWUP' in u or 'TEST' in u or 'MAREN' in u
+                            or 'THOMAS_PRONK' in u):
+                        logging.debug('skipping test subject %s',
+                                      row['User code'])
+                    else:
+                        logging.error('unknown PSC1 code %s in user code %s',
+                                      psc1, row['User code'])
+                    continue
 
+                # de-identify columns that contain dates
+                for fieldname in convert:
+                    if psc1 in DOB_FROM_PSC1:
+                        birth = DOB_FROM_PSC1[psc1]
+                        timestamp = datetime.strptime(row[fieldname],
+                                                      ANONYMIZED_COLUMNS[fieldname]).date()
+                        age = timestamp - birth
+                        row[fieldname] = str(age.days)
+                    else:
+                        row[fieldname] = None
+
+                # de-identify rows that contain dates
+                #
                 # FU2 / ESPAD CHILD
-                if items[7] == 'education_end':
+                if trial == 'education_end':
                     if psc2 and psc2 in DOB_FROM_PSC2:
                         try:
-                            education_end = datetime.strptime(items[8],
-                                                              '%d-%m-%Y').date()
+                            event = datetime.strptime(row['Trial result'],
+                                                      '%d-%m-%Y').date()
                         except ValueError:
-                            items[8] = ''
+                            row['Trial result'] = None
                         else:
                             birth = DOB_FROM_PSC2[psc2]
-                            age = education_end - birth
-                            items[8] = str(age.days)
+                            age = event - birth
+                            row['Trial result'] = str(age.days)
                     else:
-                        items[8] = ''
+                        row['Trial result'] = None
                 # FU2 / NI DATA
-                elif items[7] == 'ni_period' or items[7] == 'ni_date':
+                elif trial == 'ni_period' or trial == 'ni_date':
                     try:
-                        event = datetime.strptime(items[8], '%d-%m-%Y').date()
+                        event = datetime.strptime(row['Trial result'],
+                                                  '%d-%m-%Y').date()
                     except ValueError:
-                        items[8] = ''
+                        row['Trial result'] = None
                     else:
                         # last 'timestamp' ought to be 'Processed timestamp'
                         interval = timestamp - event
-                        items[8] = str(interval.days)
+                        row['Trial result'] = str(interval.days)
 
-                psc2_file.write(','.join(items) + '\n')
+                psc2_writer.writerow(row)
 
 
 def create_psc2_files(psc2_from_psc1, master_dir, psc2_dir):

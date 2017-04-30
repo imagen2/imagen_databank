@@ -11,7 +11,7 @@ Software reference documentation_ is published on line.
   Read and perform sanity checks on raw datasets.
 
 ``cantab``
-  Extract age from FU2 Cantab data
+  Extract age from FU2 Cantab data.
 
 ``dawba``
   Remove identifying data and convert PSC1 to PSC2 in Dawba data,
