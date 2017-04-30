@@ -47,6 +47,8 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 import os
+from csv import DictReader
+from csv import DictWriter
 from datetime import datetime
 
 # import ../imagen_databank
