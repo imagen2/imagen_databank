@@ -137,8 +137,8 @@ def _create_psc2_file(psc2_from_psc1, psytools_path, psc2_path):
 
                 # de-identify columns that contain dates
                 for fieldname in convert:
-                    if psc1 in DOB_FROM_PSC1:
-                        birth = DOB_FROM_PSC1[psc1]
+                    if psc1 in DOB_FROM_PSC2:
+                        birth = DOB_FROM_PSC2[psc2]
                         timestamp = datetime.strptime(row[fieldname],
                                                       ANONYMIZED_COLUMNS[fieldname]).date()
                         age = timestamp - birth
