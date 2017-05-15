@@ -532,6 +532,10 @@ def _check_image_data(path, ziptree, suffix, psc1, date, expected):
         # choose a file from zip tree and check its DICOM tags
         with TemporaryDirectory('imagen') as tempdir:
             for f in files:
+                if os.path.basename(f).startswith('DICOMDIR'):
+                    # do not read DICOMDIR files
+                    # in case of multiple sessions I have seen DICOMDIR2 files
+                    continue
                 with ZipFile(path, 'r') as z:
                     dicom_file = z.extract(f, tempdir)
                     try:
