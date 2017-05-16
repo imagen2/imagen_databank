@@ -149,7 +149,8 @@ def _create_psc2_file(psc2_from_psc1, psytools_path, psc2_path):
                 # de-identify rows that contain dates
                 #
                 # FU2 / ESPAD CHILD
-                if trial == 'education_end':
+                # FU2 / NI DATA
+                if trial in {'education_end', 'ni_period', 'ni_date'}:
                     if psc2 and psc2 in DOB_FROM_PSC2:
                         try:
                             event = datetime.strptime(row['Trial result'],
@@ -162,17 +163,6 @@ def _create_psc2_file(psc2_from_psc1, psytools_path, psc2_path):
                             row['Trial result'] = str(age.days)
                     else:
                         row['Trial result'] = None
-                # FU2 / NI DATA
-                elif trial == 'ni_period' or trial == 'ni_date':
-                    try:
-                        event = datetime.strptime(row['Trial result'],
-                                                  '%d-%m-%Y').date()
-                    except ValueError:
-                        row['Trial result'] = None
-                    else:
-                        # last 'timestamp' ought to be 'Processed timestamp'
-                        interval = timestamp - event
-                        row['Trial result'] = str(interval.days)
 
                 psc2_writer.writerow(row)
 
