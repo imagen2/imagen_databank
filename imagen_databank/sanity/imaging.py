@@ -156,17 +156,20 @@ class ZipTree:
 
     def _add(self, zipinfo):
         d = self
+
         if zipinfo.filename.endswith('/'):  # directory
             parts = zipinfo.filename.rstrip('/').split('/')
             filename = ''
             for part in parts:
-                filename += part + '/'
-                d = d.directories.setdefault(part, ZipTree(filename))
+                dirname += part + '/'
+                d = d.directories.setdefault(part, ZipTree(dirname))
         else:  # file
             parts = zipinfo.filename.split('/')
             basename = parts.pop()
+            dirname = ''
             for part in parts:
-                d = d.directories.setdefault(part, ZipTree())
+                dirname += part + '/'
+                d = d.directories.setdefault(part, ZipTree(dirname))
             if basename not in d.files:
                 d.files[basename] = zipinfo
             else:
