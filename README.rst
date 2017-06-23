@@ -2,9 +2,9 @@
 Databank operations of the Imagen project
 =========================================
 
-Databank operations are currently documented internally at NeuroSpin.
+Databank operations are mostly documented internally at NeuroSpin.
 
-Software reference documentation_ is published on line. 
+Basic information is available from the wiki_ associated to this repository.
 
 
 ``imagen_databank``
@@ -21,6 +21,6 @@ Software reference documentation_ is published on line.
   Download Psytools data as CSV and JSON files from the Delosis_ server.
   Remove identifying data and convert PSC1 to PSC2.
 
-.. _documentation: http://imagen-databank.readthedocs.io
-.. _youthinmind: http://youthinmind.com/
+.. _wiki: https://github.com/imagen2/imagen_databank/wiki
+.. _youthinmind: http://youthinmind.com
 .. _Delosis: https://www.delosis.com
