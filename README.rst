@@ -6,9 +6,9 @@ Databank operations are mostly documented internally at NeuroSpin.
 
 Basic information is available from the `project wiki`_.
 
-This is a Python package that combines a Python library *imagen_databank*
-for basic sanity check and preprocessing of Imagen data and a set of scripts
-to extract, check, anonymize and transform raw Imagen data.
+This Python package combines a Python library *imagen_databank* for basic
+sanity check and preprocessing of Imagen data and a set of scripts to
+extract, check, anonymize and transform raw Imagen data.
 
 ``imagen_databank``
   Read and perform sanity checks on raw datasets.
