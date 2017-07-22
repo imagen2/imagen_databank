@@ -159,7 +159,7 @@ class ZipTree:
 
         if zipinfo.filename.endswith('/'):  # directory
             parts = zipinfo.filename.rstrip('/').split('/')
-            filename = ''
+            dirname = ''
             for part in parts:
                 dirname += part + '/'
                 d = d.directories.setdefault(part, ZipTree(dirname))
@@ -397,7 +397,7 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
                                                                 .format(date, timestamp.date())))
                     else:
                         error_list.append(Error(z.filename, 'Missing acquisition date'))
-                        
+
                     error_list.extend(errors)
 
     if expected_tests:
@@ -545,7 +545,7 @@ def _check_image_data(path, ziptree, suffix, psc1, date, expected):
                         metadata = read_metadata(dicom_file, force=True)
                     except IOError:
                         continue
-                    except AttributeError as e:
+                    except AttributeError:
                         error_list.append(Error(f, 'This is not a valid DICOM file'))
                         break
                     else:
