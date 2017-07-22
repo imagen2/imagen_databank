@@ -32,6 +32,7 @@ import re
 import datetime
 import dateutil.tz
 import dicom
+from dicom.filereader import InvalidDicomError
 
 import logging
 logger = logging.getLogger(__name__)
