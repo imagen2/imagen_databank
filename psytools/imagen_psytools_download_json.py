@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Download Psytools JSON files (FU3).
+"""Download Psytools files from LimeSurvey 2 server (FU3).
 
 ==========
 Attributes
@@ -22,6 +22,8 @@ import os
 import requests
 import json
 import base64
+import csv
+import io
 from urllib.parse import urlparse
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -187,11 +189,11 @@ class LimeSurveySession(object):
     @error2exception
     def responses(self, survey, status='all'):
         request = self._request('export_responses',
-                                [self.key, survey, 'json', None, status])
+                                [self.key, survey, 'csv', None, status])
         responses, error = self._post(request)
 
         try:
-            responses = json.loads(base64.b64decode(responses).decode('utf_8'))
+            responses = base64.b64decode(responses).decode('utf_8').split('\n')
         except TypeError:
             # fix non-sensical LSRC2 error handling
             # completely at odds with JSON-RPC error handling
@@ -217,7 +219,7 @@ class LimeSurveySession(object):
                         'code': -32099,  # implementation-defined error in JSON-RPC
                         'message': status,
                     }
-            responses = {'responses': []}
+            responses = []
 
         return responses, error
 
@@ -246,18 +248,6 @@ def _get_netrc_auth(url):
         return
 
 
-def _psc1_response_from_id_reponse(id_response, psc1_from_token):
-    psc1_response = {}
-    for k, v in id_response.items():
-        if v['token'] in psc1_from_token:
-            psc1 = psc1_from_token[v['token']]
-            psc1_response[psc1] = v
-        else:
-            logging.error('Orphan token "%s" in response "%s"',
-                          v['token'], k)
-    return psc1_response
-
-
 def download_json(base_url):
     """JSON RPC calls to retrieve new questionnaires.
 
@@ -280,21 +270,34 @@ def download_json(base_url):
 
             # retrieve survey
             responses = session.responses(sid, 'all')
+            if not responses:  # some 'FUII Parent' surveys are still empty
+                continue
 
-            # dump survey to JSON format:
+            # process CSV data:
             # * change "tid" into PSC1 code
             # * keep "token"
-            if 'responses' in responses:
-                responses['responses'] = [_psc1_response_from_id_reponse(r, psc1_from_token)
-                                          for r in responses['responses']]
-            data = json.dumps(responses,
-                              indent=4, separators=(',', ': '), sort_keys=True)
+            # * use minimal quoting as in FU2
+            reader = csv.DictReader(responses, delimiter=',')
+            output = io.StringIO()
+            writer = csv.DictWriter(output, fieldnames=reader.fieldnames,
+                                    delimiter=',', quoting=csv.QUOTE_MINIMAL,
+                                    lineterminator='\n')
+            writer.writeheader()
+            for row in reader:
+                token = row['token']
+                if token in psc1_from_token:
+                    row['id'] = psc1_from_token[row['token']]
+                    writer.writerow(row)
+                else:
+                    logging.error('Orphan token "%s" in response "%s"',
+                                  token, row['id'])
+            data = output.getvalue()
 
             # save survey to this file name
             psytools_path = title
             psytools_path = psytools_path.replace(' - ', '-')
             psytools_path = psytools_path.replace(' ', '_')
-            psytools_path += '.json'
+            psytools_path += '.csv'
             if 'FUIII' in title:
                 psytools_dir = PSYTOOLS_FU3_MASTER_DIR
             elif 'FUII' in title:
@@ -303,15 +306,14 @@ def download_json(base_url):
                 psytools_dir = PSYTOOLS_SB_MASTER_DIR
             psytools_path = os.path.join(psytools_dir, psytools_path)
 
-            # skip file that have not changed since last update
-            # note that "sort_keys=True" is required for this to work!
+            # skip files that have not changed since last update
             if os.path.isfile(psytools_path):
                 with open(psytools_path, 'r') as psytools:
                     if psytools.read() == data:
                         logging.info('skip unchanged file: %s', psytools_path)
                         continue
 
-            # write survey into JSON file
+            # write survey into CSV file
             with open(psytools_path, 'w') as psytools:
                 logging.info('write file: %s', psytools_path)
                 psytools.write(data)
