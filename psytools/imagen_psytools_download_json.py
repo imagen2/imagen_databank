@@ -181,7 +181,7 @@ class LimeSurveySession(object):
     @error2exception
     def responses(self, survey, status='all'):
         request = self._request('export_responses',
-                                [self.key, survey, 'json', 'fr', status])
+                                [self.key, survey, 'json', None, status])
         responses, error = self._post(request)
 
         try:
