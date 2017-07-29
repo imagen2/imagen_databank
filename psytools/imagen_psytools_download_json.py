@@ -9,8 +9,12 @@ Attributes
 Output
 ------
 
+PSYTOOLS_FU2_MASTER_DIR : str
+    Location of FU3 PSC1-encoded files.
 PSYTOOLS_FU3_MASTER_DIR : str
     Location of FU3 PSC1-encoded files.
+PSYTOOLS_SB_MASTER_DIR : str
+    Location of Stratify B PSC1-encoded files.
 
 """
 
@@ -22,7 +26,9 @@ from urllib.parse import urlparse
 import logging
 logging.basicConfig(level=logging.INFO)
 
+PSYTOOLS_FU2_MASTER_DIR = '/neurospin/imagen/FU2/RAW/PSC1/psytools'
 PSYTOOLS_FU3_MASTER_DIR = '/neurospin/imagen/FU3/RAW/PSC1/psytools'
+PSYTOOLS_SB_MASTER_DIR = '/neurospin/imagen/SB/RAW/PSC1/psytools'
 
 JSON_BASE_URL = 'https://www.delosis.com/qs/index.php/admin/remotecontrol'
 
@@ -288,8 +294,14 @@ def download_json(base_url):
             psytools_path = title
             psytools_path = psytools_path.replace(' - ', '-')
             psytools_path = psytools_path.replace(' ', '_')
-            psytools_path = os.path.join(PSYTOOLS_FU3_MASTER_DIR,
-                                         psytools_path + '.json')
+            psytools_path += '.json'
+            if 'FUIII' in title:
+                psytools_dir = PSYTOOLS_FU3_MASTER_DIR
+            elif 'FUII' in title:
+                psytools_dir = PSYTOOLS_FU2_MASTER_DIR
+            else:
+                psytools_dir = PSYTOOLS_SB_MASTER_DIR
+            psytools_path = os.path.join(psytools_dir, psytools_path)
 
             # skip file that have not changed since last update
             # note that "sort_keys=True" is required for this to work!
