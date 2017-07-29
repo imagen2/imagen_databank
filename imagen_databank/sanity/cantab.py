@@ -126,7 +126,49 @@ _COLUMN_NAMES = {
         'OPTIONAL': (
             # Warnings: skip Warning1, Warning2, ... Hardcoded in the code!
         )
-    }
+    },
+    'SB': {  # in principle StratifyB should be identical to FU3
+        'REQUIRED': (
+            # demographics...
+            "Subject ID",
+            "Age",
+            "NART",
+            "Gender",
+            "Session start time",
+            # Cambridge Guessing (Gambling) Task (CGT)
+            "CGT Delay aversion",
+            "CGT Deliberation time",
+            "CGT Overall proportion bet",
+            "CGT Quality of decision making",
+            "CGT Risk adjustment",
+            "CGT Risk taking",
+            # Intra-Extra Dimensional Set Shift (IED)
+            "IED Total trials",
+            "IED Total trials (adjusted)",
+            "IED Completed stage trials",
+            "IED Pre-ED errors",
+            "IED EDS errors",
+            "IED Total errors",
+            "IED Total errors (adjusted)",
+            "IED Completed stage errors",
+            "IED Errors (block 1)",
+            "IED Errors (block 2)",
+            "IED Errors (block 3)",
+            "IED Errors (block 4)",
+            "IED Errors (block 5)",
+            "IED Errors (block 6)",
+            "IED Errors (block 7)",
+            "IED Errors (block 8)",
+            "IED Errors (block 9)",
+            "IED Stages completed",
+            # Spatial Working Memory (SWM)
+            "SWM Between errors",
+            "SWM Strategy",
+        ),
+        'OPTIONAL': (
+            # Warnings: skip Warning1, Warning2, ... Hardcoded in the code!
+        )
+    },
 }
 
 
