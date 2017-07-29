@@ -289,8 +289,8 @@ def download_json(base_url):
                     row['id'] = psc1_from_token[row['token']]
                     writer.writerow(row)
                 else:
-                    logging.error('Orphan token "%s" in response "%s"',
-                                  token, row['id'])
+                    logging.warning('Orphan token "%s" in response "%s"',
+                                    token, row['id'])
             data = output.getvalue()
 
             # save survey to this file name
