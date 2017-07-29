@@ -298,12 +298,7 @@ def download_json(base_url):
             psytools_path = psytools_path.replace(' - ', '-')
             psytools_path = psytools_path.replace(' ', '_')
             psytools_path += '.csv'
-            if 'FUIII' in title:
-                psytools_dir = PSYTOOLS_FU3_MASTER_DIR
-            elif 'FUII' in title:
-                psytools_dir = PSYTOOLS_FU2_MASTER_DIR
-            else:
-                psytools_dir = PSYTOOLS_SB_MASTER_DIR
+            psytools_dir = PSYTOOLS_FU3_MASTER_DIR
             psytools_path = os.path.join(psytools_dir, psytools_path)
 
             # skip files that have not changed since last update
