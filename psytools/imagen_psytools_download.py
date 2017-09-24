@@ -27,12 +27,15 @@ PSYTOOLS_SB_MASTER_DIR : str
 
 """
 
+import requests
 import os
+import gzip
+import io
+import re
 import requests
 import json
 import base64
 import csv
-import io
 from urllib.parse import urlparse
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -191,10 +194,10 @@ def download_legacy(base_url, datasets):
         # let Requests use ~/.netrc instead of passing an auth parameter
         #     auth = requests.auth.HTTPBasicAuth('...', '...')
         r = requests.get(url)
-        compressed_data = BytesIO(r.content)
+        compressed_data = io.BytesIO(r.content)
         with gzip.GzipFile(fileobj=compressed_data) as uncompressed_data:
             # unfold quoted text spanning multiple lines
-            uncompressed_data = TextIOWrapper(uncompressed_data)
+            uncompressed_data = io.TextIOWrapper(uncompressed_data)
             data = QUOTED_PATTERN.sub(lambda x: x.group().replace('\n', '/'),
                                       uncompressed_data.read())
             # break down into different directories, one for each timepoint
