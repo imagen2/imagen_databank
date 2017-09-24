@@ -306,6 +306,7 @@ def download_json(base_url):
                 psytools_dir = PSYTOOLS_FU3_MASTER_DIR
             else:
                 logging.error('unidentifiable Psytools data: %s', title)
+                continue
             psytools_path = os.path.join(psytools_dir, psytools_path)
 
             # skip files that have not changed since last update
