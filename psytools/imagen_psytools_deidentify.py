@@ -58,8 +58,10 @@ from imagen_databank import PSC2_FROM_PSC1
 from imagen_databank import DOB_FROM_PSC2
 
 
-def _create_psc2_file(psc2_from_psc1, psytools_path, psc2_path):
-    """Anonymize and re-encode a Psytools questionnaire from PSC1 to PSC2.
+def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
+    """Anonymize and re-encode a legacy Psytools questionnaire from PSC1 to PSC2.
+
+    Legacy questionnaires are in long format.
 
     Parameters
     ----------
@@ -96,8 +98,8 @@ def _create_psc2_file(psc2_from_psc1, psytools_path, psc2_path):
                 # cross-checking and error detection. They should not
                 # be used for scientific purposes.
                 #
-                # These items should therefore not be exposed to Imagen
-                # users.
+                # These items should therefore not be published in the
+                # Imagen database.
                 #
                 # The Scito anoymization pipeline used not to filter
                 # these items out. Since the Imagen V2 server exposes raw
@@ -167,8 +169,36 @@ def _create_psc2_file(psc2_from_psc1, psytools_path, psc2_path):
                 psc2_writer.writerow(row)
 
 
-def create_psc2_files(psc2_from_psc1, master_dir, psc2_dir):
-    """Anonymize and re-encode all psytools questionnaires within a directory.
+def _deidentify_lsrc2(psc2_from_psc1, psytools_path, psc2_path):
+    """Anonymize and re-encode an LSRC2 Psytools questionnaire from PSC1 to PSC2.
+
+    LSRC2 questionnaires are in wide format.
+
+    Parameters
+    ----------
+    psc2_from_psc1: map
+        Conversion table, from PSC1 to PSC2.
+    psytools_path: str
+        Input: PSC1-encoded Psytools file.
+    psc2_path: str
+        Output: PSC2-encoded Psytools file.
+
+    """
+    return
+
+    with open(psytools_path, 'r') as psc1_file:
+        psc1_reader = DictReader(psc1_file, dialect='excel')
+
+        with open(psc2_path, 'w') as psc2_file:
+            psc2_writer = DictWriter(psc2_file, psc1_reader.fieldnames, dialect='excel')
+            psc2_writer.writeheader()
+            for row in psc1_reader:
+
+    ## TODO ##
+
+
+def deidentify(psc2_from_psc1, master_dir, psc2_dir):
+    """Anonymize and re-encode Psytools questionnaires within a directory.
 
     PSC1-encoded files are read from `master_dir`, anoymized and converted
     from PSC1 codes to PSC2, and the result is written in `psc2_dir`.
@@ -183,23 +213,26 @@ def create_psc2_files(psc2_from_psc1, master_dir, psc2_dir):
         Output directory with PSC2-encoded and anonymized questionnaires.
 
     """
-    for master_file in os.listdir(master_dir):
-        (_, ext) = os.path.splitext(master_file)
-        if ext == '.csv':
-            master_path = os.path.join(master_dir, master_file)
-            psc2_path = os.path.join(psc2_dir, master_file)
-            _create_psc2_file(psc2_from_psc1, master_path, psc2_path)
+    for filename in os.listdir(master_dir):
+        master_path = os.path.join(master_dir, filename)
+        psc2_path = os.path.join(psc2_dir, filename)
+        if filename.startswith('IMAGEN-IMGN_'):
+            _deidentify_legacy(psc2_from_psc1, master_path, psc2_path)
+        elif filename.startswith('Imagen_') or filename.startswith('STRATIFY_'):
+            _deidentify_lsrc2(psc2_from_psc1, master_path, psc2_path)
+        else:
+            logging.error('skipping unknown file: %s', filename)
 
 
 def main():
-    create_psc2_files(PSC2_FROM_PSC1,
-                      PSYTOOLS_BL_MASTER_DIR, PSYTOOLS_BL_PSC2_DIR)
-    create_psc2_files(PSC2_FROM_PSC1,
-                      PSYTOOLS_FU1_MASTER_DIR, PSYTOOLS_FU1_PSC2_DIR)
-    create_psc2_files(PSC2_FROM_PSC1,
-                      PSYTOOLS_FU2_MASTER_DIR, PSYTOOLS_FU2_PSC2_DIR)
-    create_psc2_files(PSC2_FROM_PSC1,
-                      PSYTOOLS_FU3_MASTER_DIR, PSYTOOLS_FU3_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_BL_MASTER_DIR, PSYTOOLS_BL_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_FU1_MASTER_DIR, PSYTOOLS_FU1_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_FU2_MASTER_DIR, PSYTOOLS_FU2_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_FU3_MASTER_DIR, PSYTOOLS_FU3_PSC2_DIR)
 
 
 if __name__ == "__main__":
