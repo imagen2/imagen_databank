@@ -20,6 +20,8 @@ DAWBA_FU2_MASTER_DIR : str
     Location of FU2 PSC1-encoded files.
 DAWBA_FU3_MASTER_DIR : str
     Location of FU3 PSC1-encoded files.
+DAWBA_SB_MASTER_DIR : str
+    Location of Stratify PSC1-encoded files.
 
 Output
 ------
@@ -32,6 +34,8 @@ DAWBA_FU2_PSC2_DIR : str
     Location of FU2 PSC2-encoded files.
 DAWBA_FU3_PSC2_DIR : str
     Location of FU3 PSC2-encoded files.
+DAWBA_SB_PSC2_DIR : str
+    Location of Stratify PSC2-encoded files.
 
 """
 
@@ -43,6 +47,8 @@ DAWBA_FU2_MASTER_DIR = '/neurospin/imagen/FU2/RAW/PSC1/dawba'
 DAWBA_FU2_PSC2_DIR = '/neurospin/imagen/FU2/RAW/PSC2/dawba'
 DAWBA_FU3_MASTER_DIR = '/neurospin/imagen/FU3/RAW/PSC1/dawba'
 DAWBA_FU3_PSC2_DIR = '/neurospin/imagen/FU3/RAW/PSC2/dawba'
+DAWBA_SB_MASTER_DIR = '/neurospin/imagen/FU3/RAW/PSC1/dawba'
+DAWBA_SB_PSC2_DIR = '/neurospin/imagen/FU3/RAW/PSC2/dawba'
 
 MISSING_DAWBA1_CODES = {
     # DAWBA1 codes, missing for some reason - just ignore them...
@@ -202,6 +208,8 @@ def main():
                       DAWBA_FU2_MASTER_DIR, DAWBA_FU2_PSC2_DIR)
     create_psc2_files(PSC2_FROM_DAWBA,
                       DAWBA_FU3_MASTER_DIR, DAWBA_FU3_PSC2_DIR)
+    create_psc2_files(PSC2_FROM_DAWBA,
+                      DAWBA_SB_MASTER_DIR, DAWBA_SB_PSC2_DIR)
 
 
 if __name__ == "__main__":
