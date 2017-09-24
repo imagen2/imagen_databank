@@ -298,7 +298,14 @@ def download_json(base_url):
             psytools_path = psytools_path.replace(' - ', '-')
             psytools_path = psytools_path.replace(' ', '_')
             psytools_path += '.csv'
-            psytools_dir = PSYTOOLS_FU3_MASTER_DIR
+
+            if 'STRATIFY' in title.upper():
+                psytools_dir = PSYTOOLS_SB_MASTER_DIR
+            elif 'IMAGEN' in title.upper():
+                # even FU2 files go into FU3 for now
+                psytools_dir = PSYTOOLS_FU3_MASTER_DIR
+            else:
+                logging.error('unidentifiable Psytools data: %s', title)
             psytools_path = os.path.join(psytools_dir, psytools_path)
 
             # skip files that have not changed since last update
