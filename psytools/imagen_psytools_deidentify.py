@@ -169,6 +169,23 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                 psc2_writer.writerow(row)
 
 
+def _psc2(psc1):
+    if 'TEST' in psc1.upper():
+        # skip test subjects
+        logging.debug('Skipping test subject "%s"', psc1)
+    else:
+        # find and skip subjects with invalid identifier
+        if psc1[-3:] in {'FU2', 'FU3'}:
+            psc1 = psc1[:-3]
+        elif psc1[-2:] == 'SB':
+            psc1 = psc1[:-2]
+        if psc1 in PSC2_FROM_PSC1:
+            return PSC2_FROM_PSC1[psc1]
+        else:
+            logging.error('Invalid subject identifier "%s"', psc1)
+    return None
+
+
 def _deidentify_lsrc2(psc2_from_psc1, psytools_path, psc2_path):
     """Anonymize and re-encode an LSRC2 Psytools questionnaire from PSC1 to PSC2.
 
@@ -184,17 +201,45 @@ def _deidentify_lsrc2(psc2_from_psc1, psytools_path, psc2_path):
         Output: PSC2-encoded Psytools file.
 
     """
-    return
+    COLUMNS_TO_REMOVE = {
+        'token',
+        'ipaddr',
+        'IdCheckGender',
+        'IdCheckDob',
+    }
+    COLUMNS_WITH_DATE = {
+        'startdate',
+        'datestamp',
+        'submitdate',
+    }
 
     with open(psytools_path, 'r') as psc1_file:
         psc1_reader = DictReader(psc1_file, dialect='excel')
-
+        # columns to remove entirely
+        fieldnames = [x for x in psc1_reader.fieldnames
+                      if x not in COLUMNS_TO_REMOVE]
         with open(psc2_path, 'w') as psc2_file:
-            psc2_writer = DictWriter(psc2_file, psc1_reader.fieldnames, dialect='excel')
+            psc2_writer = DictWriter(psc2_file, fieldnames, dialect='excel')
             psc2_writer.writeheader()
             for row in psc1_reader:
+                # skip test and invalid subjects
+                psc2 = _psc2(row['id'])
+                if psc2:
+                    # columns to remove entirely
+                    for x in COLUMNS_TO_REMOVE:
+                        if x in row:
+                            del row[x]
+                    # columns to de-identify
+                    row['id'] = psc2
+                    for x in COLUMNS_WITH_DATE:
+                        if x in row and row[x]:
+                            date = datetime.strptime(row[x],
+                                                     '%Y-%m-%d %H:%M:%S').date()
+                            birth = DOB_FROM_PSC2[psc2]
+                            age = date - birth
+                            row[x] = age.days
+                    psc2_writer.writerow(row)
 
-    ## TODO ##
 
 
 def deidentify(psc2_from_psc1, master_dir, psc2_dir):
