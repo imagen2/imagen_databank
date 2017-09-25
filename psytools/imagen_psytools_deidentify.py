@@ -43,13 +43,13 @@ PSYTOOLS_FU2_PSC2_DIR = u'/neurospin/imagen/FU2/RAW/PSC2/psytools'
 PSYTOOLS_FU3_MASTER_DIR = u'/neurospin/imagen/FU3/RAW/PSC1/psytools'
 PSYTOOLS_FU3_PSC2_DIR = u'/neurospin/imagen/FU3/RAW/PSC2/psytools'
 
-import logging
-logging.basicConfig(level=logging.INFO)
 
 import os
 from csv import DictReader
 from csv import DictWriter
 from datetime import datetime
+import logging
+logging.basicConfig(level=logging.INFO)
 
 # import ../imagen_databank
 import sys

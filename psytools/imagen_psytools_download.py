@@ -27,7 +27,6 @@ PSYTOOLS_SB_MASTER_DIR : str
 
 """
 
-import requests
 import os
 import gzip
 import io
