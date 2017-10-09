@@ -211,24 +211,28 @@ def report_additional_data(path, psc1, exact=False):
         for f in additional_files[FT_CSV]:
             f_path = os.path.join(path, f)
             subject_id, _, _, _ = read_ft(f_path)
-            additional_data.setdefault(FT_CSV, {})[f] = set(subject_id)
+            if subject_id:
+                additional_data.setdefault(FT_CSV, {})[f] = set(subject_id)
     # read Scanning/mid_*.csv where available
     if MID_CSV in additional_files:
         for f in additional_files[MID_CSV]:
             f_path = os.path.join(path, f)
             subject_id, _, _, _ = read_mid(f_path)
-            additional_data.setdefault(MID_CSV, {})[f] = set(subject_id)
+            if subject_id:
+                additional_data.setdefault(MID_CSV, {})[f] = set(subject_id)
     # read Scanning/recog_*.csv where available
     if RECOG_CSV in additional_files:
         for f in additional_files[RECOG_CSV]:
             f_path = os.path.join(path, f)
             subject_id, _, _, _ = read_recog(f_path)
-            additional_data.setdefault(RECOG_CSV, {})[f] = set(subject_id)
+            if subject_id:
+                additional_data.setdefault(RECOG_CSV, {})[f] = set(subject_id)
     # read Scanning/ss_*.csv where available
     if SS_CSV in additional_files:
         for f in additional_files[SS_CSV]:
             f_path = os.path.join(path, f)
             subject_id, _, _, _ = read_ss(f_path)
-            additional_data.setdefault(SS_CSV, {})[f] = set(subject_id)
+            if subject_id:
+                additional_data.setdefault(SS_CSV, {})[f] = set(subject_id)
 
     return additional_data
