@@ -34,7 +34,8 @@ import time
 import datetime
 
 from .core import (LONDON, NOTTINGHAM, DUBLIN, BERLIN,
-                   HAMBURG, MANNHEIM, PARIS, DRESDEN)
+                   HAMBURG, MANNHEIM, PARIS, DRESDEN,
+                   SOUTHAMPTON)
 from .dicom_utils import read_metadata
 from .dicom_utils import InvalidDicomError
 
@@ -46,6 +47,7 @@ __all__ = ['SEQUENCE_LOCALIZER_CALIBRATION', 'SEQUENCE_T2',
            'SEQUENCE_MID', 'SEQUENCE_FT', 'SEQUENCE_SST',
            'SEQUENCE_B0_MAP', 'SEQUENCE_DTI',
            'SEQUENCE_RESTING_STATE',
+           'SEQUENCE_NODDI',
            'SEQUENCE_NAME',
            'NONSTANDARD_DICOM',
            'series_type_from_description',
@@ -157,6 +159,7 @@ NONSTANDARD_DICOM = {
     MANNHEIM: False,
     PARIS: False,
     DRESDEN: False,
+    SOUTHAMPTON: False,
 }
 
 #
