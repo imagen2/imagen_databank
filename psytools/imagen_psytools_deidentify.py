@@ -258,7 +258,14 @@ def deidentify(psc2_from_psc1, master_dir, psc2_dir):
         Output directory with PSC2-encoded and anonymized questionnaires.
 
     """
+    CURRENTLY_NOT_PROPERLY_DEIDENTIFIED = {
+        'IMAGEN-IMGN_RELIABILITY_PI_FU2-BASIC_DIGEST.csv',
+        'IMAGEN-IMGN_RELIABILITY_FU3-BASIC_DIGEST.csv',
+    }
+
     for filename in os.listdir(master_dir):
+        if filename in CURRENTLY_NOT_PROPERLY_DEIDENTIFIED:
+            continue
         master_path = os.path.join(master_dir, filename)
         psc2_path = os.path.join(psc2_dir, filename)
         if filename.startswith('IMAGEN-IMGN_'):
