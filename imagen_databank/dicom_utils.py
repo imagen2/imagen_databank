@@ -255,17 +255,15 @@ def read_metadata(path, force=False):
             metadata['SoftwareVersions'] = dataset.SoftwareVersions
     if 'StudyComments' in dataset:  # DUBLIN
         metadata['StudyComments'] = dataset.StudyComments
+    if 'PatientName' in dataset:  # BERLIN, NOTTINGHAM
+        metadata['PatientName'] = dataset.PatientName
     if 'ImageComments' in dataset:  # HAMBURG, DRESDEN
         metadata['ImageComments'] = dataset.ImageComments
-    if 'PatientName' in dataset:  # NOTTINGHAM
-        tmp = dataset.PatientName
-        if tmp != 'anon':  # LONDON
-            metadata['PatientName'] = dataset.PatientName
     if 'StudyDescription' in dataset:  # LONDON
         metadata['StudyDescription'] = dataset.StudyDescription
     if 'PerformedProcedureStepDescription' in dataset:  # LONDON
         metadata['PerformedProcedureStepDescription'] = dataset.PerformedProcedureStepDescription
-    if 'PatientID' in dataset:  # BERLIN (?), MANNHEIM, PARIS
+    if 'PatientID' in dataset:  # BERLIN, MANNHEIM, PARIS
         metadata['PatientID'] = dataset.PatientID
 
     return metadata
