@@ -214,7 +214,7 @@ def download_legacy(base_url, datasets):
             data = QUOTED_PATTERN.sub(lambda x: x.group().replace('\n', '/'),
                                       uncompressed_data.read())
             # break down into different directories, one for each timepoint
-            if '_FU3' in task:
+            if '_FU3' in task or 'cVEDA_' in task:
                 psytools_dir = PSYTOOLS_FU3_MASTER_DIR
             elif '_FU2' in task:
                 psytools_dir = PSYTOOLS_FU2_MASTER_DIR
