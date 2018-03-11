@@ -268,7 +268,7 @@ def deidentify(psc2_from_psc1, master_dir, psc2_dir):
             continue
         master_path = os.path.join(master_dir, filename)
         psc2_path = os.path.join(psc2_dir, filename)
-        if filename.startswith('IMAGEN-IMGN_'):
+        if filename.startswith('IMAGEN-IMGN_') or filename.startswith('IMAGEN-cVEDA_'):
             _deidentify_legacy(psc2_from_psc1, master_path, psc2_path)
         elif filename.startswith('Imagen_') or filename.startswith('STRATIFY_'):
             _deidentify_lsrc2(psc2_from_psc1, master_path, psc2_path)
