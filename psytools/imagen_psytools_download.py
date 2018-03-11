@@ -457,6 +457,11 @@ def download_lsrc2(base_url):
         for survey in surveys:
             title = survey['surveyls_title']
             sid = survey['sid']
+            active = survey['active']
+
+            if active == 'N':
+                logging.info('skip inactive survey: %s', title)
+                continue
             logging.info('read survey: %s', title)
 
             # subjects in surveys are identified by "sid" and "token"
