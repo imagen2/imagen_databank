@@ -111,15 +111,15 @@ from datetime import datetime
 # import ../imagen_databank
 import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
-from imagen_databank import PSC1_FROM_PSC2
-from imagen_databank import PSC2_FROM_DAWBA
-from imagen_databank import DOB_FROM_PSC2
+from imagen_databank import PSC1_FROM_DAWBA
+from imagen_databank import PSC2_FROM_PSC1
+from imagen_databank import DOB_FROM_PSC1
 
 import logging
 logging.basicConfig(level=logging.INFO)
 
 
-def _create_psc2_file(psc2_from_dawba, dawba_path, psc2_path):
+def _create_psc2_file(dawba_path, psc2_path):
     """Anonymize and re-encode a DAWBA questionnaire from DAWBA to PSC2.
 
     DAWBA questionnaire files are CSV files.
@@ -147,26 +147,7 @@ def _create_psc2_file(psc2_from_dawba, dawba_path, psc2_path):
             for line in dawba_file:
                 items = line.split('\t')
                 dawba = items[0]
-                if dawba in psc2_from_dawba:
-                    psc2 = psc2_from_dawba[dawba]
-                    logging.info('converting subject %s from DAWBA to PSC2',
-                                 PSC1_FROM_PSC2[psc2])
-                    items[0] = psc2
-                    # convert dates to subject age in days
-                    for i in convert:
-                        if items[i] != '':
-                            if psc2 in DOB_FROM_PSC2:
-                                startdate = datetime.strptime(items[i],
-                                                              '%d.%m.%y').date()
-                                birthdate = DOB_FROM_PSC2[psc2]
-                                age = startdate - birthdate
-                                logging.info('age of subject %s: %d',
-                                             PSC1_FROM_PSC2[psc2], age.days)
-                                items[i] = str(age.days)
-                            else:
-                                items[i] = ''
-                    psc2_file.write('\t'.join(items))
-                else:
+                if dawba not in PSC1_FROM_DAWBA:
                     if dawba in WITHDRAWN_DAWBA_CODES:
                         logging.info('withdrawn DAWBA code: %s', dawba)
                     elif dawba in MISSING_DAWBA1_CODES:
@@ -175,9 +156,32 @@ def _create_psc2_file(psc2_from_dawba, dawba_path, psc2_path):
                         logging.error('DAWBA code missing from conversion table: %s',
                                       dawba)
                     continue
+                psc1 = PSC1_FROM_DAWBA[dawba]
+                if psc1 not in PSC2_FROM_PSC1:
+                    logging.error('PSC1 code missing from conversion table: %s',
+                                  psc1)
+                    continue
+                psc2 = PSC2_FROM_PSC1[psc1]
+                logging.info('converting subject %s from DAWBA to PSC2',
+                             psc1)
+                items[0] = psc2
+                # convert dates to subject age in days
+                for i in convert:
+                    if items[i] != '':
+                        if psc1 in DOB_FROM_PSC1:
+                            startdate = datetime.strptime(items[i],
+                                                          '%d.%m.%y').date()
+                            birthdate = DOB_FROM_PSC1[psc1]
+                            age = startdate - birthdate
+                            logging.info('age of subject %s: %d',
+                                         psc1, age.days)
+                            items[i] = str(age.days)
+                        else:
+                            items[i] = ''
+                psc2_file.write('\t'.join(items))
 
 
-def create_psc2_files(psc2_from_dawba, master_dir, psc2_dir):
+def create_psc2_files(master_dir, psc2_dir):
     """Anonymize and re-encode all DAWBA questionnaires within a directory.
 
     DAWBA-encoded files are read from `master_dir`, anoymized and converted
@@ -185,8 +189,6 @@ def create_psc2_files(psc2_from_dawba, master_dir, psc2_dir):
 
     Parameters
     ----------
-    psc2_from_dawba: map
-        Conversion table, from DAWBA to PSC2.
     master_dir: str
         Input directory with DAWBA-encoded questionnaires.
     psc2_dir: str
@@ -196,20 +198,15 @@ def create_psc2_files(psc2_from_dawba, master_dir, psc2_dir):
     for master_file in os.listdir(master_dir):
         master_path = os.path.join(master_dir, master_file)
         psc2_path = os.path.join(psc2_dir, master_file)
-        _create_psc2_file(psc2_from_dawba, master_path, psc2_path)
+        _create_psc2_file(master_path, psc2_path)
 
 
 def main():
-    create_psc2_files(PSC2_FROM_DAWBA,
-                      DAWBA_BL_MASTER_DIR, DAWBA_BL_PSC2_DIR)
-    create_psc2_files(PSC2_FROM_DAWBA,
-                      DAWBA_FU1_MASTER_DIR, DAWBA_FU1_PSC2_DIR)
-    create_psc2_files(PSC2_FROM_DAWBA,
-                      DAWBA_FU2_MASTER_DIR, DAWBA_FU2_PSC2_DIR)
-    create_psc2_files(PSC2_FROM_DAWBA,
-                      DAWBA_FU3_MASTER_DIR, DAWBA_FU3_PSC2_DIR)
-    create_psc2_files(PSC2_FROM_DAWBA,
-                      DAWBA_SB_MASTER_DIR, DAWBA_SB_PSC2_DIR)
+    create_psc2_files(DAWBA_BL_MASTER_DIR, DAWBA_BL_PSC2_DIR)
+    create_psc2_files(DAWBA_FU1_MASTER_DIR, DAWBA_FU1_PSC2_DIR)
+    create_psc2_files(DAWBA_FU2_MASTER_DIR, DAWBA_FU2_PSC2_DIR)
+    create_psc2_files(DAWBA_FU3_MASTER_DIR, DAWBA_FU3_PSC2_DIR)
+    create_psc2_files(DAWBA_SB_MASTER_DIR, DAWBA_SB_PSC2_DIR)
 
 
 if __name__ == "__main__":

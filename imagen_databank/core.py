@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2014-2017 CEA
+# Copyright (c) 2014-2018 CEA
 #
 # This software is governed by the CeCILL license under French law and
 # abiding by the rules of distribution of free software. You can use,
@@ -38,8 +38,9 @@ __all___ = ['LONDON', 'NOTTINGHAM', 'DUBLIN', 'BERLIN',
             'HAMBURG', 'MANNHEIM', 'PARIS', 'DRESDEN',
             'SOUTHAMPTON',
             'CENTER_NAME',
-            'PSC2_FROM_PSC1', 'PSC2_FROM_DAWBA',
-            'PSC1_FROM_PSC2', 'DOB_FROM_PSC2',
+            'PSC2_FROM_PSC1', 'PSC1_FROM_PSC2',
+            'PSC1_FROM_DAWBA', 'PSC2_FROM_DAWBA', # PSC2_FROM_DAWBA is obsolete
+            'DOB_FROM_PSC1',
             'detect_psc1', 'detect_psc2', 'guess_psc1',
             'Error']
 
@@ -73,18 +74,18 @@ CENTER_NAME = {
 }
 
 #
-# file that maps PSC1 and DAWBA codes to PSC2 codes
+# file that maps PSC1 to PSC2 and DAWBA codes to PSC1
 #
 _PSC2PSC = '/neurospin/imagen/src/scripts/psc_tools/psc2psc.csv'
 
 #
-# file that maps PSC2 codes to date of birth
+# file that maps PSC1 codes to date of birth
 #
 _DOB = '/neurospin/imagen/src/scripts/psc_tools/DOB.csv'
 
 
 def _initialize_psc1_dawba_psc2():
-    """Returns dictionnaries to map PSC1 and DAWBA codes to PSC2.
+    """Returns dictionnaries to map PSC1 to PSC2 and DAWBA codes to PSC1.
 
     Parameters
     ----------
@@ -94,11 +95,11 @@ def _initialize_psc1_dawba_psc2():
     Returns
     -------
     tuple
-        Pair of PSC1→PSC2 and DAWBA→PSC2 dictionnaries.
+        Pair of PSC1→PSC2 and DAWBA→PSC1 dictionnaries.
 
     """
     psc2_from_psc1 = {}
-    psc2_from_dawba = {}
+    psc1_from_dawba = {}
     with open(_PSC2PSC, 'rU') as f:
         for line in f:
             psc1, dawba, psc2 = line.strip('\n').split('=')
@@ -111,8 +112,8 @@ def _initialize_psc1_dawba_psc2():
                     raise Exception('inconsistent PSC1/PSC2 mapping')
             else:
                 psc2_from_psc1[psc1] = psc2
-            psc2_from_dawba[dawba] = psc2
-    return psc2_from_psc1, psc2_from_dawba
+            psc1_from_dawba[dawba] = psc1
+    return psc2_from_psc1, psc1_from_dawba
 
 
 _REGEX_DOB = re.compile(r'(\d{1,2})[./](\d{1,2})[./](\d{2,4})')
@@ -132,10 +133,10 @@ def _initialize_dob():
         Dictionnary map PSC1 code to date of birth.
 
     """
-    dob_from_psc2 = {}
+    dob_from_psc1 = {}
     with open(_DOB, 'rU') as f:
         for line in f:
-            psc2, dob, dummy_when = line.strip('\n').split('=')
+            psc1, dob, dummy_when = line.strip('\n').split('=')
             match = _REGEX_DOB.match(dob)
             if match:
                 day = int(match.group(1))
@@ -145,15 +146,19 @@ def _initialize_dob():
                     year += 1900
                 if year > 2012 or year < 1900:
                     raise Exception('unexpected date of birth: {0}'.format(dob))
-                dob_from_psc2[psc2] = datetime.date(year, month, day)
+                dob_from_psc1[psc1] = datetime.date(year, month, day)
             else:
                 raise Exception('unexpected line in DOB.csv: {0}'.format(line))
-    return dob_from_psc2
+    return dob_from_psc1
 
 
-PSC2_FROM_PSC1, PSC2_FROM_DAWBA = _initialize_psc1_dawba_psc2()
+PSC2_FROM_PSC1, PSC1_FROM_DAWBA = _initialize_psc1_dawba_psc2()
+PSC2_FROM_DAWBA = {k: PSC2_FROM_PSC1[v]  # obsolete
+                   for k, v in PSC1_FROM_DAWBA.items() if v in PSC2_FROM_PSC1}
 PSC1_FROM_PSC2 = {v: k for k, v in PSC2_FROM_PSC1.items()}
-DOB_FROM_PSC2 = _initialize_dob()
+DOB_FROM_PSC1 = _initialize_dob()
+DOB_FROM_PSC2 = {PSC2_FROM_PSC1[k]: v  # obsolete
+                 for k, v in DOB_FROM_PSC1.items() if k in PSC2_FROM_PSC1}
 
 
 #

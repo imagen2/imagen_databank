@@ -55,7 +55,7 @@ logging.basicConfig(level=logging.INFO)
 import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 from imagen_databank import PSC2_FROM_PSC1
-from imagen_databank import DOB_FROM_PSC2
+from imagen_databank import DOB_FROM_PSC1
 
 
 def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
@@ -139,8 +139,8 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
 
                 # de-identify columns that contain dates
                 for fieldname in convert:
-                    if psc2 in DOB_FROM_PSC2:
-                        birth = DOB_FROM_PSC2[psc2]
+                    if psc1 in DOB_FROM_PSC1:
+                        birth = DOB_FROM_PSC1[psc1]
                         timestamp = datetime.strptime(row[fieldname],
                                                       ANONYMIZED_COLUMNS[fieldname]).date()
                         age = timestamp - birth
@@ -153,14 +153,14 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                 # FU2 / ESPAD CHILD
                 # FU2 / NI DATA
                 if trial in {'education_end', 'ni_period', 'ni_date'}:
-                    if psc2 and psc2 in DOB_FROM_PSC2:
+                    if psc1 in DOB_FROM_PSC1:
                         try:
                             event = datetime.strptime(row['Trial result'],
                                                       '%d-%m-%Y').date()
                         except ValueError:
                             row['Trial result'] = None
                         else:
-                            birth = DOB_FROM_PSC2[psc2]
+                            birth = DOB_FROM_PSC1[psc1]
                             age = event - birth
                             row['Trial result'] = str(age.days)
                     else:
@@ -169,7 +169,7 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                 psc2_writer.writerow(row)
 
 
-def _psc2(psc1):
+def _psc1(psc1, psc2_from_psc1):
     if 'TEST' in psc1.upper():
         # skip test subjects
         logging.debug('Skipping test subject "%s"', psc1)
@@ -179,8 +179,11 @@ def _psc2(psc1):
             psc1 = psc1[:-3]
         elif psc1[-2:] == 'SB':
             psc1 = psc1[:-2]
-        if psc1 in PSC2_FROM_PSC1:
-            return PSC2_FROM_PSC1[psc1]
+        if psc1 in psc2_from_psc1:
+            return psc1
+        elif psc1 in {'0x0000xxxxxx'}:
+            logging.info('Skipping known invalid subject identifier "%s"',
+                         psc1)
         else:
             logging.error('Invalid subject identifier "%s"', psc1)
     return None
@@ -223,8 +226,9 @@ def _deidentify_lsrc2(psc2_from_psc1, psytools_path, psc2_path):
             psc2_writer.writeheader()
             for row in psc1_reader:
                 # skip test and invalid subjects
-                psc2 = _psc2(row['id'])
-                if psc2:
+                psc1 = _psc1(row['id'], psc2_from_psc1)
+                if psc1:
+                    psc2 = psc2_from_psc1[psc1]
                     # columns to remove entirely
                     for x in COLUMNS_TO_REMOVE:
                         if x in row:
@@ -235,7 +239,7 @@ def _deidentify_lsrc2(psc2_from_psc1, psytools_path, psc2_path):
                         if x in row and row[x]:
                             date = datetime.strptime(row[x],
                                                      '%Y-%m-%d %H:%M:%S').date()
-                            birth = DOB_FROM_PSC2[psc2]
+                            birth = DOB_FROM_PSC1[psc1]
                             age = date - birth
                             row[x] = age.days
                     psc2_writer.writerow(row)

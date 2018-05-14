@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # noqa
 
-# Copyright (c) 2014-2017 CEA
+# Copyright (c) 2014-2018 CEA
 #
 # This software is governed by the CeCILL license under French law and
 # abiding by the rules of distribution of free software. You can use,
@@ -37,7 +37,9 @@ from .core import (LONDON, NOTTINGHAM, DUBLIN, BERLIN,
                    HAMBURG, MANNHEIM, PARIS, DRESDEN,
                    SOUTHAMPTON)
 from .core import CENTER_NAME
-from .core import (PSC2_FROM_PSC1, PSC2_FROM_DAWBA, PSC1_FROM_PSC2, DOB_FROM_PSC2)
+from .core import (PSC2_FROM_PSC1, PSC1_FROM_PSC2,
+                   PSC1_FROM_DAWBA, PSC2_FROM_DAWBA,  # PSC2_FROM_DAWBA is obsolete
+                   DOB_FROM_PSC1, DOB_FROM_PSC2)  # DOB_FROM_PSC2 is obsolete
 from .core import (detect_psc1, detect_psc2, guess_psc1)
 from .core import Error
 
@@ -76,7 +78,7 @@ from .scanning import read_scanning
 from . import sanity
 
 __author__ = 'Dimitri Papadopoulos'
-__copyright__ = 'Copyright (c) 2014-2017 CEA'
+__copyright__ = 'Copyright (c) 2014-2018 CEA'
 __license__ = 'CeCILL'
 __version__ = '0.1.0'
 __email__ = 'imagendatabase@cea.fr'

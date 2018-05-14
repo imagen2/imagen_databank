@@ -33,7 +33,7 @@ from datetime import date
 import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 from imagen_databank import PSC2_FROM_PSC1
-from imagen_databank import DOB_FROM_PSC2
+from imagen_databank import DOB_FROM_PSC1
 from imagen_databank import read_datasheet
 
 
@@ -50,14 +50,12 @@ def main():
             logger.warning('Proper "Subject ID" not found: %s', datasheet)
             continue
         psc1 = subject_ids.pop()[:12]
-        if psc1 not in PSC2_FROM_PSC1:
-            logger.error('unknown PSC1 code %s: %s', psc1, datasheet)
-            continue
-        psc2 = PSC2_FROM_PSC1[psc1]
-        if psc2 not in DOB_FROM_PSC2:
+
+        # find age
+        if psc1 not in DOB_FROM_PSC1:
             logger.error('unknown age for PSC2 code %s: %s', psc2, datasheet)
             continue
-        dob = DOB_FROM_PSC2[psc2]
+        dob = DOB_FROM_PSC1[psc1]
         session_start_times = set([sst.date() for sst in session_start_times])
         if len(session_start_times) != 1:
             logger.warning('Proper "Session start time" not found: %s',
@@ -69,6 +67,13 @@ def main():
                          session_start_time, datasheet)
             continue
         age = (session_start_time - dob).days
+
+        # find PSC2
+        if psc1 not in PSC2_FROM_PSC1:
+            logger.error('unknown PSC1 code %s: %s', psc1, datasheet)
+            continue
+        psc2 = PSC2_FROM_PSC1[psc1]
+
         print('{0},{1}'.format(psc2, age))
 
 
