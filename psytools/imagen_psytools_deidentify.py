@@ -34,14 +34,14 @@ PSYTOOLS_FU3_PSC2_DIR : str
 
 """
 
-PSYTOOLS_BL_MASTER_DIR = u'/neurospin/imagen/BL/RAW/PSC1/psytools'
-PSYTOOLS_BL_PSC2_DIR = u'/neurospin/imagen/BL/RAW/PSC2/psytools'
-PSYTOOLS_FU1_MASTER_DIR = u'/neurospin/imagen/FU1/RAW/PSC1/psytools'
-PSYTOOLS_FU1_PSC2_DIR = u'/neurospin/imagen/FU1/RAW/PSC2/psytools'
-PSYTOOLS_FU2_MASTER_DIR = u'/neurospin/imagen/FU2/RAW/PSC1/psytools'
-PSYTOOLS_FU2_PSC2_DIR = u'/neurospin/imagen/FU2/RAW/PSC2/psytools'
-PSYTOOLS_FU3_MASTER_DIR = u'/neurospin/imagen/FU3/RAW/PSC1/psytools'
-PSYTOOLS_FU3_PSC2_DIR = u'/neurospin/imagen/FU3/RAW/PSC2/psytools'
+PSYTOOLS_BL_MASTER_DIR = '/neurospin/imagen/BL/RAW/PSC1/psytools'
+PSYTOOLS_BL_PSC2_DIR = '/neurospin/imagen/BL/RAW/PSC2/psytools'
+PSYTOOLS_FU1_MASTER_DIR = '/neurospin/imagen/FU1/RAW/PSC1/psytools'
+PSYTOOLS_FU1_PSC2_DIR = '/neurospin/imagen/FU1/RAW/PSC2/psytools'
+PSYTOOLS_FU2_MASTER_DIR = '/neurospin/imagen/FU2/RAW/PSC1/psytools'
+PSYTOOLS_FU2_PSC2_DIR = '/neurospin/imagen/FU2/RAW/PSC2/psytools'
+PSYTOOLS_FU3_MASTER_DIR = '/neurospin/imagen/FU3/RAW/PSC1/psytools'
+PSYTOOLS_FU3_PSC2_DIR = '/neurospin/imagen/FU3/RAW/PSC2/psytools'
 
 
 import os
@@ -243,7 +243,6 @@ def _deidentify_lsrc2(psc2_from_psc1, psytools_path, psc2_path):
                             age = date - birth
                             row[x] = age.days
                     psc2_writer.writerow(row)
-
 
 
 def deidentify(psc2_from_psc1, master_dir, psc2_dir):

@@ -39,7 +39,7 @@ __all___ = ['LONDON', 'NOTTINGHAM', 'DUBLIN', 'BERLIN',
             'SOUTHAMPTON',
             'CENTER_NAME',
             'PSC2_FROM_PSC1', 'PSC1_FROM_PSC2',
-            'PSC1_FROM_DAWBA', 'PSC2_FROM_DAWBA', # PSC2_FROM_DAWBA is obsolete
+            'PSC1_FROM_DAWBA', 'PSC2_FROM_DAWBA',  # PSC2_FROM_DAWBA is obsolete
             'DOB_FROM_PSC1',
             'detect_psc1', 'detect_psc2', 'guess_psc1',
             'Error']

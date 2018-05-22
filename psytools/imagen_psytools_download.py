@@ -75,7 +75,7 @@ LEGACY_CSV_DATASETS = (
     ('IMGN_CTS_PARENT_RC5', BASIC_DIGEST),  # (Relationship questionnaire)
     ('IMGN_DOT_PROBE_RC5', IMAGEN_DIGEST),  # (Dot Identification Task)
     ('IMGN_ESPAD_CHILD_RC5', IMAGEN_DIGEST),  # (Drug Use Questionnaire)
-    ('IMGN_PALP_1_1_RC5', IMAGEN_DIGEST), # (Numbers Task (3 Parts))
+    ('IMGN_PALP_1_1_RC5', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
     ('IMGN_PALP_1_2_RC5', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
     ('IMGN_PALP_1_3_RC5', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
     ('IMGN_PALP_1_4_RC5', IMAGEN_DIGEST),  # (Numbers Task (3 Parts))
@@ -233,7 +233,6 @@ def download_legacy(base_url, datasets):
             with open(psytools_path, 'w') as uncompressed_file:
                 logging.info('write file: %s', psytools_path)
                 uncompressed_file.write(data)
-
 
 
 class LimeSurveyError(Exception):
