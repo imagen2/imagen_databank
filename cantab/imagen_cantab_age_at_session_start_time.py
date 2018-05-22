@@ -53,7 +53,7 @@ def main():
 
         # find age
         if psc1 not in DOB_FROM_PSC1:
-            logger.error('unknown age for PSC2 code %s: %s', psc2, datasheet)
+            logger.error('unknown age for PSC1 code %s: %s', psc1, datasheet)
             continue
         dob = DOB_FROM_PSC1[psc1]
         session_start_times = set([sst.date() for sst in session_start_times])
