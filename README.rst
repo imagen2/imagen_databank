@@ -24,6 +24,10 @@ extract, check, anonymize and transform raw Imagen data.
   Download Psytools data as CSV and JSON files from the Delosis_ server.
   Remove identifying data and convert PSC1 to PSC2.
 
+``sex``
+  Derive reference sex of Imagen subjects from multiple sources.
+  There had been errors at baseline.
+
 .. _`project wiki`: https://github.com/imagen2/imagen_databank/wiki
 .. _youthinmind: http://youthinmind.com
 .. _Delosis: https://www.delosis.com
