@@ -20,6 +20,10 @@ extract, check, anonymize and transform raw Imagen data.
   Remove identifying data and convert PSC1 to PSC2 in Dawba data,
   after manual download from the youthinmind_ server.
 
+``onsets``
+  Extract FU3 onsets from datasets, as onset files now follow a distinct
+  path from DICOM files.
+
 ``psytools``
   Download Psytools data as CSV and JSON files from the Delosis_ server.
   Remove identifying data and convert PSC1 to PSC2.
