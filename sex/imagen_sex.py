@@ -123,6 +123,11 @@ def main():
             if psc1 in validation:
                 row['2018 validation'] = validation[psc1]
 
+            if psc1 in xnat and psc1 in validation:
+                if xnat[psc1] != validation[psc1]:
+                    logging.warning('%s: changed XNAT %s into %s',
+                                    psc1, xnat[psc1], validation[psc1])
+
             values = set(row.values())
             if len(values) > 1:
                 if psc1 in validation:
