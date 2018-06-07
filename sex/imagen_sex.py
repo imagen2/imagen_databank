@@ -132,6 +132,11 @@ def main():
             if len(values) > 1:
                 if psc1 in validation:
                     row['Reference'] = validation[psc1]
+                elif psc1 in xnat:
+                    row['Reference'] = xnat[psc1]
+                else:
+                    logging.warning('%s: cannot derive a reference value for sex',
+                                    psc1)
             else:
                 row['Reference'] = next(iter(values))
 
