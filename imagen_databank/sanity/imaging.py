@@ -670,9 +670,9 @@ def check_zip_content(path, timepoint=None, psc1=None, date=None, expected=None)
         SEQUENCE_MID: 'Doubtful',
         SEQUENCE_FT: 'Bad',
         SEQUENCE_SST: 'Good',
-        SEQUENCE_B0_MAP, 'Good',
-        SEQUENCE_DTI, 'Good',
-        SEQUENCE_RESTING_STATE, 'Missing',
+        SEQUENCE_B0_MAP: 'Good',
+        SEQUENCE_DTI: 'Good',
+        SEQUENCE_RESTING_STATE: 'Missing',
     }
 
     Parameters
