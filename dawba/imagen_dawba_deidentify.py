@@ -138,12 +138,23 @@ def _create_psc2_file(dawba_path, psc2_path):
 
     """
     with open(dawba_path, 'r') as dawba_file:
-        # identify columns to anonymize in header
-        header = dawba_file.readline()
-        convert = [i for i, field in enumerate(header.split('\t'))
-                   if 'sstartdate' in field or 'p1startdate' in field]
+        # identify columns to anonymize/remove in header
+        header = next(iter(dawba_file))
+        items = header.split('\t')
+        convert = {i for i, item in enumerate(items)
+                   if 'sstartdate' in item or 'p1startdate' in item}
+        skip = {i for i, item in enumerate(items)
+                if 'ratername' in item or 'ratedate' in item}
+
         with open(psc2_path, 'w') as psc2_file:
-            psc2_file.write(header)
+            # write header
+            items = [item for i, item in enumerate(items)
+                     if i not in skip]
+            psc2_file.write('\t'.join(items))
+            if not items[-1].endswith('\n'):
+                psc2_file.write('\n')
+
+            # write data
             for line in dawba_file:
                 items = line.split('\t')
                 dawba = items[0]
@@ -178,7 +189,11 @@ def _create_psc2_file(dawba_path, psc2_path):
                             items[i] = str(age.days)
                         else:
                             items[i] = ''
+                items = [item for i, item in enumerate(items)
+                         if i not in skip]
                 psc2_file.write('\t'.join(items))
+                if not items[-1].endswith('\n'):
+                    psc2_file.write('\n')
 
 
 def create_psc2_files(master_dir, psc2_dir):
