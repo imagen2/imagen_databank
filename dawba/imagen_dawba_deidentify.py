@@ -47,8 +47,8 @@ DAWBA_FU2_MASTER_DIR = '/neurospin/imagen/FU2/RAW/PSC1/dawba'
 DAWBA_FU2_PSC2_DIR = '/neurospin/imagen/FU2/RAW/PSC2/dawba'
 DAWBA_FU3_MASTER_DIR = '/neurospin/imagen/FU3/RAW/PSC1/dawba'
 DAWBA_FU3_PSC2_DIR = '/neurospin/imagen/FU3/RAW/PSC2/dawba'
-DAWBA_SB_MASTER_DIR = '/neurospin/imagen/FU3/RAW/PSC1/dawba'
-DAWBA_SB_PSC2_DIR = '/neurospin/imagen/FU3/RAW/PSC2/dawba'
+DAWBA_SB_MASTER_DIR = '/neurospin/imagen/SB/RAW/PSC1/dawba'
+DAWBA_SB_PSC2_DIR = '/neurospin/imagen/SB/RAW/PSC2/dawba'
 
 MISSING_DAWBA1_CODES = {
     # DAWBA1 codes, missing for some reason - just ignore them...
