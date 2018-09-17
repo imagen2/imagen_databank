@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 __all___ = ['LONDON', 'NOTTINGHAM', 'DUBLIN', 'BERLIN',
             'HAMBURG', 'MANNHEIM', 'PARIS', 'DRESDEN',
-            'SOUTHAMPTON',
+            'SOUTHAMPTON', 'AACHEN',
             'CENTER_NAME',
             'PSC2_FROM_PSC1', 'PSC1_FROM_PSC2',
             'PSC1_FROM_DAWBA', 'PSC2_FROM_DAWBA',  # PSC2_FROM_DAWBA is obsolete
@@ -56,7 +56,8 @@ HAMBURG = 5
 MANNHEIM = 6
 PARIS = 7
 DRESDEN = 8
-SOUTHAMPTON = 9
+SOUTHAMPTON = 9  # Stratify
+AACHEN = 9  # Stratify
 
 #
 # from numerical ID to standard name of all 8 acquisition centers of Imagen
@@ -70,7 +71,8 @@ CENTER_NAME = {
     MANNHEIM: 'MANNHEIM',
     PARIS: 'PARIS',
     DRESDEN: 'DRESDEN',
-    SOUTHAMPTON: 'SOUTHAMPTON',
+    SOUTHAMPTON: 'SOUTHAMPTON',  # Stratify
+    AACHEN: 'AACHEN',  # Stratify
 }
 
 #

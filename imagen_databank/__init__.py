@@ -35,7 +35,7 @@ __all__ = ['additional_data', 'behavioral', 'cantab', 'core', 'dicom_utils',
 from . import core
 from .core import (LONDON, NOTTINGHAM, DUBLIN, BERLIN,
                    HAMBURG, MANNHEIM, PARIS, DRESDEN,
-                   SOUTHAMPTON)
+                   SOUTHAMPTON, AACHEN)
 from .core import CENTER_NAME
 from .core import (PSC2_FROM_PSC1, PSC1_FROM_PSC2,
                    PSC1_FROM_DAWBA, PSC2_FROM_DAWBA,  # PSC2_FROM_DAWBA is obsolete

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2014-2017 CEA
+# Copyright (c) 2014-2018 CEA
 #
 # This software is governed by the CeCILL license under French law and
 # abiding by the rules of distribution of free software. You can use,
@@ -35,7 +35,7 @@ import datetime
 
 from .core import (LONDON, NOTTINGHAM, DUBLIN, BERLIN,
                    HAMBURG, MANNHEIM, PARIS, DRESDEN,
-                   SOUTHAMPTON)
+                   SOUTHAMPTON, AACHEN)
 from .dicom_utils import read_metadata
 from .dicom_utils import InvalidDicomError
 
@@ -160,6 +160,7 @@ NONSTANDARD_DICOM = {
     PARIS: False,
     DRESDEN: False,
     SOUTHAMPTON: False,
+    AACHEN: False,
 }
 
 #
