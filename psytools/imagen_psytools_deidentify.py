@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Re-encode and anonymize Psytools CSV files (BL, FU1, FU2 and FU3).
+"""Re-encode and anonymize Psytools CSV files (BL, FU1, FU2, FU3 and Stratify).
 
 This script replaces the Scito anoymization pipeline.
 
@@ -19,6 +19,8 @@ PSYTOOLS_FU2_MASTER_DIR : str
     Location of FU2 PSC1-encoded files.
 PSYTOOLS_FU3_MASTER_DIR : str
     Location of FU3 PSC1-encoded files.
+PSYTOOLS_SB_MASTER_DIR : str
+    Location of Stratify PSC1-encoded files.
 
 Output
 ------
@@ -31,6 +33,8 @@ PSYTOOLS_FU2_PSC2_DIR : str
     Location of FU2 PSC2-encoded files.
 PSYTOOLS_FU3_PSC2_DIR : str
     Location of FU3 PSC2-encoded files.
+PSYTOOLS_SB_PSC2_DIR : str
+    Location of Stratify PSC2-encoded files.
 
 """
 
@@ -42,6 +46,8 @@ PSYTOOLS_FU2_MASTER_DIR = '/neurospin/imagen/FU2/RAW/PSC1/psytools'
 PSYTOOLS_FU2_PSC2_DIR = '/neurospin/imagen/FU2/RAW/PSC2/psytools'
 PSYTOOLS_FU3_MASTER_DIR = '/neurospin/imagen/FU3/RAW/PSC1/psytools'
 PSYTOOLS_FU3_PSC2_DIR = '/neurospin/imagen/FU3/RAW/PSC2/psytools'
+PSYTOOLS_SB_MASTER_DIR = '/neurospin/imagen/SB/RAW/PSC1/psytools'
+PSYTOOLS_SB_PSC2_DIR = '/neurospin/imagen/SB/RAW/PSC2/psytools'
 
 
 import os
@@ -172,7 +178,7 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
 def _psc1(psc1, psc2_from_psc1):
     if 'TEST' in psc1.upper():
         # skip test subjects
-        logging.debug('Skipping test subject "%s"', psc1)
+        logging.debug('skipping test subject "%s"', psc1)
     else:
         # find and skip subjects with invalid identifier
         if psc1[-3:] in {'FU2', 'FU3'}:
@@ -182,10 +188,10 @@ def _psc1(psc1, psc2_from_psc1):
         if psc1 in psc2_from_psc1:
             return psc1
         elif psc1 in {'0x0000xxxxxx'}:
-            logging.info('Skipping known invalid subject identifier "%s"',
+            logging.info('skipping known invalid subject identifier "%s"',
                          psc1)
         else:
-            logging.error('Invalid subject identifier "%s"', psc1)
+            logging.error('invalid subject identifier "%s"', psc1)
     return None
 
 
@@ -239,9 +245,14 @@ def _deidentify_lsrc2(psc2_from_psc1, psytools_path, psc2_path):
                         if x in row and row[x]:
                             date = datetime.strptime(row[x],
                                                      '%Y-%m-%d %H:%M:%S').date()
-                            birth = DOB_FROM_PSC1[psc1]
-                            age = date - birth
-                            row[x] = age.days
+                            if psc1 in DOB_FROM_PSC1:
+                                birth = DOB_FROM_PSC1[psc1]
+                                age = date - birth
+                                row[x] = age.days
+                            else:
+                                logging.error('unknown date of birth: "%s"',
+                                              psc1)
+                                row[x] = None
                     psc2_writer.writerow(row)
 
 
@@ -264,6 +275,9 @@ def deidentify(psc2_from_psc1, master_dir, psc2_dir):
     CURRENTLY_NOT_PROPERLY_DEIDENTIFIED = {
         'IMAGEN-IMGN_RELIABILITY_PI_FU2-BASIC_DIGEST.csv',
         'IMAGEN-IMGN_RELIABILITY_FU3-BASIC_DIGEST.csv',
+        'STRATIFY_screening_(London).csv',
+        'STRATIFY_screening_(Southampton).csv',
+        'STRATIFY_screening_(ED).csv',
     }
 
     for filename in os.listdir(master_dir):
@@ -271,7 +285,7 @@ def deidentify(psc2_from_psc1, master_dir, psc2_dir):
             continue
         master_path = os.path.join(master_dir, filename)
         psc2_path = os.path.join(psc2_dir, filename)
-        if filename.startswith('IMAGEN-IMGN_') or filename.startswith('IMAGEN-cVEDA_'):
+        if filename.startswith('IMAGEN-') or filename.startswith('STRATIFY-'):
             _deidentify_legacy(psc2_from_psc1, master_path, psc2_path)
         elif filename.startswith('Imagen_') or filename.startswith('STRATIFY_'):
             _deidentify_lsrc2(psc2_from_psc1, master_path, psc2_path)
@@ -280,14 +294,16 @@ def deidentify(psc2_from_psc1, master_dir, psc2_dir):
 
 
 def main():
+    #~ deidentify(PSC2_FROM_PSC1,
+               #~ PSYTOOLS_BL_MASTER_DIR, PSYTOOLS_BL_PSC2_DIR)
+    #~ deidentify(PSC2_FROM_PSC1,
+               #~ PSYTOOLS_FU1_MASTER_DIR, PSYTOOLS_FU1_PSC2_DIR)
+    #~ deidentify(PSC2_FROM_PSC1,
+               #~ PSYTOOLS_FU2_MASTER_DIR, PSYTOOLS_FU2_PSC2_DIR)
+    #~ deidentify(PSC2_FROM_PSC1,
+               #~ PSYTOOLS_FU3_MASTER_DIR, PSYTOOLS_FU3_PSC2_DIR)
     deidentify(PSC2_FROM_PSC1,
-               PSYTOOLS_BL_MASTER_DIR, PSYTOOLS_BL_PSC2_DIR)
-    deidentify(PSC2_FROM_PSC1,
-               PSYTOOLS_FU1_MASTER_DIR, PSYTOOLS_FU1_PSC2_DIR)
-    deidentify(PSC2_FROM_PSC1,
-               PSYTOOLS_FU2_MASTER_DIR, PSYTOOLS_FU2_PSC2_DIR)
-    deidentify(PSC2_FROM_PSC1,
-               PSYTOOLS_FU3_MASTER_DIR, PSYTOOLS_FU3_PSC2_DIR)
+               PSYTOOLS_SB_MASTER_DIR, PSYTOOLS_SB_PSC2_DIR)
 
 
 if __name__ == "__main__":
