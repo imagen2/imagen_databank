@@ -118,7 +118,7 @@ def _initialize_psc1_dawba_psc2():
     return psc2_from_psc1, psc1_from_dawba
 
 
-_REGEX_DOB = re.compile(r'(\d{1,2})[./](\d{1,2})[./](\d{2,4})')
+_REGEX_DOB = re.compile(r'(\d{4})-(\d{2})-(\d{2})')
 
 
 def _initialize_dob():
@@ -138,15 +138,13 @@ def _initialize_dob():
     dob_from_psc1 = {}
     with open(_DOB, 'rU') as f:
         for line in f:
-            psc1, dob, dummy_when = line.strip('\n').split('=')
+            psc1, dob, dummy_when = line.strip('\n').split(',')
             match = _REGEX_DOB.match(dob)
             if match:
-                day = int(match.group(1))
+                year = int(match.group(1))
                 month = int(match.group(2))
-                year = int(match.group(3))
-                if year < 100:
-                    year += 1900
-                if year > 2012 or year < 1900:
+                day = int(match.group(3))
+                if year > 2012 or year < 1990:
                     raise Exception('unexpected date of birth: {0}'.format(dob))
                 dob_from_psc1[psc1] = datetime.date(year, month, day)
             else:
