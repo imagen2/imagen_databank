@@ -80,7 +80,7 @@ def process(psc2_dir, processed_dir, input_template, output):
                 shutil.copyfileobj(psc2, processed)
             for psc2_path in ordered_psc2_paths[1:]:
                 with open(psc2_path,'r') as psc2:
-                    psc2.readline()  ## remove 1st line
+                    psc2.readline()  # remove 1st line
                     shutil.copyfileobj(psc2, processed)
 
 
@@ -94,15 +94,12 @@ def main():
     process(PSYTOOLS_FU3_PSC2_DIR, PSYTOOLS_FU3_PROCESSED_DIR,
             re.compile('Imagen_FUII-Parent-([^\)]*).csv'),
             'Imagen_FUII-Parent.csv')
-    #~ process(PSYTOOLS_SB_PSC2_DIR, PSYTOOLS_SB_PROCESSED_DIR,
-            #~ re.compile('STRATIFY_screening_\(([^\)]*)\).csv'),
-            #~ 'STRATIFY_screening.csv')
-    #~ process(PSYTOOLS_SB_PSC2_DIR, PSYTOOLS_SB_PROCESSED_DIR,
-            #~ re.compile('STRATIFY_Core1_\(([^\)]*)\).csv'),
-            #~ 'STRATIFY_Core1.csv')
-    #~ process(PSYTOOLS_SB_PSC2_DIR, PSYTOOLS_SB_PROCESSED_DIR,
-            #~ re.compile('STRATIFY_Core2_\(([^\)]*)\).csv'),
-            #~ 'STRATIFY_Core2.csv')
+    process(PSYTOOLS_SB_PSC2_DIR, PSYTOOLS_SB_PROCESSED_DIR,
+            re.compile('STRATIFY_Core1_\(([^\)]*)\).csv'),
+            'STRATIFY_Core1.csv')
+    process(PSYTOOLS_SB_PSC2_DIR, PSYTOOLS_SB_PROCESSED_DIR,
+            re.compile('STRATIFY_Core2_\(([^\)]*)\).csv'),
+            'STRATIFY_Core2.csv')
 
 
 if __name__ == "__main__":
