@@ -123,6 +123,8 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                 #   -I  Institute
                 psc1_suffix = row['User code'].rsplit('-', 1)
                 psc1 = psc1_suffix[0]
+                if psc1.endswith('SB'):  # unlike Imagen, Stratify PSC1 codes have a suffix in Psytools
+                    psc1 = psc1[:-len('SB')]
                 if psc1 in PSC2_FROM_PSC1:
                     psc2 = PSC2_FROM_PSC1[psc1]
                     if len(psc1_suffix) > 1:
