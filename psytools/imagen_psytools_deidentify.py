@@ -294,14 +294,14 @@ def deidentify(psc2_from_psc1, master_dir, psc2_dir):
 
 
 def main():
-    #~ deidentify(PSC2_FROM_PSC1,
-               #~ PSYTOOLS_BL_MASTER_DIR, PSYTOOLS_BL_PSC2_DIR)
-    #~ deidentify(PSC2_FROM_PSC1,
-               #~ PSYTOOLS_FU1_MASTER_DIR, PSYTOOLS_FU1_PSC2_DIR)
-    #~ deidentify(PSC2_FROM_PSC1,
-               #~ PSYTOOLS_FU2_MASTER_DIR, PSYTOOLS_FU2_PSC2_DIR)
-    #~ deidentify(PSC2_FROM_PSC1,
-               #~ PSYTOOLS_FU3_MASTER_DIR, PSYTOOLS_FU3_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_BL_MASTER_DIR, PSYTOOLS_BL_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_FU1_MASTER_DIR, PSYTOOLS_FU1_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_FU2_MASTER_DIR, PSYTOOLS_FU2_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_FU3_MASTER_DIR, PSYTOOLS_FU3_PSC2_DIR)
     deidentify(PSC2_FROM_PSC1,
                PSYTOOLS_SB_MASTER_DIR, PSYTOOLS_SB_PSC2_DIR)
 
