@@ -90,6 +90,19 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
         convert = [fieldname for fieldname in psc1_reader.fieldnames
                    if fieldname in ANONYMIZED_COLUMNS]
 
+        # de-identify or discard rows that contain dates
+        ANONYMIZED_ROWS = {  # replace date by age of child
+            'education_end',  # FU2 / ESPAD CHILD
+            'ni_period', 'ni_date'  # FU2 / NI DATA
+        }
+        PARENT_ANONYMIZED_ROWS = {  # replace date by age of parent
+            'pbq_01', 'pbq_02',  # BL/FU1 / PBQ
+        }
+        DISCARDED_ROWS = {
+            'DATE_BIRTH_1', 'DATE_BIRTH_2', 'DATE_BIRTH_3',  # FU3 / NI DATA
+            'TEST_DATE_1', 'TEST_DATE_2', 'TEST_DATE_3'
+        }
+
         with open(psc2_path, 'w') as psc2_file:
             psc2_writer = DictWriter(psc2_file, psc1_reader.fieldnames, dialect='excel')
             psc2_writer.writeheader()
@@ -115,6 +128,10 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                 if 'id_check_' in trial:
                     logging.debug('skipping line with "id_check_" for %s',
                                   row['User code'])
+                    continue
+                elif trial in DISCARDED_ROWS:
+                    logging.debug('skipping line with "%s" for %s',
+                                  trial, row['User code'])
                     continue
 
                 # subject ID is PSC1 followed by either of:
@@ -146,21 +163,21 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                     continue
 
                 # de-identify columns that contain dates
+                completed_timestamp = None
                 for fieldname in convert:
                     if psc1 in DOB_FROM_PSC1:
                         birth = DOB_FROM_PSC1[psc1]
                         timestamp = datetime.strptime(row[fieldname],
                                                       ANONYMIZED_COLUMNS[fieldname]).date()
+                        if fieldname == 'Completed Timestamp':
+                            completed_timestamp = timestamp
                         age = timestamp - birth
                         row[fieldname] = str(age.days)
                     else:
                         row[fieldname] = None
 
                 # de-identify rows that contain dates
-                #
-                # FU2 / ESPAD CHILD
-                # FU2 / NI DATA
-                if trial in {'education_end', 'ni_period', 'ni_date'}:
+                if trial in ANONYMIZED_ROWS:
                     if psc1 in DOB_FROM_PSC1:
                         try:
                             event = datetime.strptime(row['Trial result'],
@@ -170,6 +187,18 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                         else:
                             birth = DOB_FROM_PSC1[psc1]
                             age = event - birth
+                            row['Trial result'] = str(age.days)
+                    else:
+                        row['Trial result'] = None
+                elif trial in PARENT_ANONYMIZED_ROWS:
+                    if completed_timestamp:
+                        try:
+                            birth = datetime.strptime(row['Trial result'],
+                                                          '%d-%m-%Y').date()
+                        except ValueError:
+                            row['Trial result'] = None
+                        else:
+                            age = completed_timestamp - birth
                             row['Trial result'] = str(age.days)
                     else:
                         row['Trial result'] = None
