@@ -79,11 +79,13 @@ CENTER_NAME = {
 # file that maps PSC1 to PSC2 and DAWBA codes to PSC1
 #
 _PSC2PSC = '/neurospin/imagen/src/scripts/psc_tools/psc2psc.csv'
+_PSC2PSC_STRATIFY = '/neurospin/imagen/src/scripts/psc_tools/psc2psc_SB.csv'
 
 #
 # file that maps PSC1 codes to date of birth
 #
 _DOB = '/neurospin/imagen/src/scripts/psc_tools/DOB.csv'
+_DOB_STRATIFY = '/neurospin/imagen/src/scripts/psc_tools/DOB_SB.csv'
 
 
 def _initialize_psc1_dawba_psc2():
@@ -102,19 +104,20 @@ def _initialize_psc1_dawba_psc2():
     """
     psc2_from_psc1 = {}
     psc1_from_dawba = {}
-    with open(_PSC2PSC, 'rU') as f:
-        for line in f:
-            psc1, dawba, psc2 = line.strip('\n').split('=')
-            # 1st line is: PSC1=DAWBA=PSC2
-            if psc1 == 'PSC1' and dawba == 'DAWBA' and psc2 == 'PSC2':
-                continue
-            if psc2 in psc2_from_psc1:
-                if psc2_from_psc1[psc1] != psc2:
-                    logger.critical('inconsistent PSC1/PSC2 mapping: %s', _PSC2PSC)
-                    raise Exception('inconsistent PSC1/PSC2 mapping')
-            else:
-                psc2_from_psc1[psc1] = psc2
-            psc1_from_dawba[dawba] = psc1
+    for psc2psc in (_PSC2PSC, _PSC2PSC_STRATIFY):
+        with open(psc2psc, 'rU') as f:
+            for line in f:
+                psc1, dawba, psc2 = line.strip('\n').split('=')
+                # 1st line is: PSC1=DAWBA=PSC2
+                if psc1 == 'PSC1' and dawba == 'DAWBA' and psc2 == 'PSC2':
+                    continue
+                if psc2 in psc2_from_psc1:
+                    if psc2_from_psc1[psc1] != psc2:
+                        logger.critical('inconsistent PSC1/PSC2 mapping: %s', _PSC2PSC)
+                        raise Exception('inconsistent PSC1/PSC2 mapping')
+                else:
+                    psc2_from_psc1[psc1] = psc2
+                psc1_from_dawba[dawba] = psc1
     return psc2_from_psc1, psc1_from_dawba
 
 
@@ -136,19 +139,20 @@ def _initialize_dob():
 
     """
     dob_from_psc1 = {}
-    with open(_DOB, 'rU') as f:
-        for line in f:
-            psc1, dob, dummy_when = line.strip('\n').split(',')
-            match = _REGEX_DOB.match(dob)
-            if match:
-                year = int(match.group(1))
-                month = int(match.group(2))
-                day = int(match.group(3))
-                if year > 2012 or year < 1990:
-                    raise Exception('unexpected date of birth: {0}'.format(dob))
-                dob_from_psc1[psc1] = datetime.date(year, month, day)
-            else:
-                raise Exception('unexpected line in DOB.csv: {0}'.format(line))
+    for dob in (_DOB, _DOB_STRATIFY):
+        with open(dob, 'rU') as f:
+            for line in f:
+                psc1, dob, dummy_when = line.strip('\n').split(',')
+                match = _REGEX_DOB.match(dob)
+                if match:
+                    year = int(match.group(1))
+                    month = int(match.group(2))
+                    day = int(match.group(3))
+                    if year > 2012 or year < 1990:
+                        raise Exception('unexpected date of birth: {0}'.format(dob))
+                    dob_from_psc1[psc1] = datetime.date(year, month, day)
+                else:
+                    raise Exception('unexpected line in DOB.csv: {0}'.format(line))
     return dob_from_psc1
 
 
