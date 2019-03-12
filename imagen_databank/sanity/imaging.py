@@ -559,7 +559,8 @@ def _check_image_data(path, ziptree, suffix, psc1, date, expected):
                         )
                         for tag in ORDERED_TAGS:
                             if tag in metadata:
-                                subject_id = metadata[tag]
+                                # DICOM tags are encoded as ISO-IR 100 in Europe
+                                subject_id = metadata[tag].decode('latin_1').encode('utf_8')
                                 if (subject_id and subject_id != 'anon'):  # LONDON 'PatientName'
                                     if subject_id[-len(suffix):] == suffix:
                                         subject_id = subject_id[:-len(suffix)]
