@@ -29,8 +29,8 @@ PSYTOOLS_SB_PROCESSED_DIR : str
 
 PSYTOOLS_FU3_PSC2_DIR = '/neurospin/imagen/FU3/RAW/PSC2/psytools'
 PSYTOOLS_FU3_PROCESSED_DIR = '/neurospin/imagen/FU3/processed/psytools'
-PSYTOOLS_SB_PSC2_DIR = '/neurospin/imagen/SB/RAW/PSC2/psytools'
-PSYTOOLS_SB_PROCESSED_DIR = '/neurospin/imagen/SB/processed/psytools'
+PSYTOOLS_SB_PSC2_DIR = '/neurospin/imagen/STRATIFY/RAW/PSC2/psytools'
+PSYTOOLS_SB_PROCESSED_DIR = '/neurospin/imagen/STRATIFY/processed/psytools'
 
 
 import os

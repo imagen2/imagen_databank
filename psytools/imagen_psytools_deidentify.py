@@ -46,8 +46,8 @@ PSYTOOLS_FU2_MASTER_DIR = '/neurospin/imagen/FU2/RAW/PSC1/psytools'
 PSYTOOLS_FU2_PSC2_DIR = '/neurospin/imagen/FU2/RAW/PSC2/psytools'
 PSYTOOLS_FU3_MASTER_DIR = '/neurospin/imagen/FU3/RAW/PSC1/psytools'
 PSYTOOLS_FU3_PSC2_DIR = '/neurospin/imagen/FU3/RAW/PSC2/psytools'
-PSYTOOLS_SB_MASTER_DIR = '/neurospin/imagen/SB/RAW/PSC1/psytools'
-PSYTOOLS_SB_PSC2_DIR = '/neurospin/imagen/SB/RAW/PSC2/psytools'
+PSYTOOLS_SB_MASTER_DIR = '/neurospin/imagen/STRATIFY/RAW/PSC1/psytools'
+PSYTOOLS_SB_PSC2_DIR = '/neurospin/imagen/STRATIFY/RAW/PSC2/psytools'
 
 
 import os

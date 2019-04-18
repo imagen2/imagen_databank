@@ -43,7 +43,7 @@ PSYTOOLS_IMAGEN_BL_MASTER_DIR = '/neurospin/imagen/BL/RAW/PSC1/psytools'
 PSYTOOLS_IMAGEN_FU1_MASTER_DIR = '/neurospin/imagen/FU1/RAW/PSC1/psytools'
 PSYTOOLS_IMAGEN_FU2_MASTER_DIR = '/neurospin/imagen/FU2/RAW/PSC1/psytools'
 PSYTOOLS_IMAGEN_FU3_MASTER_DIR = '/neurospin/imagen/FU3/RAW/PSC1/psytools'
-PSYTOOLS_STRATIFY_MASTER_DIR = '/neurospin/imagen/SB/RAW/PSC1/psytools'
+PSYTOOLS_STRATIFY_MASTER_DIR = '/neurospin/imagen/STRATIFY/RAW/PSC1/psytools'
 
 LEGACY_BASE_URL = 'https://www.delosis.com/psytools-server/dataservice/dataset/'
 LSRC2_BASE_URL = 'https://www.delosis.com/qs/index.php/admin/remotecontrol'
