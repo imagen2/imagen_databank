@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2014-2018 CEA
+# Copyright (c) 2014-2019 CEA
 #
 # This software is governed by the CeCILL license under French law and
 # abiding by the rules of distribution of free software. You can use,
@@ -46,7 +46,7 @@ __all___ = ['LONDON', 'NOTTINGHAM', 'DUBLIN', 'BERLIN',
 
 
 #
-# numerical ID of all 8 acquisition centers of Imagen
+# numerical ID of acquisition centers of Imagen
 #
 LONDON = 1
 NOTTINGHAM = 2
@@ -56,11 +56,11 @@ HAMBURG = 5
 MANNHEIM = 6
 PARIS = 7
 DRESDEN = 8
-SOUTHAMPTON = 9  # Stratify
-AACHEN = 9  # Stratify
+SOUTHAMPTON = 90  # Stratify
+AACHEN = 91  # Stratify
 
 #
-# from numerical ID to standard name of all 8 acquisition centers of Imagen
+# from numerical ID to standard name of acquisition centers of Imagen
 #
 CENTER_NAME = {
     LONDON: 'LONDON',
