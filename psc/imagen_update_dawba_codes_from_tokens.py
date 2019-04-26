@@ -19,6 +19,7 @@ import requests
 import json
 import base64
 from urllib.parse import urlparse
+import datetime
 import logging
 logging.basicConfig(level=logging.INFO)
 
@@ -30,6 +31,7 @@ LSRC2_BASE_URL = 'https://www.delosis.com/qs/index.php/admin/remotecontrol'
 LSRC2_NETRC_FILE = '~/.lsrc2'
 # The PSC1, Dawba, PSC2 conversion table
 PSC2PSC = '/neurospin/imagen/src/scripts/psc_tools/psc2psc.csv'
+PSC2PSC_SB = '/neurospin/imagen/src/scripts/psc_tools/psc2psc_SB.csv'
 
 
 class LimeSurveyError(Exception):
@@ -324,20 +326,24 @@ def download_lsrc2_tokens(base_url):
         return dawba_from_psc1
 
 
-import sys
 def main():
     dawba_from_psc1 = download_lsrc2_tokens(LSRC2_BASE_URL)
-    with open(PSC2PSC, 'rU') as f:
-        for line in f:
-            psc1, dawba, psc2 = line.strip('\n').split('=')
-            if psc1 in dawba_from_psc1:
-                if dawba == '000000':
-                    dawba = dawba_from_psc1[psc1]
-                    line = '='.join((psc1, dawba, psc2)) + '\n'
-                elif int(dawba) > 200000 and dawba != dawba_from_psc1[psc1]:
-                    logging.error('%s: Dawba code changed from %s to %s',
-                                  psc1, dawba, dawba_from_psc1[psc1])
-            sys.stdout.write(line)
+
+    for psc2psc in (PSC2PSC, PSC2PSC_SB):
+        root, ext = os.path.splitext(psc2psc)
+        output = root + '_' + datetime.date.today().isoformat() + ext
+        with open(psc2psc, 'r') as p, open(output, 'w') as o:
+            for line in p:
+                line = line.strip('\n')
+                psc1, dawba, psc2 = line.split('=')
+                if psc1 in dawba_from_psc1:
+                    if int(dawba) > 200000:  # modify only FU3 and Stratify
+                        if dawba != dawba_from_psc1[psc1]:
+                            logging.error('%s: Dawba code changed from %s to %s',
+                                          psc1, dawba, dawba_from_psc1[psc1])
+                        dawba = dawba_from_psc1[psc1]
+                        line = '='.join((psc1, dawba, psc2))
+                print(line, file=o)
 
 
 if __name__ == "__main__":
