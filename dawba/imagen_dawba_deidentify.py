@@ -103,6 +103,16 @@ WITHDRAWN_DAWBA_CODES = {
     '132983',
     '129716',
     '129500',
+    # see thread "Imagen FU3 Dawba code 221867" on 2019-05-08
+    '221867',
+    # see thread "token management in Imagen FU3" on 2019-05-03
+    '228686',
+    '228691',
+    # see thread "token management in Imagen FU3" on 2019-05-03
+    '239204',
+    '239230',
+    # see thread "Imagen FU3 Dawba code 252346" on 2019-05-04
+    '252346',
 }
 
 import os
