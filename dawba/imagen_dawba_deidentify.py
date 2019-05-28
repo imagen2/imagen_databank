@@ -103,6 +103,8 @@ WITHDRAWN_DAWBA_CODES = {
     '132983',
     '129716',
     '129500',
+    # see thread "Imagen: Dawba data 201490 acquired on 13 September 2015" on 2019-05-27
+    '201490',
     # see thread "Imagen FU3 Dawba code 221867" on 2019-05-08
     '221867',
     # see thread "token management in Imagen FU3" on 2019-05-03
