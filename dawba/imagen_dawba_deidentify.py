@@ -115,6 +115,9 @@ WITHDRAWN_DAWBA_CODES = {
     '239230',
     # see thread "Imagen FU3 Dawba code 252346" on 2019-05-04
     '252346',
+    # see thread "Re: AW:Imagen FU3 token management: 272443 / 272444" on 2019-06-25
+    # 244471 and 244513 are the same participant, we were told to keep the former
+    '244513',
 }
 
 import os
