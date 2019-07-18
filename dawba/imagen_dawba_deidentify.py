@@ -177,7 +177,10 @@ def _create_psc2_file(dawba_path, psc2_path):
                     if dawba in WITHDRAWN_DAWBA_CODES:
                         logging.info('withdrawn DAWBA code: %s', dawba)
                     elif dawba in MISSING_DAWBA1_CODES:
-                        logging.warning('missing DAWBA1 codes: %s', dawba)
+                        if int(dawba) > 100000:
+                            logging.warning('missing DAWBA1 codes: %s', dawba)
+                        else:
+                            logging.info('missing DAWBA1 codes: %s', dawba)
                     else:
                         logging.error('DAWBA code missing from conversion table: %s',
                                       dawba)
