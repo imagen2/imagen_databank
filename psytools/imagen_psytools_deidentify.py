@@ -90,6 +90,14 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
         convert = [fieldname for fieldname in psc1_reader.fieldnames
                    if fieldname in ANONYMIZED_COLUMNS]
 
+        # discard other columns with dates
+        DISCARDED_COLUMNS = {
+            'id_check_dob', 'id_check_gender', 'id_check_relation',
+            # FU3 / NI DATA
+            'DATE_BIRTH_1', 'DATE_BIRTH_2', 'DATE_BIRTH_3',
+            'TEST_DATE_1', 'TEST_DATE_2', 'TEST_DATE_3'
+        }
+
         # read/process each row and save for later writing
         rows = {}
         for row in psc1_reader:
@@ -163,20 +171,17 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                         row[column] = str(age.days)
 
             # discard other columns with dates
-            # FU3 / NI DATA
-            DISCARDED_COLUMNS = {
-                'DATE_BIRTH_1', 'DATE_BIRTH_2', 'DATE_BIRTH_3',
-                'TEST_DATE_1', 'TEST_DATE_2', 'TEST_DATE_3'
-            }
             for column in DISCARDED_COLUMNS:
                 if column in psc1_reader.fieldnames:
-                    row[column] = ''
+                    del row[column]
 
             rows.setdefault(psc2, []).append(row)
 
         # save rows into output file, sort by PSC2
         with open(psc2_path, 'w') as psc2_file:
-            psc2_writer = DictWriter(psc2_file, psc1_reader.fieldnames, dialect='excel')
+            fieldnames = [fieldname for fieldname in psc1_reader.fieldnames
+                          if fieldname not in DISCARDED_COLUMNS]
+            psc2_writer = DictWriter(psc2_file, fieldnames, dialect='excel')
             psc2_writer.writeheader()
             for psc2 in sorted(rows):
                 for row in rows[psc2]:
