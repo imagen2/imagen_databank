@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Re-encode and anonymize Psytools CSV files (BL, FU1, FU2, FU3 and Stratify).
+"""Re-encode and pseudonymize Psytools CSV files (BL, FU1, FU2, FU3 and Stratify).
 
-This script replaces the Scito anoymization pipeline.
+This script replaces the Scito pseudonymization pipeline.
 
 ==========
 Attributes
@@ -11,15 +11,15 @@ Attributes
 Input
 -----
 
-PSYTOOLS_BL_MASTER_DIR : str
+PSYTOOLS_BL_DERIVED_DIR : str
     Location of BL PSC1-encoded files.
-PSYTOOLS_FU1_MASTER_DIR : str
+PSYTOOLS_FU1_DERIVED_DIR : str
     Location of FU1 PSC1-encoded files.
-PSYTOOLS_FU2_MASTER_DIR : str
+PSYTOOLS_FU2_DERIVED_DIR : str
     Location of FU2 PSC1-encoded files.
-PSYTOOLS_FU3_MASTER_DIR : str
+PSYTOOLS_FU3_DERIVED_DIR : str
     Location of FU3 PSC1-encoded files.
-PSYTOOLS_SB_MASTER_DIR : str
+PSYTOOLS_SB_DERIVED_DIR : str
     Location of Stratify PSC1-encoded files.
 
 Output
@@ -38,16 +38,16 @@ PSYTOOLS_SB_PSC2_DIR : str
 
 """
 
-PSYTOOLS_BL_MASTER_DIR = '/neurospin/imagen/BL/RAW/PSC1/psytools'
-PSYTOOLS_BL_PSC2_DIR = '/neurospin/imagen/BL/RAW/PSC2/psytools'
-PSYTOOLS_FU1_MASTER_DIR = '/neurospin/imagen/FU1/RAW/PSC1/psytools'
-PSYTOOLS_FU1_PSC2_DIR = '/neurospin/imagen/FU1/RAW/PSC2/psytools'
-PSYTOOLS_FU2_MASTER_DIR = '/neurospin/imagen/FU2/RAW/PSC1/psytools'
-PSYTOOLS_FU2_PSC2_DIR = '/neurospin/imagen/FU2/RAW/PSC2/psytools'
-PSYTOOLS_FU3_MASTER_DIR = '/neurospin/imagen/FU3/RAW/PSC1/psytools'
-PSYTOOLS_FU3_PSC2_DIR = '/neurospin/imagen/FU3/RAW/PSC2/psytools'
-PSYTOOLS_SB_MASTER_DIR = '/neurospin/imagen/STRATIFY/RAW/PSC1/psytools'
-PSYTOOLS_SB_PSC2_DIR = '/neurospin/imagen/STRATIFY/RAW/PSC2/psytools'
+PSYTOOLS_BL_DERIVED_DIR = '/tmp/imagen/BL/processed/psytools'
+PSYTOOLS_BL_PSC2_DIR = '/neurospin/imagen/BL/processed/psytools'
+PSYTOOLS_FU1_DERIVED_DIR = '/tmp/imagen/FU1/processed/psytools'
+PSYTOOLS_FU1_PSC2_DIR = '/neurospin/imagen/FU1/processed/psytools'
+PSYTOOLS_FU2_DERIVED_DIR = '/tmp/imagen/FU2/processed/psytools'
+PSYTOOLS_FU2_PSC2_DIR = '/neurospin/imagen/FU2/processed/psytools'
+PSYTOOLS_FU3_DERIVED_DIR = '/tmp/imagen/FU3/processed/psytools'
+PSYTOOLS_FU3_PSC2_DIR = '/neurospin/imagen/FU3/processed/psytools'
+PSYTOOLS_SB_DERIVED_DIR = '/tmp/imagen/STRATIFY/processed/psytools'
+PSYTOOLS_SB_PSC2_DIR = '/neurospin/imagen/STRATIFY/processed/psytools'
 
 
 import os
@@ -82,7 +82,7 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
     with open(psytools_path, 'r') as psc1_file:
         psc1_reader = DictReader(psc1_file, dialect='excel')
 
-        # de-identify columns that contain dates
+        # de-identify columns with timestamps
         ANONYMIZED_COLUMNS = {
             'Completed Timestamp': '%Y-%m-%d %H:%M:%S.%f',
             'Processed Timestamp': '%Y-%m-%d %H:%M:%S.%f',
@@ -90,120 +90,97 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
         convert = [fieldname for fieldname in psc1_reader.fieldnames
                    if fieldname in ANONYMIZED_COLUMNS]
 
-        # de-identify or discard rows that contain dates
-        ANONYMIZED_ROWS = {  # replace date by age of child
-            'education_end',  # FU2 / ESPAD CHILD
-            'ni_period', 'ni_date'  # FU2 / NI DATA
-        }
-        PARENT_ANONYMIZED_ROWS = {  # replace date by age of parent
-            'pbq_01', 'pbq_02',  # BL/FU1 / PBQ
-        }
-        DISCARDED_ROWS = {
-            'DATE_BIRTH_1', 'DATE_BIRTH_2', 'DATE_BIRTH_3',  # FU3 / NI DATA
-            'TEST_DATE_1', 'TEST_DATE_2', 'TEST_DATE_3'
-        }
+        # read/process each row and save for later writing
+        rows = {}
+        for row in psc1_reader:
+            psc1, suffix = row['User code'][:12], row['User code'][12:]
+            if psc1 in PSC2_FROM_PSC1:
+                psc2 = PSC2_FROM_PSC1[psc1]
+                if suffix in {'-C', '-P', '-I'}:
+                    # keep the suffix of Imagen subject IDs
+                    #   -C  Child
+                    #   -P  Parent
+                    #   -I  Institute
+                    row['User code'] = psc2 + suffix
+                else:
+                    # remove the "SB" suffix from Stratify subject ID
+                    if suffix != 'SB':
+                        logging.error('unknown suffix %s in user code %s',
+                                      suffix, row['User code'])
+                    row['User code'] = psc2
+            else:
+                logging.error('unknown PSC1 code %s in user code %s',
+                              psc1, row['User code'])
+                continue
 
+            # de-identify columns with timestamps
+            for fieldname in convert:
+                if psc1 in DOB_FROM_PSC1:
+                    birth = DOB_FROM_PSC1[psc1]
+                    try:
+                        timestamp = datetime.strptime(row[fieldname],
+                                                      ANONYMIZED_COLUMNS[fieldname]).date()
+                    except ValueError:
+                        logging.error('%s: invalid "%s": %s',
+                                      psc1, fieldname, row[fieldname])
+                        row[fieldname] = None
+                    else:
+                        age = timestamp - birth
+                        row[fieldname] = str(age.days)
+                else:
+                    row[fieldname] = None
+
+            # convert to age in days at date of birth - should be 0 if correct!
+            # FU2 / ESPAD CHILD
+            # FU2 / NI DATA
+            for column in ('education_end', 'ni_period', 'ni_date'):
+                if column in psc1_reader.fieldnames:
+                    if psc1 in DOB_FROM_PSC1:
+                        birth = DOB_FROM_PSC1[psc1]
+                        try:
+                            d = datetime.strptime(row[column],
+                                                  '%d-%m-%Y').date()
+                        except ValueError:
+                            row[column] = None
+                        else:
+                            age = d - birth
+                            row[column] = str(age.days)
+                    else:
+                        row[column] = None
+
+            # convert to age of parents in days at assessment
+            # BL/FU1 / PBQ
+            for column in ('pbq_01', 'pbq_02'):
+                if column in psc1_reader.fieldnames:
+                    try:
+                        birth = datetime.strptime(row[column],
+                                                      '%d-%m-%Y').date()
+                    except ValueError:
+                        row[column] = None
+                    else:
+                        # last 'timestamp' ought to be 'Processed timestamp'
+                        age = timestamp - birth
+                        row[column] = str(age.days)
+
+            # discard other columns with dates
+            # FU3 / NI DATA
+            DISCARDED_COLUMNS = {
+                'DATE_BIRTH_1', 'DATE_BIRTH_2', 'DATE_BIRTH_3',
+                'TEST_DATE_1', 'TEST_DATE_2', 'TEST_DATE_3'
+            }
+            for column in DISCARDED_COLUMNS:
+                if column in psc1_reader.fieldnames:
+                    row[column] = ''
+
+            rows.setdefault(psc2, []).append(row)
+
+        # save rows into output file, sort by PSC2
         with open(psc2_path, 'w') as psc2_file:
             psc2_writer = DictWriter(psc2_file, psc1_reader.fieldnames, dialect='excel')
             psc2_writer.writeheader()
-            for row in psc1_reader:
-                trial = row['Trial']
-                # Psytools files contain identifying data,
-                # specifically lines containing items:
-                # - id_check_dob
-                # - id_check_gender
-                #
-                # As the name implies, the purpose of these items is
-                # cross-checking and error detection. They should not
-                # be used for scientific purposes.
-                #
-                # These items should therefore not be published in the
-                # Imagen database.
-                #
-                # The Scito anoymization pipeline used not to filter
-                # these items out. Since the Imagen V2 server exposes raw
-                # Psytools files to end users, we need to remove these
-                # items sooner, before importing the data into the
-                # CubicWeb database.
-                if 'id_check_' in trial:
-                    logging.debug('skipping line with "id_check_" for %s',
-                                  row['User code'])
-                    continue
-                elif trial in DISCARDED_ROWS:
-                    logging.debug('skipping line with "%s" for %s',
-                                  trial, row['User code'])
-                    continue
-
-                # subject ID is PSC1 followed by either of:
-                #   -C  Child
-                #   -P  Parent
-                #   -I  Institute
-                psc1_suffix = row['User code'].rsplit('-', 1)
-                psc1 = psc1_suffix[0]
-                if psc1.endswith('SB'):  # unlike Imagen, Stratify PSC1 codes have a suffix in Psytools
-                    psc1 = psc1[:-len('SB')]
-                if psc1 in PSC2_FROM_PSC1:
-                    psc2 = PSC2_FROM_PSC1[psc1]
-                    if len(psc1_suffix) > 1:
-                        psc2_suffix = '-'.join((psc2, psc1_suffix[1]))
-                    else:
-                        psc2_suffix = psc2
-                    logging.debug('converting from %s to %s',
-                                  row['User code'], psc2_suffix)
-                    row['User code'] = psc2_suffix
-                else:
-                    u = psc1.upper()
-                    if ('FOLLOWUP' in u or 'TEST' in u or 'MAREN' in u
-                            or 'THOMAS_PRONK' in u):
-                        logging.debug('skipping test subject %s',
-                                      row['User code'])
-                    else:
-                        logging.error('unknown PSC1 code %s in user code %s',
-                                      psc1, row['User code'])
-                    continue
-
-                # de-identify columns that contain dates
-                completed_timestamp = None
-                for fieldname in convert:
-                    if psc1 in DOB_FROM_PSC1:
-                        birth = DOB_FROM_PSC1[psc1]
-                        timestamp = datetime.strptime(row[fieldname],
-                                                      ANONYMIZED_COLUMNS[fieldname]).date()
-                        if fieldname == 'Completed Timestamp':
-                            completed_timestamp = timestamp
-                        age = timestamp - birth
-                        row[fieldname] = str(age.days)
-                    else:
-                        row[fieldname] = None
-
-                # de-identify rows that contain dates
-                if trial in ANONYMIZED_ROWS:
-                    if psc1 in DOB_FROM_PSC1:
-                        try:
-                            event = datetime.strptime(row['Trial result'],
-                                                      '%d-%m-%Y').date()
-                        except ValueError:
-                            row['Trial result'] = None
-                        else:
-                            birth = DOB_FROM_PSC1[psc1]
-                            age = event - birth
-                            row['Trial result'] = str(age.days)
-                    else:
-                        row['Trial result'] = None
-                elif trial in PARENT_ANONYMIZED_ROWS:
-                    if completed_timestamp:
-                        try:
-                            birth = datetime.strptime(row['Trial result'],
-                                                          '%d-%m-%Y').date()
-                        except ValueError:
-                            row['Trial result'] = None
-                        else:
-                            age = completed_timestamp - birth
-                            row['Trial result'] = str(age.days)
-                    else:
-                        row['Trial result'] = None
-
-                psc2_writer.writerow(row)
+            for psc2 in sorted(rows):
+                for row in rows[psc2]:
+                    psc2_writer.writerow(row)
 
 
 def _psc1(psc1, psc2_from_psc1):
@@ -326,15 +303,15 @@ def deidentify(psc2_from_psc1, master_dir, psc2_dir):
 
 def main():
     deidentify(PSC2_FROM_PSC1,
-               PSYTOOLS_BL_MASTER_DIR, PSYTOOLS_BL_PSC2_DIR)
+               PSYTOOLS_BL_DERIVED_DIR, PSYTOOLS_BL_PSC2_DIR)
     deidentify(PSC2_FROM_PSC1,
-               PSYTOOLS_FU1_MASTER_DIR, PSYTOOLS_FU1_PSC2_DIR)
+               PSYTOOLS_FU1_DERIVED_DIR, PSYTOOLS_FU1_PSC2_DIR)
     deidentify(PSC2_FROM_PSC1,
-               PSYTOOLS_FU2_MASTER_DIR, PSYTOOLS_FU2_PSC2_DIR)
+               PSYTOOLS_FU2_DERIVED_DIR, PSYTOOLS_FU2_PSC2_DIR)
     deidentify(PSC2_FROM_PSC1,
-               PSYTOOLS_FU3_MASTER_DIR, PSYTOOLS_FU3_PSC2_DIR)
+               PSYTOOLS_FU3_DERIVED_DIR, PSYTOOLS_FU3_PSC2_DIR)
     deidentify(PSC2_FROM_PSC1,
-               PSYTOOLS_SB_MASTER_DIR, PSYTOOLS_SB_PSC2_DIR)
+               PSYTOOLS_SB_DERIVED_DIR, PSYTOOLS_SB_PSC2_DIR)
 
 
 if __name__ == "__main__":
