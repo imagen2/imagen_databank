@@ -118,6 +118,13 @@ WITHDRAWN_DAWBA_CODES = {
     # see thread "Re: AW:Imagen FU3 token management: 272443 / 272444" on 2019-06-25
     # 244471 and 244513 are the same participant, we were told to keep the former
     '244513',
+    # see thread "AW: [ext] Fwd: Pause to production of new teams" on 2019-07-23
+    '265683',
+    '265684',
+    '265685',
+    '265686',
+    '265687',
+    '265689',
 }
 
 import os
