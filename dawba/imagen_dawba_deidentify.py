@@ -50,7 +50,7 @@ DAWBA_FU3_PSC2_DIR = '/neurospin/imagen/FU3/RAW/PSC2/dawba'
 DAWBA_SB_MASTER_DIR = '/neurospin/imagen/STRATIFY/RAW/PSC1/dawba'
 DAWBA_SB_PSC2_DIR = '/neurospin/imagen/STRATIFY/RAW/PSC2/dawba'
 
-MISSING_DAWBA1_CODES = {
+WITHDRAWN_DAWBA_CODES = {
     # DAWBA1 codes, missing for some reason - just ignore them...
     '19042',
     '19044',
@@ -93,8 +93,6 @@ MISSING_DAWBA1_CODES = {
     '38299',
     '38300',
     '38301',
-}
-WITHDRAWN_DAWBA_CODES = {
     # see thread "DAWBA3 codes conversion table" from 2015-05-18
     '127657',
     # see thread "DAWBA3 codes conversion table" from 2015-12-15
@@ -183,11 +181,6 @@ def _create_psc2_file(dawba_path, psc2_path):
                 if dawba not in PSC1_FROM_DAWBA:
                     if dawba in WITHDRAWN_DAWBA_CODES:
                         logging.info('withdrawn DAWBA code: %s', dawba)
-                    elif dawba in MISSING_DAWBA1_CODES:
-                        if int(dawba) > 100000:
-                            logging.warning('missing DAWBA1 codes: %s', dawba)
-                        else:
-                            logging.info('missing DAWBA1 codes: %s', dawba)
                     else:
                         logging.error('DAWBA code missing from conversion table: %s',
                                       dawba)
