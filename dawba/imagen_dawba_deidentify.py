@@ -123,6 +123,9 @@ WITHDRAWN_DAWBA_CODES = {
     '265686',
     '265687',
     '265689',
+    # see thread "IMAGEN FU3, DAWBA-PSC1 clarification" on 2019-09-04
+    # 236038 and 254243 are the same participant, we were told to keep the former
+    '254243',
 }
 
 import os
