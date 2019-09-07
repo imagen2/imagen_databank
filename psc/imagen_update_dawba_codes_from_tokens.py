@@ -21,6 +21,7 @@ import base64
 from urllib.parse import urlparse
 import datetime
 import logging
+from imagen_databank import PSC2_FROM_PSC1
 logging.basicConfig(level=logging.INFO)
 
 # The LSRC2 service at Delosis.
@@ -245,7 +246,7 @@ def _get_netrc_auth(url):
         return
 
 
-def download_lsrc2_tokens(base_url):
+def download_lsrc2_tokens(base_url, startswith=None):
     """JSON RPC calls to LSRC2 service to retrieve tokens.
 
     """
@@ -259,52 +260,77 @@ def download_lsrc2_tokens(base_url):
             sid = survey['sid']
             active = survey['active']
 
-            if active == 'N':
-                logging.info('skip inactive survey: %s', title)
+            if title.startswith(startswith):
+                if active == 'N':
+                    logging.info('skip inactive survey: %s', title)
+                    continue
+                else:
+                    logging.info('read survey: %s', title)
+            else:
+                logging.info('skip survey: %s', title)
                 continue
-            if title.startswith('Imagen FUII - '):
-                logging.info('skip FU2 survey: %s', title)
-                continue
-            logging.info('read survey: %s', title)
 
             # subjects in surveys are identified by "sid" and "token"
             # retrieve correlation between "token" and PSC1 and Dawba codes
             psc1_from_token = {}
             dawba_from_token = {}
             participants = session.participants(sid, ['completed', 'reminded', 'attribute_1', 'attribute_2'])
+
             for participant in participants:
                 token = participant['token']
-                #~ if ('reminded' in participant and participant['reminded'] == 'Duplicate' or
-                    #~ 'completed' in participant and participant['completed'] == 'N'):
-                    #~ continue
+                if ('reminded' in participant and participant['reminded'] == 'Duplicate' or
+                        'completed' in participant and participant['completed'] == 'N'):
+                    continue
                 # PSC1
                 if 'attribute_1' in participant:
-                    psc1 = participant['attribute_1']
+                    psc1 = participant['attribute_1'].strip()
                     if psc1.endswith('SB'):
                         psc1 = psc1[:-2]
                     if psc1.endswith('FU3'):
                         psc1 = psc1[:-3]
-                    if token in psc1_from_token:
-                        if psc1 != psc1_from_token[token]:
-                            logging.error('survey: %s: participant %s has inconsistent PSC1 codes',
-                                          title, psc1_from_token[token])
+                    if psc1.isdigit():
+                        if token in psc1_from_token:
+                            if psc1 != psc1_from_token[token]:
+                                logging.error('survey: %s: duplicate token has inconsistent PSC1 codes: %s / %s',
+                                              title, psc1_from_token[token], psc1)
+                            else:
+                                logging.warning('survey: %s: duplicate token for PSC1 code: %s',
+                                                title, psc1)
+                        else:
+                            psc1_from_token[token] = psc1
                     else:
-                        psc1_from_token[token] = psc1
+                        logging.info('survey: %s: skipping invalid PSC1 code: %s',
+                                     title, psc1)
                 else:
-                    logging.error('survey: %s: participant %s lacks a PSC1 code',
-                                  title, psc1_from_token[token])
+                    logging.error('survey: %s: token %s lacks a PSC1 code',
+                                  title, token)
                 # Dawba
                 if 'attribute_2' in participant:
                     dawba = participant['attribute_2']
-                    if token in dawba_from_token:
-                        if dawba != dawba_from_token[token]:
-                            logging.error('survey: %s: participant %s has inconsistent Dawba codes',
-                                          title, dawba_from_token[token])
+                    if dawba:
+                        dawba = dawba.strip()
+                        if dawba.isdigit():
+                            if token in dawba_from_token:
+                                if dawba != dawba_from_token[token]:
+                                    logging.error('survey: %s: duplicate token has inconsistent Dawba codes: %s / %s',
+                                                  title, dawba_from_token[token], dawba)
+                                else:
+                                    logging.warning('survey: %s: duplicate token for Dawba code: %s',
+                                                    title, dawba)
+                            else:
+                                dawba_from_token[token] = dawba
+                        elif dawba == '-':
+                            logging.warning("survey: %s: %s: skipping empty Dawba code '-'",
+                                            title, psc1)
+                        else:
+                            logging.info('survey: %s: %s: skipping invalid Dawba code: %s',
+                                         title, psc1, dawba)
                     else:
-                        dawba_from_token[token] = dawba
+                        logging.info('survey: %s: %s: skipping empty Dawba code',
+                                     title, psc1)
                 else:
-                    logging.error('survey: %s: participant %s lacks a Dawba code',
-                                  title, psc1_from_token[token])
+                    logging.error('survey: %s: token %s lacks a Dawba code',
+                                  title, token)
 
             for token in psc1_from_token.keys() & dawba_from_token.keys():
                 psc1 = psc1_from_token[token]
@@ -314,35 +340,55 @@ def download_lsrc2_tokens(base_url):
 
         for psc1, codes in dawba_from_psc1.items():
             if len(codes) > 1:
-                message = '%s: multiple Dawba codes:\n'
+                message_details = ''
                 for dawba, titles in codes.items():
-                    message += '\t%s:\n\t\t%s'.format(psc1, '\n\t\t'.join(title for title in titles))
+                    message_details += '\t{}:\n\t\t{}\n'.format(dawba, '\n\t\t'.join(title for title in titles))
+                logging.error('%s: multiple Dawba codes:\n%s',
+                              psc1, message_details)
                 dawba_from_psc1[psc1] = None
             else:
                 dawba_from_psc1[psc1] = next(iter(dawba_from_psc1[psc1].keys()))
-        dawba_from_psc1 =  { psc1: dawba for psc1, dawba in dawba_from_psc1.items()
-                             if dawba }
+        dawba_from_psc1 = {psc1: dawba for psc1, dawba in dawba_from_psc1.items()
+                           if dawba}
 
         return dawba_from_psc1
 
 
 def main():
-    dawba_from_psc1 = download_lsrc2_tokens(LSRC2_BASE_URL)
+    projects = (
+        (PSC2PSC, 'Imagen FUIII - Core'),
+        (PSC2PSC_SB, 'STRATIFY Core'),
+    )
 
-    for psc2psc in (PSC2PSC, PSC2PSC_SB):
+    for psc2psc, startswith in projects:
+        dawba_from_psc1 = download_lsrc2_tokens(LSRC2_BASE_URL, startswith)
+
         root, ext = os.path.splitext(psc2psc)
         output = root + '_' + datetime.date.today().isoformat() + ext
         with open(psc2psc, 'r') as p, open(output, 'w') as o:
+            # skip header line
+            line = next(p).strip('\n')
+            print(line, file=o)
+
+            done = set()
             for line in p:
                 line = line.strip('\n')
                 psc1, dawba, psc2 = line.split('=')
-                if psc1 in dawba_from_psc1:
-                    if int(dawba) > 200000:  # modify only FU3 and Stratify
+                if (int(dawba) > 200000 or  # process only FU3 and Stratify
+                        dawba == '000000'):
+                    if psc1 in dawba_from_psc1:
                         if dawba != dawba_from_psc1[psc1]:
                             logging.error('%s: Dawba code changed from %s to %s',
                                           psc1, dawba, dawba_from_psc1[psc1])
                         dawba = dawba_from_psc1[psc1]
                         line = '='.join((psc1, dawba, psc2))
+                    done.add(psc1)
+                print(line, file=o)
+
+            for psc1 in (dawba_from_psc1.keys() - done):
+                dawba = dawba_from_psc1[psc1]
+                psc2 = PSC2_FROM_PSC1[psc1]
+                line = '='.join((psc1, dawba, psc2))
                 print(line, file=o)
 
 
