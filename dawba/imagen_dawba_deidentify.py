@@ -217,7 +217,7 @@ def _create_psc2_file(dawba_path, psc2_path):
                     psc2_file.write('\n')
 
 
-def create_psc2_files(master_dir, psc2_dir):
+def create_psc2_files(master_dir, psc2_dir, prefix=None):
     """Anonymize and re-encode all DAWBA questionnaires within a directory.
 
     DAWBA-encoded files are read from `master_dir`, anoymized and converted
@@ -233,16 +233,18 @@ def create_psc2_files(master_dir, psc2_dir):
     """
     for master_file in os.listdir(master_dir):
         master_path = os.path.join(master_dir, master_file)
+        if prefix:
+            master_file = prefix + master_file
         psc2_path = os.path.join(psc2_dir, master_file)
         _create_psc2_file(master_path, psc2_path)
 
 
 def main():
-    create_psc2_files(DAWBA_BL_MASTER_DIR, DAWBA_BL_PSC2_DIR)
-    create_psc2_files(DAWBA_FU1_MASTER_DIR, DAWBA_FU1_PSC2_DIR)
-    create_psc2_files(DAWBA_FU2_MASTER_DIR, DAWBA_FU2_PSC2_DIR)
-    create_psc2_files(DAWBA_FU3_MASTER_DIR, DAWBA_FU3_PSC2_DIR)
-    create_psc2_files(DAWBA_SB_MASTER_DIR, DAWBA_SB_PSC2_DIR)
+    create_psc2_files(DAWBA_BL_MASTER_DIR, DAWBA_BL_PSC2_DIR, prefix='IMAGEN_')
+    create_psc2_files(DAWBA_FU1_MASTER_DIR, DAWBA_FU1_PSC2_DIR, prefix='IMAGEN_')
+    create_psc2_files(DAWBA_FU2_MASTER_DIR, DAWBA_FU2_PSC2_DIR, prefix='IMAGEN_')
+    create_psc2_files(DAWBA_FU3_MASTER_DIR, DAWBA_FU3_PSC2_DIR, prefix='IMAGEN_')
+    create_psc2_files(DAWBA_SB_MASTER_DIR, DAWBA_SB_PSC2_DIR, prefix='STRATIFY_')
 
 
 if __name__ == "__main__":
