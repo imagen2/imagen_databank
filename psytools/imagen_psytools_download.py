@@ -476,7 +476,7 @@ class LimeSurveySession(object):
         return responses, error
 
 
-def download_lsrc2(base_url, netrc_file):
+def download_lsrc2(base_url, netrc_file, dispatch):
     """JSON RPC calls to LSRC2 service to retrieve new questionnaires.
 
     """
@@ -533,15 +533,13 @@ def download_lsrc2(base_url, netrc_file):
             psytools_path += '.csv'
 
             # break down into different directories, one for each timepoint
-            if 'STRATIFY' in title.upper():
-                psytools_dir = PSYTOOLS_STRATIFY_MASTER_DIR
-            elif 'IMAGEN' in title.upper():
-                # even FU2 files go into FU3 for now
-                psytools_dir = PSYTOOLS_IMAGEN_FU3_MASTER_DIR
+            for match, psytools_dir in dispatch.items():
+                if match in title:
+                    psytools_path = os.path.join(psytools_dir, psytools_path)
+                    break
             else:
                 logging.error('unidentifiable Psytools data: %s', title)
                 continue
-            psytools_path = os.path.join(psytools_dir, psytools_path)
 
             # skip files that have not changed since last update
             if os.path.isfile(psytools_path):
@@ -572,7 +570,13 @@ def main():
     download_legacy(LEGACY_BASE_URL, STRATIFY_NETRC_FILE,
                     STRATIFY_LEGACY_CSV_DATASETS,
                     PSYTOOLS_STRATIFY_MASTER_DIR)
-    download_lsrc2(LSRC2_BASE_URL, LSRC2_NETRC_FILE)
+
+    dispatch = {
+        'Imagen FUII -': PSYTOOLS_IMAGEN_FU2_MASTER_DIR,
+        'Imagen FUIII -': PSYTOOLS_IMAGEN_FU3_MASTER_DIR,
+        'STRATIFY ': PSYTOOLS_STRATIFY_MASTER_DIR,
+    }
+    download_lsrc2(LSRC2_BASE_URL, LSRC2_NETRC_FILE, dispatch)
 
 
 if __name__ == "__main__":
