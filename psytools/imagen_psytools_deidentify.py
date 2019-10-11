@@ -84,8 +84,8 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
 
         # de-identify columns with timestamps
         ANONYMIZED_COLUMNS = {
-            'Completed Timestamp': '%Y-%m-%d %H:%M:%S.%f',
-            'Processed Timestamp': '%Y-%m-%d %H:%M:%S.%f',
+            'Completed Timestamp': ('%Y-%m-%d %H:%M:%S.%f', '%Y-%m-%d %H:%M:%S'),
+            'Processed Timestamp': ('%Y-%m-%d %H:%M:%S.%f', '%Y-%m-%d %H:%M:%S'),
         }
         convert = [fieldname for fieldname in psc1_reader.fieldnames
                    if fieldname in ANONYMIZED_COLUMNS]
@@ -111,8 +111,8 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                     #   -I  Institute
                     row['User code'] = psc2 + suffix
                 else:
-                    # remove the "SB" suffix from Stratify subject ID
-                    if suffix != 'SB':
+                    # remove "FU3 and "SB" suffixes in Stratify and LimeSurvey-derived files
+                    if suffix not in {'FU3', 'SB'}:
                         logging.error('unknown suffix %s in user code %s',
                                       suffix, row['User code'])
                     row['User code'] = psc2
@@ -125,18 +125,20 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
             for fieldname in convert:
                 if psc1 in DOB_FROM_PSC1:
                     birth = DOB_FROM_PSC1[psc1]
-                    try:
-                        timestamp = datetime.strptime(row[fieldname],
-                                                      ANONYMIZED_COLUMNS[fieldname]).date()
-                    except ValueError:
+                    for timestamp_format in ANONYMIZED_COLUMNS[fieldname]:
+                        try:
+                            timestamp = datetime.strptime(row[fieldname],
+                                                          timestamp_format).date()
+                        except ValueError:
+                            continue
+                        else:
+                            age = timestamp - birth
+                            row[fieldname] = str(age.days)
+                            break
+                    else:
                         logging.error('%s: invalid "%s": %s',
                                       psc1, fieldname, row[fieldname])
                         row[fieldname] = None
-                    else:
-                        age = timestamp - birth
-                        row[fieldname] = str(age.days)
-                else:
-                    row[fieldname] = None
 
             # convert to age in days at date of birth - should be 0 if correct!
             # FU2 / ESPAD CHILD
