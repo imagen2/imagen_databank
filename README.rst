@@ -20,8 +20,17 @@ extract, check, anonymize and transform raw Imagen data.
   Remove identifying data and convert PSC1 to PSC2 in Dawba data,
   after manual download from the youthinmind_ server.
 
+``geolocation``
+  Merge and convert geolocation data from PSC1 to PSC2.
+
+``mri``
+  De-identify some NIfTI files that used to contain the PSC1 code.
+
 ``onsets``
   Remove identifying data and convert PSC1 to PSC2 in FU3 onsets files.
+
+``psc``
+  Update FU3 Dawba codes from token tables maitained on the Delosis_ serevr.
 
 ``psytools``
   Download Psytools data as CSV files from the Delosis_ server.
