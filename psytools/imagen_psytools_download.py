@@ -273,9 +273,7 @@ def download_legacy(base_url, netrc_file, datasets, psytools_dir):
         compressed_data = io.BytesIO(r.content)
         with gzip.GzipFile(fileobj=compressed_data) as uncompressed_data:
             # unfold quoted text spanning multiple lines
-            uncompressed_data = io.TextIOWrapper(uncompressed_data)
-            data = QUOTED_PATTERN.sub(lambda x: x.group().replace('\n', '/'),
-                                      uncompressed_data.read())
+            data = io.TextIOWrapper(uncompressed_data).read()
             # skip files that have not changed since last update
             psytools_path = os.path.join(psytools_dir, dataset)
             if os.path.isfile(psytools_path):
