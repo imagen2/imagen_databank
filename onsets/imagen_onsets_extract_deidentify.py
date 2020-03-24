@@ -9,12 +9,15 @@ from multiprocessing import Pool
 from imagen_databank import PSC2_FROM_PSC1, DOB_FROM_PSC1
 import logging
 
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.INFO)
 
 WORKER_PROCESSES = 8
 
-FU3_DATASETS = '/neurospin/imagen/FU3/RAW/QUARANTINE'
-BEHAVIOURAL = '/neurospin/imagen/FU3/RAW/PSC2/onsets'
+DATASETS_FU3_SB = '/neurospin/imagen/FU3/RAW/QUARANTINE'
+ONSETS = {
+    'FU3': '/neurospin/imagen/FU3/RAW/PSC2/onsets',
+    'SB': '/neurospin/imagen/STRATIFY/RAW/PSC2/onsets',
+}
 
 
 def _parse_onsets_datetime(date_string):
@@ -34,8 +37,8 @@ def _parse_onsets_datetime(date_string):
     return None
 
 
-def _extract_psc1_timestamp_FU3(path):
-    """Extract time stamp from FU3 zip files in QUARANTINE.
+def _extract_psc1_timestamp(path):
+    """Extract time stamp from FU3 / Stratify zip files in QUARANTINE.
 
     Parameters
     ----------
@@ -68,17 +71,21 @@ def _extract_psc1_timestamp_FU3(path):
     return psc1, increment
 
 
-def process_behavioural(path, prefix, psc1, psc2):
+def process_behavioural(path, timepoint, prefix, psc1, psc2):
     logging.info('%s: processing behavioural file...', path)
 
     with open(path, encoding='latin-1', newline='') as content:
-        output = os.path.join(BEHAVIOURAL, prefix + '_' + psc2 + 'FU3.csv')
+        output_path = ONSETS[timepoint]
+        output = os.path.join(output_path, prefix + '_' + psc2 + timepoint + '.csv')
         with open(output, 'w') as output:
             # de-identify 1st line
             line = next(iter(content))
             column = line.split('\t')
-            column[1] = str((_parse_onsets_datetime(column[1]).date() -
-                             DOB_FROM_PSC1[psc1]).days)
+            if psc1 in DOB_FROM_PSC1:
+                column[1] = str((_parse_onsets_datetime(column[1]).date() -
+                                DOB_FROM_PSC1[psc1]).days)
+            else:
+                column[1] = ''
             column[2] = column[2].replace(psc1, psc2)
             line = '\t'.join(column)
             # write to target file
@@ -87,10 +94,10 @@ def process_behavioural(path, prefix, psc1, psc2):
                 output.write(line)
 
 
-def process_dataset_FU3(arguments):
-    (psc1, psc2, dataset_path) = arguments  # unpack multiple arguments
+def process_dataset(arguments):
+    (timepoint, psc1, psc2, dataset_path) = arguments  # unpack multiple arguments
 
-    logging.info('%s: processing zipped FU3 dataset...', psc1)
+    logging.info('%s: processing zipped %s dataset...', psc1, timepoint)
 
     with TemporaryDirectory(prefix='imagen_behavioural_') as tmp:
         with zipfile.ZipFile(dataset_path) as dataset_zipfile:
@@ -98,19 +105,19 @@ def process_dataset_FU3(arguments):
     
             for prefix in ('ft', 'mid', 'recog', 'ss'):
                 for member in members:
-                    if member.filename == (psc1 + 'FU3/AdditionalData/Scanning/' +
-                                           prefix + '_' + psc1 + 'FU3.csv'):
+                    if member.filename == (psc1 + timepoint + '/AdditionalData/Scanning/' +
+                                           prefix + '_' + psc1 + timepoint + '.csv'):
                         dataset_zipfile.extract(member, path=tmp)
                         behavioural_path = os.path.join(tmp, member.filename)
-                        process_behavioural(behavioural_path, prefix, psc1, psc2)
+                        process_behavioural(behavioural_path, timepoint, prefix, psc1, psc2)
                         break
                 else:
                     logging.warning('%s: missing %s_*.csv file', psc1, prefix)
 
-    logging.info('%s: processed zipped FU3 dataset', psc1)
+    logging.info('%s: processed zipped %s dataset', psc1, timepoint)
 
 
-def list_datasets_FU3(path):
+def list_datasets(path, timepoint):
     # list zip files to process
     # for subjects with multiple zip files, keep the most recent one
     datasets = {}
@@ -121,31 +128,33 @@ def list_datasets_FU3(path):
         increment, data, psc1 = root.split('_', 2)
         assert(increment.isdigit() and data == 'data' and
                psc1[:12].isdigit())
-        if psc1[12:15] != 'FU3':
+        if psc1[12:12+len(timepoint)] != timepoint:
             continue
 
-        psc1, timestamp = _extract_psc1_timestamp_FU3(dataset)
+        psc1, timestamp = _extract_psc1_timestamp(dataset)
         dataset_path = os.path.join(path, dataset)
         datasets.setdefault(psc1, {})[timestamp] = dataset_path
 
-    logging.info('found %d zipped FU3 datasets', len(datasets))
+    logging.info('found %d zipped %s datasets', len(datasets), timepoint)
 
     return[(psc1, timestamps[max(timestamps.keys())])  # keep latest dataset
            for (psc1, timestamps) in datasets.items()]
 
 
-def dataset_FU3(path):
-    todo_list = list(list_datasets_FU3(path))
-    todo_list = [(psc1, PSC2_FROM_PSC1[psc1], path) for (psc1, path) in todo_list]
-    
+def process_datasets(path, timepoint):
+    todo_list = list(list_datasets(path, timepoint))
+    todo_list = [(timepoint, psc1, PSC2_FROM_PSC1[psc1], path) for (psc1, path) in todo_list]
+
     pool = Pool(WORKER_PROCESSES)
-    results = pool.map(process_dataset_FU3, todo_list)
+    results = pool.map(process_dataset, todo_list)
     pool.close()
     pool.join()
+    return results
 
 
 def main():
-    results = dataset_FU3(FU3_DATASETS)
+    for timepoint in ('FU3', 'SB'):
+        results = process_datasets(DATASETS_FU3_SB, timepoint)
 
 
 if __name__ == "__main__":
