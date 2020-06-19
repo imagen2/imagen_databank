@@ -22,7 +22,7 @@ PSYTOOLS_FU2_MASTER_DIR : str
     Location of Imagen FU2 PSC1-encoded files.
 PSYTOOLS_FU3_MASTER_DIR : str
     Location of Imagen FU3 PSC1-encoded files.
-PSYTOOLS_SB_MASTER_DIR : str
+PSYTOOLS_STRATIFY_MASTER_DIR : str
     Location of Stratify B PSC1-encoded files.
 
 """
@@ -44,6 +44,10 @@ PSYTOOLS_IMAGEN_FU1_MASTER_DIR = '/neurospin/imagen/FU1/RAW/PSC1/psytools'
 PSYTOOLS_IMAGEN_FU2_MASTER_DIR = '/neurospin/imagen/FU2/RAW/PSC1/psytools'
 PSYTOOLS_IMAGEN_FU3_MASTER_DIR = '/neurospin/imagen/FU3/RAW/PSC1/psytools'
 PSYTOOLS_STRATIFY_MASTER_DIR = '/neurospin/imagen/STRATIFY/RAW/PSC1/psytools'
+PSYTOOLS_IMACOV19_BL_MASTER_DIR = '/neurospin/imagen/IMACOV19_BL/RAW/PSC1/psytools'
+PSYTOOLS_IMACOV19_FU_MASTER_DIR = '/neurospin/imagen/IMACOV19_FU/RAW/PSC1/psytools'
+PSYTOOLS_STRATICO19_BL_MASTER_DIR = '/neurospin/imagen/STRATICO19_BL/RAW/PSC1/psytools'
+PSYTOOLS_STRATICO19_FU_MASTER_DIR = '/neurospin/imagen/STRATICO19_FU/RAW/PSC1/psytools'
 
 LEGACY_BASE_URL = 'https://www.delosis.com/psytools-server/dataservice/dataset/'
 LSRC2_BASE_URL = 'https://www.delosis.com/qs/index.php/admin/remotecontrol'
@@ -527,6 +531,8 @@ def download_lsrc2(base_url, netrc_file, dispatch):
             # save survey to this file name
             psytools_path = title
             psytools_path = psytools_path.replace(' - ', '-')
+            psytools_path = psytools_path.replace(' | 2', '_2')  # German Covid-19 questionnaires
+            psytools_path = psytools_path.replace(' | ', '-')    # German Covid-19 questionnaires
             psytools_path = psytools_path.replace(' ', '_')
             psytools_path += '.csv'
 
@@ -573,6 +579,12 @@ def main():
         'Imagen FUII -': PSYTOOLS_IMAGEN_FU2_MASTER_DIR,
         'Imagen FUIII -': PSYTOOLS_IMAGEN_FU3_MASTER_DIR,
         'STRATIFY ': PSYTOOLS_STRATIFY_MASTER_DIR,
+        'IMACOV19 Baseline - ': PSYTOOLS_IMACOV19_BL_MASTER_DIR,
+        'IMACOV19 2-weekly follow-up - ': PSYTOOLS_IMACOV19_FU_MASTER_DIR,
+        'IMACOV19 | 2-wöchentliche Nachfolge Befragung ': PSYTOOLS_IMACOV19_FU_MASTER_DIR,
+        'STRATICO19 Baseline - ': PSYTOOLS_STRATICO19_BL_MASTER_DIR,
+        'STRATICO19 2-weekly follow-up - ': PSYTOOLS_STRATICO19_FU_MASTER_DIR,
+        'STRATICO19 | 2-wöchentliche Nachfolge Befragung ': PSYTOOLS_STRATICO19_FU_MASTER_DIR,
     }
     download_lsrc2(LSRC2_BASE_URL, LSRC2_NETRC_FILE, dispatch)
 

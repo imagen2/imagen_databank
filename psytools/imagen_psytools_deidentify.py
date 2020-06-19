@@ -19,7 +19,7 @@ PSYTOOLS_FU2_DERIVED_DIR : str
     Location of FU2 PSC1-encoded files.
 PSYTOOLS_FU3_DERIVED_DIR : str
     Location of FU3 PSC1-encoded files.
-PSYTOOLS_SB_DERIVED_DIR : str
+PSYTOOLS_STRATIFY_DERIVED_DIR : str
     Location of Stratify PSC1-encoded files.
 
 Output
@@ -33,7 +33,7 @@ PSYTOOLS_FU2_PSC2_DIR : str
     Location of FU2 PSC2-encoded files.
 PSYTOOLS_FU3_PSC2_DIR : str
     Location of FU3 PSC2-encoded files.
-PSYTOOLS_SB_PSC2_DIR : str
+PSYTOOLS_STRATIFY_PSC2_DIR : str
     Location of Stratify PSC2-encoded files.
 
 """
@@ -46,8 +46,16 @@ PSYTOOLS_FU2_DERIVED_DIR = '/tmp/imagen/FU2/processed/psytools'
 PSYTOOLS_FU2_PSC2_DIR = '/neurospin/imagen/FU2/processed/psytools'
 PSYTOOLS_FU3_DERIVED_DIR = '/tmp/imagen/FU3/processed/psytools'
 PSYTOOLS_FU3_PSC2_DIR = '/neurospin/imagen/FU3/processed/psytools'
-PSYTOOLS_SB_DERIVED_DIR = '/tmp/imagen/STRATIFY/processed/psytools'
-PSYTOOLS_SB_PSC2_DIR = '/neurospin/imagen/STRATIFY/processed/psytools'
+PSYTOOLS_STRATIFY_DERIVED_DIR = '/tmp/imagen/STRATIFY/processed/psytools'
+PSYTOOLS_STRATIFY_PSC2_DIR = '/neurospin/imagen/STRATIFY/processed/psytools'
+PSYTOOLS_IMACOV19_BL_DERIVED_DIR = '/tmp/imagen/IMACOV19_BL/processed/psytools'
+PSYTOOLS_IMACOV19_BL_PSC2_DIR = '/neurospin/imagen/IMACOV19_BL/processed/psytools'
+PSYTOOLS_IMACOV19_FU_DERIVED_DIR = '/tmp/imagen/IMACOV19_FU/processed/psytools'
+PSYTOOLS_IMACOV19_FU_PSC2_DIR = '/neurospin/imagen/IMACOV19_FU/processed/psytools'
+PSYTOOLS_STRATICO19_BL_DERIVED_DIR = '/tmp/imagen/STRATICO19_BL/processed/psytools'
+PSYTOOLS_STRATICO19_BL_PSC2_DIR = '/neurospin/imagen/STRATICO19_BL/processed/psytools'
+PSYTOOLS_STRATICO19_FU_DERIVED_DIR = '/tmp/imagen/STRATICO19_FU/processed/psytools'
+PSYTOOLS_STRATICO19_FU_PSC2_DIR = '/neurospin/imagen/STRATICO19_FU/processed/psytools'
 
 
 import os
@@ -230,6 +238,7 @@ def _deidentify_lsrc2(psc2_from_psc1, psytools_path, psc2_path):
         'ipaddr',
         'IdCheckGender',
         'IdCheckDob',
+        'geoLoc_search',  # Covid-19 questionnaires
     }
     COLUMNS_WITH_DATE = {
         'startdate',
@@ -300,7 +309,7 @@ def deidentify(psc2_from_psc1, master_dir, psc2_dir):
             continue
         master_path = os.path.join(master_dir, filename)
         psc2_path = os.path.join(psc2_dir, filename)
-        if filename.startswith('IMAGEN-') or filename.startswith('STRATIFY-'):
+        if filename.startswith('IMAGEN-') or filename.startswith('STRATIFY-') or filename.startswith('IMACOV19-') or filename.startswith('STRATICO19-'):
             _deidentify_legacy(psc2_from_psc1, master_path, psc2_path)
         elif filename.startswith('Imagen_') or filename.startswith('STRATIFY_'):
             _deidentify_lsrc2(psc2_from_psc1, master_path, psc2_path)
@@ -318,7 +327,15 @@ def main():
     deidentify(PSC2_FROM_PSC1,
                PSYTOOLS_FU3_DERIVED_DIR, PSYTOOLS_FU3_PSC2_DIR)
     deidentify(PSC2_FROM_PSC1,
-               PSYTOOLS_SB_DERIVED_DIR, PSYTOOLS_SB_PSC2_DIR)
+               PSYTOOLS_STRATIFY_DERIVED_DIR, PSYTOOLS_STRATIFY_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_IMACOV19_BL_DERIVED_DIR, PSYTOOLS_IMACOV19_BL_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_IMACOV19_FU_DERIVED_DIR, PSYTOOLS_IMACOV19_FU_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_STRATICO19_BL_DERIVED_DIR, PSYTOOLS_STRATICO19_BL_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_STRATICO19_FU_DERIVED_DIR, PSYTOOLS_STRATICO19_FU_PSC2_DIR)
 
 
 if __name__ == "__main__":
