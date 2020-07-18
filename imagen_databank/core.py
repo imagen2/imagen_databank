@@ -149,7 +149,7 @@ def _initialize_dob():
                     month = int(match.group(2))
                     day = int(match.group(3))
                     if year > 2012 or year < 1989:
-                        raise Exception('unexpected date of birth: {0}'.format(dob))
+                        raise Exception('unexpected date of birth: {0} ({1}-{2}-{3})'.format(dob, year, month, day))
                     dob_from_psc1[psc1] = datetime.date(year, month, day)
                 else:
                     raise Exception('unexpected line in DOB.csv: {0}'.format(line))
