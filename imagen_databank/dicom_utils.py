@@ -31,8 +31,12 @@
 import re
 import datetime
 import dateutil.tz
-import dicom
-from dicom.filereader import InvalidDicomError
+try:
+    import pydicom
+except:
+    import dicom as pydicom
+from pydicom.filereader import InvalidDicomError
+from pydicom.filereader import dcmread
 
 import logging
 logger = logging.getLogger(__name__)
@@ -207,7 +211,7 @@ def read_metadata(path, force=False):
     dict
 
     """
-    dataset = dicom.read_file(path, force=force)
+    dataset = dcmread(path, force=force)
 
     # missing compulsory tags will raise exceptions
     if 'SeriesDescription' in dataset:
@@ -246,7 +250,7 @@ def read_metadata(path, force=False):
     if 'DeviceSerialNumber' in dataset:
         metadata['DeviceSerialNumber'] = dataset.DeviceSerialNumber
     if 'SoftwareVersions' in dataset:
-        if dicom.dataelem.isMultiValue(dataset.SoftwareVersions):
+        if pydicom.dataelem.isMultiValue(dataset.SoftwareVersions):
             # usually the last part is the more informative
             # for example on Philips scanners:
             # ['3.2.1', '3.2.1.1'] → '3.2.1.1'
