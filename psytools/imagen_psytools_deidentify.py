@@ -147,6 +147,8 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                         logging.error('%s: invalid "%s": %s',
                                       psc1, fieldname, row[fieldname])
                         row[fieldname] = None
+                else:
+                    row[fieldname] = None
 
             # convert to age in days at date of birth - should be 0 if correct!
             # FU2 / ESPAD CHILD
