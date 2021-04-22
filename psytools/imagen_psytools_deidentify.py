@@ -52,10 +52,18 @@ PSYTOOLS_IMACOV19_BL_DERIVED_DIR = '/tmp/imagen/IMACOV19_BL/processed/psytools'
 PSYTOOLS_IMACOV19_BL_PSC2_DIR = '/neurospin/imagen/IMACOV19_BL/processed/psytools'
 PSYTOOLS_IMACOV19_FU_DERIVED_DIR = '/tmp/imagen/IMACOV19_FU/processed/psytools'
 PSYTOOLS_IMACOV19_FU_PSC2_DIR = '/neurospin/imagen/IMACOV19_FU/processed/psytools'
+PSYTOOLS_IMACOV19_FU2_DERIVED_DIR = '/tmp/imagen/IMACOV19_FU2/processed/psytools'
+PSYTOOLS_IMACOV19_FU2_PSC2_DIR = '/neurospin/imagen/IMACOV19_FU2/processed/psytools'
+PSYTOOLS_IMACOV19_FU3_DERIVED_DIR = '/tmp/imagen/IMACOV19_FU3/processed/psytools'
+PSYTOOLS_IMACOV19_FU3_PSC2_DIR = '/neurospin/imagen/IMACOV19_FU3/processed/psytools'
 PSYTOOLS_STRATICO19_BL_DERIVED_DIR = '/tmp/imagen/STRATICO19_BL/processed/psytools'
 PSYTOOLS_STRATICO19_BL_PSC2_DIR = '/neurospin/imagen/STRATICO19_BL/processed/psytools'
 PSYTOOLS_STRATICO19_FU_DERIVED_DIR = '/tmp/imagen/STRATICO19_FU/processed/psytools'
 PSYTOOLS_STRATICO19_FU_PSC2_DIR = '/neurospin/imagen/STRATICO19_FU/processed/psytools'
+PSYTOOLS_STRATICO19_FU2_DERIVED_DIR = '/tmp/imagen/STRATICO19_FU2/processed/psytools'
+PSYTOOLS_STRATICO19_FU2_PSC2_DIR = '/neurospin/imagen/STRATICO19_FU2/processed/psytools'
+PSYTOOLS_STRATICO19_FU3_DERIVED_DIR = '/tmp/imagen/STRATICO19_FU3/processed/psytools'
+PSYTOOLS_STRATICO19_FU3_PSC2_DIR = '/neurospin/imagen/STRATICO19_FU3/processed/psytools'
 
 
 import os
@@ -320,6 +328,7 @@ def deidentify(psc2_from_psc1, master_dir, psc2_dir):
 
 
 def main():
+    # IMAGEN
     deidentify(PSC2_FROM_PSC1,
                PSYTOOLS_BL_DERIVED_DIR, PSYTOOLS_BL_PSC2_DIR)
     deidentify(PSC2_FROM_PSC1,
@@ -328,16 +337,27 @@ def main():
                PSYTOOLS_FU2_DERIVED_DIR, PSYTOOLS_FU2_PSC2_DIR)
     deidentify(PSC2_FROM_PSC1,
                PSYTOOLS_FU3_DERIVED_DIR, PSYTOOLS_FU3_PSC2_DIR)
+    # STRATIFY/ESTRA
     deidentify(PSC2_FROM_PSC1,
                PSYTOOLS_STRATIFY_DERIVED_DIR, PSYTOOLS_STRATIFY_PSC2_DIR)
+    # IMACOV
     deidentify(PSC2_FROM_PSC1,
                PSYTOOLS_IMACOV19_BL_DERIVED_DIR, PSYTOOLS_IMACOV19_BL_PSC2_DIR)
     deidentify(PSC2_FROM_PSC1,
                PSYTOOLS_IMACOV19_FU_DERIVED_DIR, PSYTOOLS_IMACOV19_FU_PSC2_DIR)
     deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_IMACOV19_FU2_DERIVED_DIR, PSYTOOLS_IMACOV19_FU2_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_IMACOV19_FU3_DERIVED_DIR, PSYTOOLS_IMACOV19_FU3_PSC2_DIR)
+    # STRATICO
+    deidentify(PSC2_FROM_PSC1,
                PSYTOOLS_STRATICO19_BL_DERIVED_DIR, PSYTOOLS_STRATICO19_BL_PSC2_DIR)
     deidentify(PSC2_FROM_PSC1,
                PSYTOOLS_STRATICO19_FU_DERIVED_DIR, PSYTOOLS_STRATICO19_FU_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_STRATICO19_FU2_DERIVED_DIR, PSYTOOLS_STRATICO19_FU2_PSC2_DIR)
+    deidentify(PSC2_FROM_PSC1,
+               PSYTOOLS_STRATICO19_FU3_DERIVED_DIR, PSYTOOLS_STRATICO19_FU3_PSC2_DIR)
 
 
 if __name__ == "__main__":
