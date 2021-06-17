@@ -127,8 +127,15 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                     #   -I  Institute
                     row['User code'] = psc2 + suffix
                 else:
-                    # remove "FU3 and "SB" suffixes in Stratify and LimeSurvey-derived files
-                    if suffix not in {'FU3', 'SB'}:
+                    if suffix == 'FU':
+                        # as a short-term decision, discard "FU" follow-up participants
+                        # from Stratify and LimeSurvey-derived files
+                        logging.info('discarding STRATIFY follow-up participant %s!',
+                                        row['User code'])
+                        continue
+                    elif suffix not in {'FU3', 'SB'}:
+                        # remove "FU3 and "SB" suffixes
+                        # in Stratify and LimeSurvey-derived files
                         logging.error('unknown suffix %s in user code %s',
                                       suffix, row['User code'])
                     row['User code'] = psc2
