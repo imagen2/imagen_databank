@@ -89,7 +89,7 @@ _DOB_STRATIFY = '/neurospin/imagen/src/scripts/psc_tools/DOB_SB.csv'
 
 
 def _initialize_psc1_dawba_psc2():
-    """Returns dictionnaries to map PSC1 to PSC2 and DAWBA codes to PSC1.
+    """Returns dictionaries to map PSC1 to PSC2 and DAWBA codes to PSC1.
 
     Parameters
     ----------
@@ -99,7 +99,7 @@ def _initialize_psc1_dawba_psc2():
     Returns
     -------
     tuple
-        Pair of PSC1→PSC2 and DAWBA→PSC1 dictionnaries.
+        Pair of PSC1→PSC2 and DAWBA→PSC1 dictionaries.
 
     """
     psc2_from_psc1 = {}
@@ -125,7 +125,7 @@ _REGEX_DOB = re.compile(r'(\d{4})-(\d{2})-(\d{2})')
 
 
 def _initialize_dob():
-    """Returns dictionnary to map PSC1 code to date of birth.
+    """Returns dictionary to map PSC1 code to date of birth.
 
     Parameters
     ----------
@@ -135,7 +135,7 @@ def _initialize_dob():
     Returns
     -------
     dict
-        Dictionnary map PSC1 code to date of birth.
+        Dictionary map PSC1 code to date of birth.
 
     """
     dob_from_psc1 = {}

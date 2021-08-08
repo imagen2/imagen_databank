@@ -321,7 +321,7 @@ def report_image_data(path, force=False):
             psc1 = image_data['PatientName']
         else:
             psc1 = None
-        # build the dictionnary of series using 'SeriesInstanceUID' as a key
+        # build the dictionary of series using 'SeriesInstanceUID' as a key
         if series_uid not in series_dict:
             series_data = {
                 'SeriesNumber': series_number,

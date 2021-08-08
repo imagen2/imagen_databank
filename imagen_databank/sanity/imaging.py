@@ -135,9 +135,9 @@ class ZipTree:
     Attributes
     ----------
     directories : dict
-        Dictionnary of subdirectories.
+        Dictionary of subdirectories.
     files : str
-        Dictionnary of files under this node.
+        Dictionary of files under this node.
 
     """
 
