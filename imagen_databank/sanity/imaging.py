@@ -518,8 +518,8 @@ def _check_image_data(path, ziptree, suffix, psc1, date, expected):
     -------
     result: tuple
         In case of errors, return the tuple ([], errors) where errors is
-        a list of errors. Oterwise return the tuple (psc1, errors) where psc1
-        is a list of dectected PSC1 code and errors is an empty list.
+        a list of errors. Otherwise return the tuple (psc1, errors) where psc1
+        is a list of detected PSC1 code and errors is an empty list.
 
     """
     subject_ids = set()

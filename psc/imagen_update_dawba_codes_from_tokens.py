@@ -379,7 +379,7 @@ def main():
                     if psc1 in dawba_from_psc1:
                         if dawba != dawba_from_psc1[psc1]:
                             if dawba == '000000':
-                                logging.info('%s: Dawba code intialized from %s to %s',
+                                logging.info('%s: Dawba code initialized from %s to %s',
                                              psc1, dawba, dawba_from_psc1[psc1])
                             else:
                                 logging.error('%s: Dawba code changed from %s to %s',

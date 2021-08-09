@@ -30,7 +30,7 @@ extract, check, anonymize and transform raw Imagen data.
   Remove identifying data and convert PSC1 to PSC2 in FU3 onsets files.
 
 ``psc``
-  Update FU3 Dawba codes from token tables maitained on the Delosis_ serevr.
+  Update FU3 Dawba codes from token tables maintained on the Delosis_ serevr.
 
 ``psytools``
   Download Psytools data as CSV files from the Delosis_ server.

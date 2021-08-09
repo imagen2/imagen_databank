@@ -79,7 +79,7 @@ _EXACT_ADDITIONAL_DATA_REGEXES = (
 def _match_additional_data_sops(filename, exact=False):
     """Compare filename to filenames defined in Imagen FU2 SOPs.
 
-    Compare actual filename to expected filenames expected for Additionnal
+    Compare actual filename to expected filenames expected for Additional
     Data in SOPs, either in a strict way or a loose way. This matching
     function is empirical and based on experimentation.
 

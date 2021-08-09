@@ -359,7 +359,7 @@ def _simple_check_subject_id(path, subject_ids, suffix=None, psc1=None):
 def _simple_check_content(path, function, suffix=None, psc1=None):
     """Helper function to check the contents of a Cantab file.
 
-    Used for those Cantab files types for which we chack only the
+    Used for those Cantab files types for which we check only the
     Subjects IDs found in the file.
 
     Parameters
