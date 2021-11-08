@@ -68,7 +68,7 @@ IMAGEN_DIGEST = 'Imagen digest'
 IMAGEN_SURVEY_DIGEST = 'Imagen survey digest'
 IMAGEN_KIRBY_DIGEST = 'Imagen Kirby digest'
 
-# Unlike LSRC2, the legacy service does not advertize available surveys,
+# Unlike LSRC2, the legacy service does not advertise available surveys,
 # so we copy the list of surveys from the graphical interface.
 IMAGEN_LEGACY_CSV_DATASETS = (
     ('IMAGEN-IMGN_ESPAD_PARENT_RC5', BASIC_DIGEST),  # (Drug Use Questionnaire)
