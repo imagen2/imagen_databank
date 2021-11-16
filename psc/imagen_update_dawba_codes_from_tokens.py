@@ -56,7 +56,7 @@ def error2exception(func):
     return wrapper
 
 
-class LimeSurveySession(object):
+class LimeSurveySession:
     """LimeSurvey JSON-RPC LSRC2 session
 
     Documented here:
