@@ -48,10 +48,12 @@ PSYTOOLS_IMACOV19_BL_MASTER_DIR = '/neurospin/imagen/IMACOV19_BL/RAW/PSC1/psytoo
 PSYTOOLS_IMACOV19_FU_MASTER_DIR = '/neurospin/imagen/IMACOV19_FU/RAW/PSC1/psytools'
 PSYTOOLS_IMACOV19_FU2_MASTER_DIR = '/neurospin/imagen/IMACOV19_FU2/RAW/PSC1/psytools'
 PSYTOOLS_IMACOV19_FU3_MASTER_DIR = '/neurospin/imagen/IMACOV19_FU3/RAW/PSC1/psytools'
+PSYTOOLS_IMACOV19_FU4_MASTER_DIR = '/neurospin/imagen/IMACOV19_FU4/RAW/PSC1/psytools'
 PSYTOOLS_STRATICO19_BL_MASTER_DIR = '/neurospin/imagen/STRATICO19_BL/RAW/PSC1/psytools'
 PSYTOOLS_STRATICO19_FU_MASTER_DIR = '/neurospin/imagen/STRATICO19_FU/RAW/PSC1/psytools'
 PSYTOOLS_STRATICO19_FU2_MASTER_DIR = '/neurospin/imagen/STRATICO19_FU2/RAW/PSC1/psytools'
 PSYTOOLS_STRATICO19_FU3_MASTER_DIR = '/neurospin/imagen/STRATICO19_FU3/RAW/PSC1/psytools'
+PSYTOOLS_STRATICO19_FU4_MASTER_DIR = '/neurospin/imagen/STRATICO19_FU4/RAW/PSC1/psytools'
 
 LEGACY_BASE_URL = 'https://www.delosis.com/psytools-server/dataservice/dataset/'
 LSRC2_BASE_URL = 'https://www.delosis.com/qs/index.php/admin/remotecontrol'
@@ -503,7 +505,14 @@ def download_lsrc2(base_url, netrc_file, dispatch):
             # subjects in surveys are identified by "sid" and "token"
             # retrieve correlation between "token" and PSC1 code
             psc1_from_token = {}
-            participants = session.participants(sid, ['attribute_1'])
+            try:
+                participants = session.participants(sid, ['attribute_1'])
+            except LimeSurveyError as e:
+                # skip surveys missing token tables (should not happen!)
+                logging.error('skip survey without token table ("%s"): %s"',
+                              str(e), title)
+                continue
+
             for participant in participants:
                 token = participant['token']
                 psc1_from_token[token] = participant['attribute_1']
@@ -511,6 +520,8 @@ def download_lsrc2(base_url, netrc_file, dispatch):
             # retrieve survey
             responses = session.responses(sid, 'all')
             if not responses:  # some 'FUII Parent' surveys are still empty
+                logging.warning('skip survey without responses: %s"',
+                                title)
                 continue
 
             # process CSV data:
@@ -589,6 +600,7 @@ def main():
         'IMACOV19 | 2-wöchentliche Nachfolge Befragung ': PSYTOOLS_IMACOV19_FU_MASTER_DIR,
         'IMACOV19 follow-up -': PSYTOOLS_IMACOV19_FU2_MASTER_DIR,
         'IMACOV19 follow-up 2021 - ': PSYTOOLS_IMACOV19_FU3_MASTER_DIR,
+        'IMACOV19 follow-up 2022 - ': PSYTOOLS_IMACOV19_FU4_MASTER_DIR,
         'STRATICO19 Baseline - ': PSYTOOLS_STRATICO19_BL_MASTER_DIR,
         'STRATICO19 2-weekly follow-up - ': PSYTOOLS_STRATICO19_FU_MASTER_DIR,
         'STRATICO19 | 2-wöchentliche Nachfolge Befragung ': PSYTOOLS_STRATICO19_FU_MASTER_DIR,
