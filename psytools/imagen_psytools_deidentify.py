@@ -48,6 +48,8 @@ PSYTOOLS_FU3_DERIVED_DIR = '/tmp/imagen/FU3/processed/psytools'
 PSYTOOLS_FU3_PSC2_DIR = '/neurospin/imagen/FU3/processed/psytools'
 PSYTOOLS_STRATIFY_DERIVED_DIR = '/tmp/imagen/STRATIFY/processed/psytools'
 PSYTOOLS_STRATIFY_PSC2_DIR = '/neurospin/imagen/STRATIFY/processed/psytools'
+PSYTOOLS_STRATIFY_FU_DERIVED_DIR = '/tmp/imagen/STRATIFY_FU/processed/psytools'
+PSYTOOLS_STRATIFY_FU_PSC2_DIR = '/neurospin/imagen/STRATIFY_FU/processed/psytools'
 PSYTOOLS_IMACOV19_BL_DERIVED_DIR = '/tmp/imagen/IMACOV19_BL/processed/psytools'
 PSYTOOLS_IMACOV19_BL_PSC2_DIR = '/neurospin/imagen/IMACOV19_BL/processed/psytools'
 PSYTOOLS_IMACOV19_FU_DERIVED_DIR = '/tmp/imagen/IMACOV19_FU/processed/psytools'
@@ -133,8 +135,8 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                         logging.info('discarding STRATIFY follow-up participant %s!',
                                         row['User code'])
                         continue
-                    elif suffix not in {'FU3', 'SB'}:
-                        # remove "FU3 and "SB" suffixes
+                    elif suffix not in {'FU3', 'SB', 'SU'}:
+                        # remove "FU3 and "SB"/"SU" suffixes
                         # in Stratify and LimeSurvey-derived files
                         logging.error('unknown suffix %s in user code %s',
                                       suffix, row['User code'])
@@ -223,7 +225,7 @@ def _psc1(psc1, psc2_from_psc1):
         # find and skip subjects with invalid identifier
         if psc1[-3:] in {'FU2', 'FU3'}:
             psc1 = psc1[:-3]
-        elif psc1[-2:] == 'SB':
+        elif psc1[-2:] in {'SB', 'SU'}:
             psc1 = psc1[:-2]
         if psc1 in psc2_from_psc1:
             return psc1
