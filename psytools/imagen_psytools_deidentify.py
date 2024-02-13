@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Re-encode and pseudonymize Psytools CSV files (BL, FU1, FU2, FU3 and Stratify).
 
 This script replaces the Scito pseudonymization pipeline.

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Download CSV Psytools files from Delosis server.
 
 This script replaces the one inherited from the initial Imagen team.

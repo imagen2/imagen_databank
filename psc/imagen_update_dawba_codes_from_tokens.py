@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Download Dawba codes for Imagen FU3 and Stratify and update conversion table.
 
 ==========

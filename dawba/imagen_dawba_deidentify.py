@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """Re-encode and anonymize DAWBA files (BL, FU1, FU2 and FU3).
 
 This script replaces the Scito anoymization pipeline which does not

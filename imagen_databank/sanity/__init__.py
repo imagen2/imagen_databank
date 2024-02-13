@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # noqa
 
 # Copyright (c) 2014-2017 CEA
