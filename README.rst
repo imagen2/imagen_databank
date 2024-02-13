@@ -20,6 +20,11 @@ extract, check, anonymize and transform raw Imagen data.
   Remove identifying data and convert PSC1 to PSC2 in Dawba data,
   after manual download from the youthinmind_ server.
 
+``stratify_demographics``
+  Cross-check Stratify age and sex with `stratify_debug_psytools.py`.
+  Print demographics with `demographics.py`, using recruitment files and
+  validated age/sex from the output of teh previosu script.
+
 ``geolocation``
   Merge and convert geolocation data from PSC1 to PSC2.
 
