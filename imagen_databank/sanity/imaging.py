@@ -489,8 +489,7 @@ def _check_empty_files(ziptree):
         if zipinfo.file_size == 0:
             yield Error(zipinfo.filename, 'File is empty')
     for ziptree in ziptree.directories.values():
-        for error in _check_empty_files(ziptree):
-            yield error
+        yield from _check_empty_files(ziptree)
 
 
 def _check_image_data(path, ziptree, suffix, psc1, date, expected):
