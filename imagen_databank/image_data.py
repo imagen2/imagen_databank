@@ -242,7 +242,7 @@ def walk_image_data(path, force=False):
             logger.debug('read file: %s', relpath)
             try:
                 metadata = read_metadata(abspath, force=force)
-            except IOError as e:
+            except OSError as e:
                 logger.error('cannot read file (%s): %s', str(e), relpath)
             except InvalidDicomError as e:
                 logger.error('cannot read nonstandard DICOM file: %s: %s', str(e), relpath)

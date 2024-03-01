@@ -237,7 +237,7 @@ def _get_netrc_auth(url):
         from netrc import netrc, NetrcParseError
         try:
             authenticators = netrc(netrc_path).authenticators(netloc)
-        except (NetrcParseError, IOError):
+        except (NetrcParseError, OSError):
             return
         if authenticators:
             return (authenticators[0], authenticators[2])

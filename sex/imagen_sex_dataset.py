@@ -243,7 +243,7 @@ def process_dataset_BL(arguments):
                         dicom_path = os.path.join(tmp, member.name)
                         try:
                             dataset = dicom.read_file(dicom_path, force=True)
-                        except IOError as e:
+                        except OSError as e:
                             logging.error('%s: cannot read file: %s',
                                           psc1, str(e))
                         except dicom.filereader.InvalidDicomError as e:
@@ -305,7 +305,7 @@ def process_dataset_FU2(arguments):
                               psc1, dicom_path)
                 try:
                     dataset = dicom.read_file(dicom_path, force=True)
-                except IOError as e:
+                except OSError as e:
                     logging.error('%s: cannot read file: %s',
                                   psc1, str(e))
                 except dicom.filereader.InvalidDicomError as e:
@@ -356,7 +356,7 @@ def process_dataset_FU3(arguments):
                         dicom_path = os.path.join(tmp, member.filename)
                         try:
                             dataset = dicom.read_file(dicom_path, force=True)
-                        except IOError as e:
+                        except OSError as e:
                             logging.error('%s: cannot read file: %s',
                                           psc1, str(e))
                         except dicom.filereader.InvalidDicomError as e:

@@ -541,7 +541,7 @@ def _check_image_data(path, ziptree, suffix, psc1, date, expected):
                     dicom_file = z.extract(f, tempdir)
                     try:
                         metadata = read_metadata(dicom_file, force=True)
-                    except IOError:
+                    except OSError:
                         continue
                     except AttributeError:
                         error_list.append(Error(f, 'This is not a valid DICOM file'))
