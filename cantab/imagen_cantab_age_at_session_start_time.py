@@ -18,7 +18,7 @@ Output
 
 """
 
-FU2_MASTER_DIR = u'/neurospin/imagen/FU2/RAW/PSC1'
+FU2_MASTER_DIR = '/neurospin/imagen/FU2/RAW/PSC1'
 
 import logging
 logger = logging.getLogger(__name__)
