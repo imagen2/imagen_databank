@@ -130,8 +130,7 @@ def dcm2nii(src, dst, comment):
                 '-o', dst,
                 src]
     completed = subprocess.run(dcm2niix,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE)
+                               capture_output=True)
     if completed.returncode:
         logger.error('%s: dcm2niix failed: %s',
                      src, completed.stdout)
