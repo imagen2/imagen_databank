@@ -33,9 +33,6 @@ import csv
 import re
 import sys
 
-if sys.version_info < (3, 0):
-    from codecs import open as open  # pylint: disable=redefined-builtin
-
 import logging
 logger = logging.getLogger(__name__)
 
