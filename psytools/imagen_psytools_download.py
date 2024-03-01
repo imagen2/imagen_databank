@@ -298,7 +298,7 @@ def download_legacy(base_url, netrc_file, datasets, psytools_dir):
 
 class LimeSurveyError(Exception):
     def __init__(self, message, code):
-        super(LimeSurveyError, self).__init__(message)
+        super().__init__(message)
         self.code = code
 
 

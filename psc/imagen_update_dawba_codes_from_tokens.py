@@ -36,7 +36,7 @@ PSC2PSC_SB = '/neurospin/imagen/src/scripts/psc_tools/psc2psc_SB.csv'
 
 class LimeSurveyError(Exception):
     def __init__(self, message, code):
-        super(LimeSurveyError, self).__init__(message)
+        super().__init__(message)
         self.code = code
 
 
