@@ -285,8 +285,8 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
 
     """
     subject_ids = set()
-    expected_tests = set([x for x in (MID_CSV, FT_CSV, SS_CSV, RECOG_CSV)
-                          if expected[x] != 'Missing']) if expected else None
+    expected_tests = set(x for x in (MID_CSV, FT_CSV, SS_CSV, RECOG_CSV)
+                         if expected[x] != 'Missing') if expected else None
     actual_tests = set()
     error_list = []
 

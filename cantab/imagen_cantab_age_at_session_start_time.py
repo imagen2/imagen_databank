@@ -55,7 +55,7 @@ def main():
             logger.error('unknown age for PSC1 code %s: %s', psc1, datasheet)
             continue
         dob = DOB_FROM_PSC1[psc1]
-        session_start_times = set([sst.date() for sst in session_start_times])
+        session_start_times = set(sst.date() for sst in session_start_times)
         if len(session_start_times) != 1:
             logger.warning('Proper "Session start time" not found: %s',
                            datasheet)
