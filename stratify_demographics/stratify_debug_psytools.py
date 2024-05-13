@@ -222,11 +222,14 @@ def cantab_timepoint(path):
                                     f_path = os.path.join(additional_data_path, f)
                                     with open(f_path, newline='') as csvfile:
                                         reader = csv.DictReader(csvfile)
-                                        if 'Gender' not in reader.fieldnames:
-                                            csvfile.seek(0)
-                                            reader = csv.DictReader(csvfile, delimiter=';')
+                                        try:
                                             if 'Gender' not in reader.fieldnames:
-                                                reader = None
+                                                csvfile.seek(0)
+                                                reader = csv.DictReader(csvfile, delimiter=';')
+                                                if 'Gender' not in reader.fieldnames:
+                                                    reader = None
+                                        except:
+                                            logging.error('bad cantab datasheet for %s', psc1)
                                         for row in reader:
                                             if 'Gender' in row:
                                                 if row['Gender']:
