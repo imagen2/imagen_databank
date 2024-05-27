@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import os
 from csv import reader
@@ -10,13 +11,13 @@ import logging
 logging.basicConfig(level=logging.ERROR)
 
 
-_DEBUG_PSYTOOLS_SEX = 'STRATIFY_SEX_2021-05-31.txt'
+_DEBUG_PSYTOOLS_SEX = '/imagen/STRATIFY/RAW/PSC1/meta_data/STRATIFY_SEX_2024-05-07.txt'
 
 _DEMOGRAPHIC_RECORDS_DIR = '/imagen/STRATIFY/RAW/PSC1/meta_data'
 _DEMOGRAPHIC_RECORDS = [
     os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_SOUTHAMPTON_2019-05-23.xlsx'),
-    os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_LONDON_2020-07-24.xlsx'),
-    os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'ESTRA_recruitment_file_LONDON_2019-07-24.xlsx'),
+    os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_LONDON_2024-03-14.xlsx'),
+    os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'ESTRA_recruitment_file_LONDON_2024-01-09.xlsx'),
     os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_LONDON_CONTROLS_2019-09-09.xlsx'),
     os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_BERLIN_2020-11-03.xlsx'),
 ]
@@ -69,6 +70,7 @@ _BN_GROUP = 'BN'
 _RECBN_GROUP = 'recBN'
 _MDD_GROUP = 'MDD'
 _PSYCHOSIS_GROUP = 'Psychosis'
+_BED_GROUP= 'BED'
 
 _PATIENT_GROUPS = {
     _CONTROL_GROUP,
@@ -80,6 +82,7 @@ _PATIENT_GROUPS = {
     _RECBN_GROUP,
     _MDD_GROUP,
     _PSYCHOSIS_GROUP,
+    _BED_GROUP,
 }
 
 
@@ -215,7 +218,7 @@ def main():
     with open(_DEBUG_PSYTOOLS_SEX, 'r') as sex_file:
         sex_reader = reader(sex_file, dialect='excel')
 
-        with open('demographics.csv', 'w') as demographics_file:
+        with open('demographics_without_notes_test2.csv', 'w') as demographics_file:
             demographics_writer = DictWriter(demographics_file,
                                              _FINAL_COLUMNS,
                                               dialect='excel')
@@ -243,7 +246,7 @@ def main():
                         'recruitment site': center,
                     }
                 row = {x: data[x] if x in data else None
-                       for x in _FINAL_COLUMNS}
+                       for x in _FINAL_COLUMNS[:-1]} #excluding column "missing data"
                 demographics_writer.writerow(row)
 
 
