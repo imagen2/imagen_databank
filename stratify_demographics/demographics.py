@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 
 import os
 from csv import reader
@@ -218,7 +218,7 @@ def main():
     with open(_DEBUG_PSYTOOLS_SEX, 'r') as sex_file:
         sex_reader = reader(sex_file, dialect='excel')
 
-        with open('demographics_without_notes_test2.csv', 'w') as demographics_file:
+        with open('STRATIFY_participants.csv', 'w') as demographics_file:
             demographics_writer = DictWriter(demographics_file,
                                              _FINAL_COLUMNS,
                                               dialect='excel')
