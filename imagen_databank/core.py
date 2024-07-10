@@ -146,7 +146,7 @@ def _initialize_dob():
                     year = int(match.group(1))
                     month = int(match.group(2))
                     day = int(match.group(3))
-                    if year > 2012 or year < 1989:
+                    if year > 2012 or year < 1987:
                         raise Exception('unexpected date of birth: {0} ({1}-{2}-{3})'.format(dob, year, month, day))
                     dob_from_psc1[psc1] = datetime.date(year, month, day)
                 else:
