@@ -18,7 +18,7 @@ _DEMOGRAPHIC_RECORDS = [
     os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_SOUTHAMPTON_2019-05-23.xlsx'),
     os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_LONDON_2024-03-14.xlsx'),
     os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'ESTRA_recruitment_file_LONDON_2024-01-09.xlsx'),
-    os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_LONDON_CONTROLS_2019-09-09.xlsx'),
+    os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'ESTRA_recruitment_file_LONDON_CONTROLS_2023-07-24.xlsx'),
     os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_BERLIN_2020-11-03.xlsx'),
 ]
 
@@ -62,6 +62,7 @@ _DEMOGRAPHIC_COLUMNS = {
 }
 
 _CONTROL_GROUP = 'Control'
+_CONTROL_GROUP_ESTRA = 'Control_ESTRA'
 _ADHD_GROUP = 'ADHD'
 _AUD_GROUP = 'AUD'
 _AN_GROUP = 'AN'
@@ -74,6 +75,7 @@ _BED_GROUP= 'BED'
 
 _PATIENT_GROUPS = {
     _CONTROL_GROUP,
+    _CONTROL_GROUP_ESTRA,
     _ADHD_GROUP,
     _AUD_GROUP,
     _AN_GROUP,
@@ -89,11 +91,13 @@ _PATIENT_GROUPS = {
 def normalize_patient_group(s):
     table = {
         'control': _CONTROL_GROUP,
+        'Control_ESTRA': _CONTROL_GROUP_ESTRA,
         'depression': _MDD_GROUP,
         'psychosis': _PSYCHOSIS_GROUP,
         'Alcohol Use Disorder': _AUD_GROUP,
         'Major Depressive Disorder': _MDD_GROUP,
         'Healthy Control': _CONTROL_GROUP,
+
     }
     if s in table:
        s = table[s]
