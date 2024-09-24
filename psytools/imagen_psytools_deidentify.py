@@ -128,8 +128,8 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                     #   -I  Institute
                     row['User code'] = psc2 + suffix
                 else:
-                    if suffix == 'FU':
-                        # as a short-term decision, discard "FU" follow-up participants
+                    if suffix in {'FU', 'SU'}:
+                        # as a short-term decision, discard "FU" follow-up participants as well as "SU" follow-up
                         # from Stratify and LimeSurvey-derived files
                         logging.info('discarding STRATIFY follow-up participant %s!',
                                         row['User code'])
@@ -224,7 +224,7 @@ def _psc1(psc1, psc2_from_psc1):
         # find and skip subjects with invalid identifier
         if psc1[-3:] in {'FU2', 'FU3'}:
             psc1 = psc1[:-3]
-        elif psc1[-2:] in {'SB', 'SU'}:
+        elif psc1[-2:] in {'SB'}: #removing SU to skip followup acquisitions in SB psytools
             psc1 = psc1[:-2]
         if psc1 in psc2_from_psc1:
             return psc1
@@ -348,6 +348,8 @@ def main():
     # STRATIFY/ESTRA
     deidentify(PSC2_FROM_PSC1,
                PSYTOOLS_STRATIFY_DERIVED_DIR, PSYTOOLS_STRATIFY_PSC2_DIR)
+    #deidentify(PSC2_FROM_PSC1,
+    #           PSYTOOLS_STRATIFY_FU_DERIVED_DIR, PSYTOOLS_STRATIFY_FU_PSC2_DIR)
     # IMACOV
     deidentify(PSC2_FROM_PSC1,
                PSYTOOLS_IMACOV19_BL_DERIVED_DIR, PSYTOOLS_IMACOV19_BL_PSC2_DIR)
