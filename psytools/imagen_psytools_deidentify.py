@@ -134,7 +134,7 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
                         logging.info('discarding STRATIFY follow-up participant %s!',
                                         row['User code'])
                         continue
-                    elif suffix not in {'FU3', 'SB', 'SU'}:
+                    elif suffix not in {'FU3', 'SB'}: #'SU' corresponds to ESTRA FU, has been removed temporarily to generate psytools SB
                         # remove "FU3 and "SB"/"SU" suffixes
                         # in Stratify and LimeSurvey-derived files
                         logging.error('unknown suffix %s in user code %s',
