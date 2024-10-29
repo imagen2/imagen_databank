@@ -11,15 +11,15 @@ import logging
 logging.basicConfig(level=logging.ERROR)
 
 
-_DEBUG_PSYTOOLS_SEX = '/imagen/STRATIFY/RAW/PSC1/meta_data/STRATIFY_SEX_2024-05-07.txt'
+_DEBUG_PSYTOOLS_SEX = '/imagen/STRATIFY/RAW/PSC1/meta_data/STRATIFY_SEX_2024-10-17.txt'
 
 _DEMOGRAPHIC_RECORDS_DIR = '/imagen/STRATIFY/RAW/PSC1/meta_data'
 _DEMOGRAPHIC_RECORDS = [
-    os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_SOUTHAMPTON_2019-05-23.xlsx'),
+    os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_SOUTHAMPTON_2024-10-16.xlsx'),
     os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_LONDON_2024-03-14.xlsx'),
-    os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'ESTRA_recruitment_file_LONDON_2024-01-09.xlsx'),
+    os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'ESTRA_recruitment_file_LONDON_2024-08-16.xlsx'),
     os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'ESTRA_recruitment_file_LONDON_CONTROLS_2023-07-24.xlsx'),
-    os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_BERLIN_2020-11-03.xlsx'),
+    os.path.join(_DEMOGRAPHIC_RECORDS_DIR, 'STRATIFY_recruitment_file_BERLIN_2024-10-16.xlsx'),
 ]
 
 _FINAL_COLUMNS = (
@@ -29,7 +29,7 @@ _FINAL_COLUMNS = (
     'scanning site',
     'patient group',
     'complete',
-    'missing data',
+    #'missing data',
 )
 
 _DEMOGRAPHIC_COLUMNS = {
@@ -40,7 +40,7 @@ _DEMOGRAPHIC_COLUMNS = {
     'Acquisition Centre': _FINAL_COLUMNS[3],
     'Patient Group': _FINAL_COLUMNS[4],
     'Fully Complete? Y/N': _FINAL_COLUMNS[5],
-    'Missing Data (Please Specify)': _FINAL_COLUMNS[6],
+    #'Missing Data (Please Specify)': _FINAL_COLUMNS[6],
     # ESTRA
     # (skip 'Recruitment Centre')
     'Scanning Site': _FINAL_COLUMNS[3],
@@ -58,7 +58,7 @@ _DEMOGRAPHIC_COLUMNS = {
     'scanning site': _FINAL_COLUMNS[3],
     'patient group': _FINAL_COLUMNS[4],
     'complete': _FINAL_COLUMNS[5],
-    'missing data': _FINAL_COLUMNS[6],
+    #'missing data': _FINAL_COLUMNS[6],
 }
 
 _CONTROL_GROUP = 'Control'
@@ -250,7 +250,7 @@ def main():
                         'recruitment site': center,
                     }
                 row = {x: data[x] if x in data else None
-                       for x in _FINAL_COLUMNS[:-1]} #excluding column "missing data"
+                       for x in _FINAL_COLUMNS}
                 demographics_writer.writerow(row)
 
 
