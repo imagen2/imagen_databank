@@ -284,7 +284,7 @@ def _deidentify_lsrc2(psc2_from_psc1, psytools_path, psc2_path):
                     # columns to de-identify
                     row['id'] = psc2
                     for x in COLUMNS_WITH_DATE:
-                        if x in row and row[x]:
+                        if row.get(x):
                             date = datetime.strptime(row[x],
                                                      '%Y-%m-%d %H:%M:%S').date()
                             if psc1 in DOB_FROM_PSC1:

@@ -361,7 +361,7 @@ def cleanup(timepoint, data, fields):
 
         # standardize date/time format
         for field in ('Session start time', 'Test start time'):
-            if field in cantab and cantab[field]:
+            if cantab.get(field):
                 session_start_time = _parse_csv_datetime(cantab[field])
                 if session_start_time is None:
                     cantab[field] = ''
