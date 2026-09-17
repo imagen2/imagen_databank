@@ -76,10 +76,8 @@ def process_psytools_timepoint(arguments):
         for row in reader:
             if lsrc2:
                 psc1 = row['id']
-                if psc1.endswith('SB'):
-                    psc1 = psc1[:-len('SB')]
-                if psc1.endswith('FU'):
-                    psc1 = psc1[:-len('FU')]
+                psc1 = psc1.removesuffix('SB')
+                psc1 = psc1.removesuffix('FU')
                 if psc1.isdigit() and len(psc1) == 12:
                     if 'IdCheckGender' in row:
                         id_check_gender = row['IdCheckGender']
@@ -115,8 +113,7 @@ def process_psytools_timepoint(arguments):
             else:
                 psc1_suffix = row['User code'].rsplit('-', 1)
                 psc1 = psc1_suffix[0]
-                if psc1.endswith('SB'):
-                    psc1 = psc1[:-len('SB')]
+                psc1 = psc1.removesuffix('SB')
                 completed = row['Completed']
                 if completed == 't':
                     trial = row['Trial']

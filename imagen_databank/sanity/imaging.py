@@ -634,8 +634,7 @@ def _check_ziptree(path, ziptree, suffix=None, psc1=None, date=None, expected=No
                 expected_psc1 = psc1
             else:
                 expected_psc1 = subject_id
-                if expected_psc1.endswith(suffix):
-                    expected_psc1 = expected_psc1[:-len(suffix)]
+                expected_psc1 = expected_psc1.removesuffix(suffix)
             s, e = _check_additional_data(path, z.directories['AdditionalData'],
                                           suffix, expected_psc1, date, expected)
             subject_ids.update(s)

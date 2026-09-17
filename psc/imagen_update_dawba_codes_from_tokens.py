@@ -283,10 +283,8 @@ def download_lsrc2_tokens(base_url, startswith=None):
                 # PSC1
                 if 'attribute_1' in participant:
                     psc1 = participant['attribute_1'].strip()
-                    if psc1.endswith('SB'):
-                        psc1 = psc1[:-2]
-                    if psc1.endswith('FU3'):
-                        psc1 = psc1[:-3]
+                    psc1 = psc1.removesuffix('SB')
+                    psc1 = psc1.removesuffix('FU3')
                     if psc1.isdigit():
                         if token in psc1_from_token:
                             if psc1 != psc1_from_token[token]:
