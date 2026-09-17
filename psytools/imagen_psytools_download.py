@@ -275,7 +275,7 @@ def download_legacy(base_url, netrc_file, datasets, psytools_dir):
 
     for task, digest in datasets:
         digest = digest.upper().replace(' ', '_')
-        dataset = '{task}-{digest}.csv'.format(task=task, digest=digest)
+        dataset = f'{task}-{digest}.csv'
         logging.info('downloading: %s', dataset)
         url = base_url + dataset + '.gz'
         r = requests.get(url, auth=(username, password))

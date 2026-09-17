@@ -187,13 +187,13 @@ def main():
                    for timepoint in psytools):
                 s = '%s: inconsistent sex:'
                 if psc1 in psytools_BL:
-                    s += '\n\tBL:  {} {}%%'.format(psytools_BL[psc1][0], psytools_BL[psc1][1])
+                    s += f'\n\tBL:  {psytools_BL[psc1][0]} {psytools_BL[psc1][1]}%%'
                 if psc1 in psytools_FU1:
-                    s += '\n\tFU1: {} {}%%'.format(psytools_FU1[psc1][0], psytools_FU1[psc1][1])
+                    s += f'\n\tFU1: {psytools_FU1[psc1][0]} {psytools_FU1[psc1][1]}%%'
                 if psc1 in psytools_FU2:
-                    s += '\n\tFU2: {} {}%%'.format(psytools_FU2[psc1][0], psytools_FU2[psc1][1])
+                    s += f'\n\tFU2: {psytools_FU2[psc1][0]} {psytools_FU2[psc1][1]}%%'
                 if psc1 in psytools_FU3:
-                    s += '\n\tFU3: {} {}%%'.format(psytools_FU3[psc1][0], psytools_FU3[psc1][1])
+                    s += f'\n\tFU3: {psytools_FU3[psc1][0]} {psytools_FU3[psc1][1]}%%'
                 logging.warning(s, psc1)
 
 

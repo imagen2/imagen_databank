@@ -191,24 +191,24 @@ def _check_psc1(subject_id, suffix=None, psc1=None):
         if subject_id.endswith(suffix):
             subject_id = subject_id[:-len(suffix)]
         elif len(subject_id) <= 12 or subject_id.isdigit():
-            yield 'PSC1 code "{}" should end with suffix "{}"'.format(subject_id, suffix)
+            yield f'PSC1 code "{subject_id}" should end with suffix "{suffix}"'
     if subject_id.isdigit():
         if len(subject_id) != 12:
-            yield 'PSC1 code "{}" contains {} digits instead of 12'.format(subject_id, len(subject_id))
+            yield f'PSC1 code "{subject_id}" contains {len(subject_id)} digits instead of 12'
     elif len(subject_id) > 12 and subject_id[:12].isdigit() and not subject_id[12].isdigit():
-        yield 'PSC1 code "{}" ends with unexpected suffix "{}"'.format(subject_id, subject_id[12:])
+        yield f'PSC1 code "{subject_id}" ends with unexpected suffix "{subject_id[12:]}"'
         subject_id = subject_id[:12]
     if not subject_id.isdigit():
-        yield 'PSC1 code "{}" should contain 12 digits'.format(subject_id)
+        yield f'PSC1 code "{subject_id}" should contain 12 digits'
     elif len(subject_id) != 12:
-        yield 'PSC1 code "{}" contains {} characters instead of 12'.format(subject_id, len(subject_id))
+        yield f'PSC1 code "{subject_id}" contains {len(subject_id)} characters instead of 12'
     elif subject_id not in PSC2_FROM_PSC1:
-        yield 'PSC1 code "{}" is not valid'.format(subject_id)
+        yield f'PSC1 code "{subject_id}" is not valid'
     elif psc1:
         if suffix and psc1.endswith(suffix):
             psc1 = psc1[:-len(suffix)]
         if subject_id != psc1:
-            yield'PSC1 code "{}" was expected to be "{}"'.format(subject_id, psc1)
+            yield f'PSC1 code "{subject_id}" was expected to be "{psc1}"'
 
 
 def _check_name(path, prefix, extension, suffix=None, psc1=None):
@@ -430,7 +430,7 @@ def _zip_check_content(path, function, suffix=None, psc1=None):
         return _simple_check_content(path, function, suffix, psc1)
     except BadZipFile as e:
         basename = os.path.basename(path)
-        return ([], [Error(basename, 'Cannot unzip file: {}'.format(e))])
+        return ([], [Error(basename, f'Cannot unzip file: {e}')])
 
 
 def _datasheet_check_content(path, function, suffix='FU2', psc1=None, date=None):
@@ -462,11 +462,11 @@ def _datasheet_check_content(path, function, suffix='FU2', psc1=None, date=None)
     try:
         contents = function(path)
     except TypeError as e:  # "delimiter" must be an 1-character string
-        return (None, [Error(basename, 'Cannot read CSV file: {}'.format(e))])
+        return (None, [Error(basename, f'Cannot read CSV file: {e}')])
     except UnicodeDecodeError as e:
         return ([], [Error(basename,
-                           'File is seriously damaged: {}'
-                           .format(e))])
+                           f'File is seriously damaged: {e}'
+                           )])
     errors = list(_simple_check_subject_id(path, contents[0], suffix, psc1))
     if date and date not in {x.date() for x in contents[1]}:
         errors.append(Error(basename,
@@ -475,27 +475,27 @@ def _datasheet_check_content(path, function, suffix='FU2', psc1=None, date=None)
     rows = contents[2]
     if rows != 2:
         errors.append(Error(basename,
-                            'Found {} rows instead of 2'
-                            .format(rows)))
+                            f'Found {rows} rows instead of 2'
+                            ))
     columns = set(contents[4])
     if suffix in _COLUMN_NAMES:
         for column in _COLUMN_NAMES[suffix]['REQUIRED']:
             if column not in columns:
                 errors.append(Error(basename,
-                                    'Missing required column "{}"'
-                                    .format(column)))
+                                    f'Missing required column "{column}"'
+                                    ))
         for column in columns:
             if column and column not in (_COLUMN_NAMES[suffix]['REQUIRED'] +
                                          _COLUMN_NAMES[suffix]['OPTIONAL']):
                 if column.startswith('Warning'):  # FIXME: hardcoded!
                     continue
                 errors.append(Error(basename,
-                                    'Found unknown column "{}"'
-                                    .format(column)))
+                                    f'Found unknown column "{column}"'
+                                    ))
     else:
         errors.append(Error(basename,
-                            'We are unable to check datasheet_*.csv files for timepoint "{}"'
-                            .format(suffix)))
+                            f'We are unable to check datasheet_*.csv files for timepoint "{suffix}"'
+                            ))
     return (contents, errors)
 
 

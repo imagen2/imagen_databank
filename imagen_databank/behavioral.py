@@ -218,33 +218,33 @@ def _read_generic_behavioral(path, task, strict=True):
     if header:
         header = [x.strip() for x in header]
         if len(header) != 4:
-            errors.append(Error(path, 'Line 1 contains {} columns instead of 4'
-                                      .format(len(header)), header))
+            errors.append(Error(path, f'Line 1 contains {len(header)} columns instead of 4'
+                                      , header))
         if len(header) > 3:
             COLUMN = 'Task type: Scanning'
             if header[3] != COLUMN:
-                errors.append(Error(path, 'Column 4 of line 1 must be "{}" '
-                                          'instead of "{}"'
-                                          .format(COLUMN, header[3]), header))
+                errors.append(Error(path, f'Column 4 of line 1 must be "{COLUMN}" '
+                                          f'instead of "{header[3]}"'
+                                          , header))
         if len(header) > 2:
             COLUMN = 'Subject ID:'
             if header[2].startswith(COLUMN):
                 psc1 = header[2][len(COLUMN):].lstrip()
             else:
-                errors.append(Error(path, 'Column 3 of line 1 "{}" must start '
-                                          'with "{}"'
-                                          .format(header[2], COLUMN), header))
+                errors.append(Error(path, f'Column 3 of line 1 "{header[2]}" must start '
+                                          f'with "{COLUMN}"'
+                                          , header))
         if len(header) > 1:
             timestamp = _parse_behavioral_datetime(header[1])
             if not timestamp:
-                errors.append(Error(path, 'Column 2 of line 1 "{}" is not a standard time stamp'
-                                          .format(header[1]), header))
+                errors.append(Error(path, f'Column 2 of line 1 "{header[1]}" is not a standard time stamp'
+                                          , header))
         if len(header) > 0:
-            COLUMN = '{} task'.format(_TASK_SPECIFICS[task][0])
+            COLUMN = f'{_TASK_SPECIFICS[task][0]} task'
             if header[0] != COLUMN:
-                errors.append(Error(path, 'Column 1 of line 1 must be "{}" '
-                                          'instead of "{}"'
-                                          .format(COLUMN, header[0]), header))
+                errors.append(Error(path, f'Column 1 of line 1 must be "{COLUMN}" '
+                                          f'instead of "{header[0]}"'
+                                          , header))
     else:
         errors.append(Error(path, 'Empty file'))
 
@@ -254,13 +254,13 @@ def _read_generic_behavioral(path, task, strict=True):
         header = [x.strip() for x in header]
         COLUMNS = _TASK_SPECIFICS[task][1]
         if len(header) != len(COLUMNS):
-            errors.append(Error(path, 'Line 2 contains {} columns instead of {}'
-                                      .format(len(header), len(COLUMNS)),
+            errors.append(Error(path, f'Line 2 contains {len(header)} columns instead of {len(COLUMNS)}'
+                                      ,
                                       header))
         for i, (h, c) in enumerate(zip(header, COLUMNS)):
             if h != c:
-                errors.append(Error(path, 'Column {} of line 2 must be {} instead of {}'
-                                          .format(i + 1, c, h), header))
+                errors.append(Error(path, f'Column {i + 1} of line 2 must be {c} instead of {h}'
+                                          , header))
                 break
     except StopIteration:
         errors.append(Error(path, 'Missing 2nd line'))
@@ -273,8 +273,8 @@ def _read_generic_behavioral(path, task, strict=True):
         if not any(row):  # get rid of empty rows
             continue
         elif (len(row) != len(COLUMNS)):
-            errors.append(Error(path, 'Line {} contains {} columns instead of {}'
-                                      .format(n, len(row), len(COLUMNS)),
+            errors.append(Error(path, f'Line {n} contains {len(row)} columns instead of {len(COLUMNS)}'
+                                      ,
                                       row))
         # column to check for ascending numerical sequence
         current = row[_TASK_SPECIFICS[task][2]].strip()
@@ -291,9 +291,9 @@ def _read_generic_behavioral(path, task, strict=True):
             sequence.append(current)
             last = current
         except ValueError:
-            errors.append(Error(path, 'Column {} of line {} "{}" should contain '
+            errors.append(Error(path, f'Column {_TASK_SPECIFICS[task][2] + 1} of line {n} "{current}" should contain '
                                       'only numbers'
-                                      .format(_TASK_SPECIFICS[task][2] + 1, n, current), row))
+                                      , row))
             if last:
                 last = None
 
@@ -475,10 +475,9 @@ def main():
                 for ss_file in ss_files:
                     (psc1, timestamp, onsets, errors) = read_ss(ss_file,  # pylint: disable=unused-variable
                                                                 False)
-                    print('▸ {} SS {}'.format(psc1, len(onsets)))
+                    print(f'▸ {psc1} SS {len(onsets)}')
                     for error in errors:
-                        print('  ✗ {}: {}'.format(error.message,
-                              os.path.relpath(error.path, ROOT_DIR)))
+                        print(f'  ✗ {error.message}: {os.path.relpath(error.path, ROOT_DIR)}')
                 #~ recog_files = tuple(os.path.join(behavioral_path, b)
                                  #~ for b in os.listdir(behavioral_path)
                                  #~ if 'recog_' in b)

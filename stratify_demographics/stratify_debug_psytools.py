@@ -277,7 +277,7 @@ def main():
             if psc1 in validated_sex:
                 print(','.join((psc1, validated_sex[psc1])), file=f)
             elif len(values) > 1:
-                message = '{}: multiple sex values:\n'.format(psc1)
+                message = f'{psc1}: multiple sex values:\n'
                 for value, variables in values.items():
                     count_value = 0
                     message_variable = ''
@@ -285,11 +285,11 @@ def main():
                         count_variable = 0
                         message_name = ''
                         for name, count in counters.items():
-                            message_name += '\t\t\t{}\n'.format(name)
+                            message_name += f'\t\t\t{name}\n'
                             count_variable += count
-                        message_variable += '\t\t{} ({})\n'.format(variable, count_variable) + message_name
+                        message_variable += f'\t\t{variable} ({count_variable})\n' + message_name
                         count_value += count_variable
-                    message_value = '\t{} ({})\n'.format(value, count_value) + message_variable
+                    message_value = f'\t{value} ({count_value})\n' + message_variable
                     message += message_value
                 logging.error(message)
             else:
@@ -303,7 +303,7 @@ def main():
                                 today.strftime('%Y-%m-%d_%H:%M:%S.0'))),
                       file=f)
             elif len(values) > 1:
-                message = '{}: multiple date of birth values:\n'.format(psc1)
+                message = f'{psc1}: multiple date of birth values:\n'
                 for value, variables in values.items():
                     count_value = 0
                     message_variable = ''
@@ -311,11 +311,11 @@ def main():
                         count_variable = 0
                         message_name = ''
                         for name, count in counters.items():
-                            message_name += '\t\t\t{} ({})\n'.format(name, count)
+                            message_name += f'\t\t\t{name} ({count})\n'
                             count_variable += count
-                        message_variable += '\t\t{} ({})\n'.format(variable, count_variable) + message_name
+                        message_variable += f'\t\t{variable} ({count_variable})\n' + message_name
                         count_value += count_variable
-                    message_value = '\t{} ({})\n'.format(value, count_value) + message_variable
+                    message_value = f'\t{value} ({count_value})\n' + message_variable
                     message += message_value
                 logging.error(message)
             else:

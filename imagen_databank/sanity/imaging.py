@@ -76,24 +76,24 @@ def _check_psc1(subject_id, suffix=None, psc1=None):
         if subject_id.endswith(suffix):
             subject_id = subject_id[:-len(suffix)]
         elif len(subject_id) <= 12 or subject_id.isdigit():
-            yield 'PSC1 code "{}" should end with suffix "{}"'.format(subject_id, suffix)
+            yield f'PSC1 code "{subject_id}" should end with suffix "{suffix}"'
     if subject_id.isdigit():
         if len(subject_id) != 12:
-            yield 'PSC1 code "{}" contains {} digits instead of 12'.format(subject_id, len(subject_id))
+            yield f'PSC1 code "{subject_id}" contains {len(subject_id)} digits instead of 12'
     elif len(subject_id) > 12 and subject_id[:12].isdigit() and not subject_id[12].isdigit():
-        yield 'PSC1 code "{}" ends with unexpected suffix "{}"'.format(subject_id, subject_id[12:])
+        yield f'PSC1 code "{subject_id}" ends with unexpected suffix "{subject_id[12:]}"'
         subject_id = subject_id[:12]
     if not subject_id.isdigit():
-        yield 'PSC1 code "{}" should contain 12 digits'.format(subject_id)
+        yield f'PSC1 code "{subject_id}" should contain 12 digits'
     elif len(subject_id) != 12:
-        yield 'PSC1 code "{}" contains {} characters instead of 12'.format(subject_id, len(subject_id))
+        yield f'PSC1 code "{subject_id}" contains {len(subject_id)} characters instead of 12'
     elif subject_id not in PSC2_FROM_PSC1:
-        yield 'PSC1 code "{}" is not valid'.format(subject_id)
+        yield f'PSC1 code "{subject_id}" is not valid'
     elif psc1:
         if suffix and psc1.endswith(suffix):
             psc1 = psc1[:-len(suffix)]
         if subject_id != psc1:
-            yield 'PSC1 code "{}" was expected to be "{}"'.format(subject_id, psc1)
+            yield f'PSC1 code "{subject_id}" was expected to be "{psc1}"'
 
 
 def check_zip_name(path, timepoint=None, psc1=None):
@@ -215,7 +215,7 @@ class TemporaryDirectory:
         self.pathname = tempfile.mkdtemp(suffix, prefix, dir)
 
     def __repr__(self):
-        return '<{} {!r}>'.format(self.__class__.__name__, self.name)
+        return f'<{self.__class__.__name__} {self.name!r}>'
 
     def __enter__(self):
         return self.pathname
@@ -330,12 +330,12 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
                         error_list.append(Error(z.filename, 'Missing subject ID'))
                     subject_ids.add(subject_id)
                     if trials and trials[-1] != 42:
-                        error_list.append(Error(z.filename, 'Behavioral file contains {} trials instead of 42'
-                                                            .format(trials[-1])))
+                        error_list.append(Error(z.filename, f'Behavioral file contains {trials[-1]} trials instead of 42'
+                                                            ))
                     if timestamp:
                         if date and date != timestamp.date():
-                            error_list.append(Error(z.filename, 'Date was expected to be "{}" instead of "{}"'
-                                                                .format(date, timestamp.date())))
+                            error_list.append(Error(z.filename, f'Date was expected to be "{date}" instead of "{timestamp.date()}"'
+                                                                ))
                     else:
                         error_list.append(Error(z.filename, 'Missing acquisition date'))
                     error_list.extend(errors)
@@ -349,12 +349,12 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
                         error_list.append(Error(z.filename, 'Missing subject ID'))
                     subject_ids.add(subject_id)
                     if len(trials) != 24:
-                        error_list.append(Error(z.filename, 'Behavioral file contains {} trials instead of 24'
-                                                            .format(len(trials))))
+                        error_list.append(Error(z.filename, f'Behavioral file contains {len(trials)} trials instead of 24'
+                                                            ))
                     if timestamp:
                         if date and date != timestamp.date():
-                            error_list.append(Error(z.filename, 'Date was expected to be "{}" instead of "{}"'
-                                                                .format(date, timestamp.date())))
+                            error_list.append(Error(z.filename, f'Date was expected to be "{date}" instead of "{timestamp.date()}"'
+                                                                ))
                     else:
                         error_list.append(Error(z.filename, 'Missing acquisition date'))
                     error_list.extend(errors)
@@ -368,12 +368,12 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
                         error_list.append(Error(z.filename, 'Missing subject ID'))
                     subject_ids.add(subject_id)
                     if trials and trials[-1] != 360:
-                        error_list.append(Error(z.filename, 'Behavioral file contains {} trials instead of 360'
-                                                            .format(trials[-1])))
+                        error_list.append(Error(z.filename, f'Behavioral file contains {trials[-1]} trials instead of 360'
+                                                            ))
                     if timestamp:
                         if date and date != timestamp.date():
-                            error_list.append(Error(z.filename, 'Date was expected to be "{}" instead of "{}"'
-                                                                .format(date, timestamp.date())))
+                            error_list.append(Error(z.filename, f'Date was expected to be "{date}" instead of "{timestamp.date()}"'
+                                                                ))
                     else:
                         error_list.append(Error(z.filename, 'Missing acquisition date'))
                     error_list.extend(errors)
@@ -387,12 +387,12 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
                         error_list.append(Error(z.filename, 'Missing subject ID'))
                     subject_ids.add(subject_id)
                     if len(trials) != 5:
-                        error_list.append(Error(z.filename, 'Behavioral file contains {} trials instead of 5'
-                                                            .format(len(trials))))
+                        error_list.append(Error(z.filename, f'Behavioral file contains {len(trials)} trials instead of 5'
+                                                            ))
                     if timestamp:
                         if date and date != timestamp.date():
-                            error_list.append(Error(z.filename, 'Date was expected to be "{}" instead of "{}"'
-                                                                .format(date, timestamp.date())))
+                            error_list.append(Error(z.filename, f'Date was expected to be "{date}" instead of "{timestamp.date()}"'
+                                                                ))
                     else:
                         error_list.append(Error(z.filename, 'Missing acquisition date'))
 
@@ -402,7 +402,7 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
         missing_tests = expected_tests - actual_tests
         for x in missing_tests:
             error_list.append(Error(ziptree.filename,
-                                    "Missing behavioral file '{}_*.csv'".format(x)))
+                                    f"Missing behavioral file '{x}_*.csv'"))
 
     return subject_ids, error_list
 
@@ -563,17 +563,17 @@ def _check_image_data(path, ziptree, suffix, psc1, date, expected):
                                         subject_id = subject_id[:-len(suffix)]
                                     subject_ids.add(subject_id)
                                     if subject_id != psc1:
-                                        error_list.append(Error(f, 'PSC1 code "{}" was expected to be "{}"'
-                                                                   .format(subject_id, psc1)))
+                                        error_list.append(Error(f, f'PSC1 code "{subject_id}" was expected to be "{psc1}"'
+                                                                   ))
                                     break
                         else:
                             subject_id = None
-                            error_list.append(Error(f, 'Missing PSC1 code "{}"'
-                                                       .format(psc1)))
+                            error_list.append(Error(f, f'Missing PSC1 code "{psc1}"'
+                                                       ))
                         break
             else:
-                error_list.append(Error(f, 'Unable to read DICOM files in dataset "{}"'
-                                           .format(psc1)))
+                error_list.append(Error(f, f'Unable to read DICOM files in dataset "{psc1}"'
+                                           ))
 
     return subject_ids, error_list
 
@@ -710,7 +710,7 @@ def check_zip_content(path, timepoint=None, psc1=None, date=None, expected=None)
         try:
             ziptree = ZipTree.create(path)
         except BadZipFile as e:
-            error_list = [Error(basename, 'Cannot read ZIP file: {}'.format(e))]
+            error_list = [Error(basename, f'Cannot read ZIP file: {e}')]
             return (set(), error_list)
         # check tree structure
         return _check_ziptree(path, ziptree, timepoint, psc1, date, expected)
