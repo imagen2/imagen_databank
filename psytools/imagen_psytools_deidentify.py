@@ -327,9 +327,9 @@ def deidentify(psc2_from_psc1, master_dir, psc2_dir):
             continue
         master_path = os.path.join(master_dir, filename)
         psc2_path = os.path.join(psc2_dir, filename)
-        if filename.startswith('IMAGEN-') or filename.startswith('STRATIFY-') or filename.startswith('IMACOV19-') or filename.startswith('STRATICO19-'):
+        if filename.startswith(('IMAGEN-', 'STRATIFY-', 'IMACOV19-', 'STRATICO19-')):
             _deidentify_legacy(psc2_from_psc1, master_path, psc2_path)
-        elif filename.startswith('Imagen_') or filename.startswith('STRATIFY_'):
+        elif filename.startswith(('Imagen_', 'STRATIFY_')):
             _deidentify_lsrc2(psc2_from_psc1, master_path, psc2_path)
         else:
             logging.error('skipping unknown file: %s', filename)
