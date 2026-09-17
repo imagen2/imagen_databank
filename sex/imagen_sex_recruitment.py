@@ -168,7 +168,7 @@ def recruitment_BL(path):
     sex_by_timestamp = {}
     for timestamp, result in results:
         for psc1, sex in result.items():
-            sex_by_timestamp.setdefault(psc1, {})[timestamp] = result[psc1]
+            sex_by_timestamp.setdefault(psc1, {})[timestamp] = sex
 
     recruitment_sex = {}
     for psc1, timestamps in sex_by_timestamp.items():
