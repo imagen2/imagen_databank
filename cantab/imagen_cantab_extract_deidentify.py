@@ -3,7 +3,6 @@
 import os
 import csv
 import tarfile
-import zipfile
 import locale
 from contextlib import contextmanager
 from datetime import datetime

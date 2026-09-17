@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 import csv
 import logging
 from imagen_databank import PSC2_FROM_PSC1

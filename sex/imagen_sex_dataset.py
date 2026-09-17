@@ -6,11 +6,8 @@ import tarfile
 import zipfile
 from datetime import datetime
 from tempfile import TemporaryDirectory
-from collections import Counter
 from multiprocessing import Pool
 import dicom
-from imagen_databank import PSC2_FROM_PSC1, DOB_FROM_PSC2
-from imagen_databank import PSC1_FROM_PSC2
 import logging
 
 logging.basicConfig(level=logging.INFO)

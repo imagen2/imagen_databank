@@ -1,5 +1,4 @@
 import csv
-import os
 from imagen_databank import PSC2_FROM_PSC1
 
 file_labID_PSC1_conv='/imagen/FU3/RAW/PSC1/genomics/rna/env_IMAGEN_align60_no.dups_metadata.tsv'

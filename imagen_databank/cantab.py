@@ -31,7 +31,6 @@ from lxml import etree
 import datetime
 import csv
 import re
-import sys
 
 import logging
 logger = logging.getLogger(__name__)
