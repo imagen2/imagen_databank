@@ -407,7 +407,7 @@ def write(path, data, fields):
             cantab = data[psc2]
             row = [psc2]
             for field, name, required in fields[1:]:  # skip 'Subject ID'
-                row.append(cantab[field] if field in cantab else None)
+                row.append(cantab.get(field, None))
             writer.writerow(row)
 
 

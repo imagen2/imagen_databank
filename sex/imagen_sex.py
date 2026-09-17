@@ -39,34 +39,34 @@ def main():
     with open('imagen_sex_dataset.csv', 'r') as f:
         reader = csv.DictReader(f, dialect='excel')
         dataset = {row['PSC1']:
-                   (row['QualityReport.txt'] if 'QualityReport.txt' in row else None,
-                    row['BL MRI'] if 'BL MRI' in row else None,
-                    row['BL Cantab'] if 'BL Cantab' in row else None,
-                    row['FU2 MRI'] if 'FU2 MRI' in row else None,
-                    row['FU2 Cantab'] if 'FU2 Cantab' in row else None,
-                    row['FU3 MRI'] if 'FU3 MRI' in row else None,
-                    row['FU3 Cantab'] if 'FU3 Cantab' in row else None)
+                   (row.get('QualityReport.txt', None),
+                    row.get('BL MRI', None),
+                    row.get('BL Cantab', None),
+                    row.get('FU2 MRI', None),
+                    row.get('FU2 Cantab', None),
+                    row.get('FU3 MRI', None),
+                    row.get('FU3 Cantab', None))
                    for row in reader}
 
     with open('imagen_sex_psytools.csv', 'r') as f:
         reader = csv.DictReader(f, dialect='excel')
         psytools = {row['PSC1']:
-                    (row['Psytools BL'] if 'Psytools BL' in row else None,
-                     row['Psytools FU1'] if 'Psytools FU1' in row else None,
-                     row['Psytools FU2'] if 'Psytools FU2' in row else None,
-                     row['Psytools FU3'] if 'Psytools FU3' in row else None)
+                    (row.get('Psytools BL', None),
+                     row.get('Psytools FU1', None),
+                     row.get('Psytools FU2', None),
+                     row.get('Psytools FU3', None))
                     for row in reader}
 
     with open('imagen_sex_xnat.csv', 'r') as f:
         reader = csv.DictReader(f, dialect='excel')
-        xnat = {row['PSC1']: row['XNAT gender'] if 'XNAT gender' in row else None
+        xnat = {row['PSC1']: row.get('XNAT gender', None)
                 for row in reader}
 
     with open('imagen_sex_methylation.csv', 'r') as f:
         reader = csv.DictReader(f, dialect='excel')
         methylation = {row['PSC1']:
-                       (row['Methylation BL'] if 'Methylation BL' in row else None,
-                        row['Methylation FU'] if 'Methylation FU' in row else None)
+                       (row.get('Methylation BL', None),
+                        row.get('Methylation FU', None))
                        for row in reader}
 
     validation = validation_FU3(FU3_VALIDATION)
