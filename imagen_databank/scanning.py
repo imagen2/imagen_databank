@@ -34,7 +34,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-_SUBJECT_ID_REGEX = re.compile('\d{2}[/\.]\d{2}[/\.]\d{4} \d{2}:\d{2}:\d{2}\tSubject ID: (\w+)')
+_SUBJECT_ID_REGEX = re.compile(r'\d{2}[/\.]\d{2}[/\.]\d{4} \d{2}:\d{2}:\d{2}\tSubject ID: (\w+)')
 
 
 def read_scanning(path):

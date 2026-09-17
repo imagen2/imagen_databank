@@ -168,9 +168,9 @@ DOB_FROM_PSC2 = {PSC2_FROM_PSC1[k]: v  # obsolete
 # - it starts with 0 followed by the digit associated to each center
 # - it is a series of 12 digits
 #
-_PSC1_REGEX = re.compile('(0[' +
+_PSC1_REGEX = re.compile(r'(0[' +
                          ''.join([str(c) for c in CENTER_NAME]) +
-                         ']\d{10})[^d]?')
+                         r']\d{10})[^d]?')
 
 
 def detect_psc1(string):
@@ -202,7 +202,7 @@ def detect_psc1(string):
 # - it starts with 0 followed by a different digit for each center
 # - it a series of 12 digits
 #
-_PSC2_REGEX = re.compile('(0\d{11})[^d]?')
+_PSC2_REGEX = re.compile(r'(0\d{11})[^d]?')
 
 
 def detect_psc2(string):
