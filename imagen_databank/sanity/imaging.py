@@ -208,7 +208,7 @@ class ZipTree:
         self._print_children(indent)
 
 
-class TemporaryDirectory(object):
+class TemporaryDirectory:
     """Backport from Python 3.
     """
     def __init__(self, suffix='', prefix=tempfile.gettempprefix(), dir=None):
