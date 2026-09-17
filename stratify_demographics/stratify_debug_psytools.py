@@ -294,7 +294,7 @@ def main():
                 logging.error(message)
             else:
                 value = next(iter(values.keys()))
-                print(','.join((psc1, value)), file=f)
+                print(f'{psc1},{value}', file=f)
 
     with open('STRATIFY_DOB_' + today.strftime('%Y-%m-%d') + '.txt', 'w') as f:
         for psc1, values in dob.items():

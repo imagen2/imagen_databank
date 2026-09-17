@@ -384,14 +384,14 @@ def main():
                                 logging.error('%s: Dawba code changed from %s to %s',
                                               psc1, dawba, dawba_from_psc1[psc1])
                         dawba = dawba_from_psc1[psc1]
-                        line = '='.join((psc1, dawba, psc2))
+                        line = f'{psc1}={dawba}={psc2}'
                     done.add(psc1)
                 print(line, file=o)
 
             for psc1 in (dawba_from_psc1.keys() - done):
                 dawba = dawba_from_psc1[psc1]
                 psc2 = PSC2_FROM_PSC1[psc1]
-                line = '='.join((psc1, dawba, psc2))
+                line = f'{psc1}={dawba}={psc2}'
                 print(line, file=o)
 
 
