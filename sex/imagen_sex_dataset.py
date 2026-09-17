@@ -325,8 +325,7 @@ def process_dataset_FU2(arguments):
                             logging.warning('%s: missing patient sex in DICOM file',
                                          psc1)
                     break
-    else:
-        logging.warning('%s: missing DICOM file', psc1)
+    logging.warning('%s: missing DICOM file', psc1)
 
     logging.info('%s: processed FU2 dataset', psc1)
 

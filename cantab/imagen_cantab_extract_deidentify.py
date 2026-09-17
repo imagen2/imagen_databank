@@ -136,9 +136,8 @@ def process_dataset_BL(arguments):
                     tar.extract(member, path=tmp)
                     datasheet_path = os.path.join(tmp, member.name)
                     return process_cantab(datasheet_path)
-            else:
-                logging.warning('%s: missing Cantab file', psc1)
-                return None
+            logging.warning('%s: missing Cantab file', psc1)
+            return None
 
 
 def process_dataset_FU2(arguments):
@@ -152,9 +151,8 @@ def process_dataset_FU2(arguments):
             if 'datasheet' in f and 'detailed' not in f:
                 datasheet_path = os.path.join(additional_data_path, f)
                 return process_cantab(datasheet_path)
-        else:
-            logging.warning('%s: missing Cantab file', psc1)
-            return None
+        logging.warning('%s: missing Cantab file', psc1)
+        return None
     else:
         logging.warning('%s: missing Cantab file', psc1)
         return None
