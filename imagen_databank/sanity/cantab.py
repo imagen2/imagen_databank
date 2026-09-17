@@ -468,7 +468,7 @@ def _datasheet_check_content(path, function, suffix='FU2', psc1=None, date=None)
                            'File is seriously damaged: {0}'
                            .format(e))])
     errors = list(_simple_check_subject_id(path, contents[0], suffix, psc1))
-    if date and date not in set(x.date() for x in contents[1]):
+    if date and date not in {x.date() for x in contents[1]}:
         errors.append(Error(basename,
                             'Date {0} was expected to be {1}'
                             .format('/'.join(str(x.date()) for x in contents[1]), date)))
