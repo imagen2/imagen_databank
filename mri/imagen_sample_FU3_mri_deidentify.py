@@ -125,7 +125,7 @@ def dcm2nii(src, dst, comment):
     logger.info('%s: running dcm2niix: %s', src, dst)
 
     dcm2niix = ['dcm2niix',
-                '-z', 'y', '-9'
+                '-z', 'y', '-9',
                 '-c', comment,
                 '-o', dst,
                 src]
