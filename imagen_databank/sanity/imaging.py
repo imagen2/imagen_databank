@@ -44,7 +44,7 @@ from ..dicom_utils import read_metadata
 import logging
 logger = logging.getLogger(__name__)
 
-__all__ = ['check_zip_name', 'check_zip_content', 'ZipTree']
+__all__ = ['ZipTree', 'check_zip_content', 'check_zip_name']
 
 
 _BEHAVIORAL_PREFIX_EXTENSION = {

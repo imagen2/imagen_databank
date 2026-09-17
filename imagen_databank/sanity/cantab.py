@@ -40,10 +40,16 @@ from ..core import Error
 import logging
 logger = logging.getLogger(__name__)
 
-__all__ = ['check_cant_name', 'check_datasheet_name',
-           'check_detailed_datasheet_name', 'check_report_name',
-           'check_cant_content', 'check_datasheet_content',
-           'check_detailed_datasheet_content', 'check_report_content']
+__all__ = [
+    'check_cant_content',
+    'check_cant_name',
+    'check_datasheet_content',
+    'check_datasheet_name',
+    'check_detailed_datasheet_content',
+    'check_detailed_datasheet_name',
+    'check_report_content',
+    'check_report_name',
+]
 
 
 _COLUMN_NAMES = {

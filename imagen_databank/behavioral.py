@@ -34,8 +34,16 @@ from .core import Error
 import logging
 logger = logging.getLogger(__name__)
 
-__all__ = ['MID_COLUMNS', 'FT_COLUMNS', 'SS_COLUMNS', 'RECOG_COLUMNS',
-           'read_mid', 'read_ft', 'read_ss', 'read_recog']
+__all__ = [
+    'FT_COLUMNS',
+    'MID_COLUMNS',
+    'RECOG_COLUMNS',
+    'SS_COLUMNS',
+    'read_ft',
+    'read_mid',
+    'read_recog',
+    'read_ss',
+]
 
 #
 # types of files we expect to be find under AdditionalData/Scanning

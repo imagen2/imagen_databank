@@ -40,16 +40,24 @@ from .dicom_utils import InvalidDicomError
 import logging
 logger = logging.getLogger(__name__)
 
-__all__ = ['SEQUENCE_LOCALIZER_CALIBRATION', 'SEQUENCE_T2',
-           'SEQUENCE_T2_FLAIR', 'SEQUENCE_ADNI_MPRAGE',
-           'SEQUENCE_MID', 'SEQUENCE_FT', 'SEQUENCE_SST',
-           'SEQUENCE_B0_MAP', 'SEQUENCE_DTI',
-           'SEQUENCE_RESTING_STATE',
-           'SEQUENCE_NODDI',
-           'SEQUENCE_NAME',
-           'NONSTANDARD_DICOM',
-           'series_type_from_description',
-           'walk_image_data', 'report_image_data']
+__all__ = [
+    'NONSTANDARD_DICOM',
+    'SEQUENCE_ADNI_MPRAGE',
+    'SEQUENCE_B0_MAP',
+    'SEQUENCE_DTI',
+    'SEQUENCE_FT',
+    'SEQUENCE_LOCALIZER_CALIBRATION',
+    'SEQUENCE_MID',
+    'SEQUENCE_NAME',
+    'SEQUENCE_NODDI',
+    'SEQUENCE_RESTING_STATE',
+    'SEQUENCE_SST',
+    'SEQUENCE_T2',
+    'SEQUENCE_T2_FLAIR',
+    'report_image_data',
+    'series_type_from_description',
+    'walk_image_data',
+]
 
 
 #

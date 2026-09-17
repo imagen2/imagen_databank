@@ -28,8 +28,16 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL license and that you accept its terms.
 
-__all__ = ['additional_data', 'behavioral', 'cantab', 'core', 'dicom_utils',
-           'image_data', 'scanning', 'sanity']
+__all__ = [
+           'additional_data',
+           'behavioral',
+           'cantab',
+           'core',
+           'dicom_utils',
+           'image_data',
+           'sanity',
+           'scanning',
+]
 
 from . import core
 from .core import (LONDON, NOTTINGHAM, DUBLIN, BERLIN,

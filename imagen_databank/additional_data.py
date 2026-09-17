@@ -39,7 +39,7 @@ from .behavioral import (MID_CSV, FT_CSV, SS_CSV, RECOG_CSV,
 import logging
 logger = logging.getLogger(__name__)
 
-__all__ = ['walk_additional_data', 'report_additional_data']
+__all__ = ['report_additional_data', 'walk_additional_data']
 
 
 #
