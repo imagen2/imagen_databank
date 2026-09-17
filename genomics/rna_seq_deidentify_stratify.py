@@ -36,7 +36,7 @@ def convert_labID_to_PSC2_with_timepoint(labID,tab_conv_labID_psc1):
                 psc2 = PSC2_FROM_PSC1[psc1]
 
                 return (psc2, line[timepoint_index])
-            except:
+            except Exception:
                 print("invalid PSC1 code:", line[psc1_index])
                 #return ("###", line[timepoint_index])
 
@@ -84,7 +84,7 @@ def convert_file_to_PSC2(file_labID_PSC1_conv, input_dir_PSC1, output_dir_PSC2, 
                     for i in range(1,len(data)):
                         data_psc2[i].append(data[i][col_index])
 
-                except:
+                except Exception:
                     continue
             print("number of lines in file: " ,count)
 

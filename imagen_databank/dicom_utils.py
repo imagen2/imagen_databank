@@ -31,7 +31,7 @@ import datetime
 import dateutil.tz
 try:
     import pydicom
-except:
+except ImportError:
     import dicom as pydicom
 from pydicom.filereader import InvalidDicomError
 from pydicom.filereader import dcmread

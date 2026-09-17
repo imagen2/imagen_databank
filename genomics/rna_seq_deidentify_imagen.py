@@ -32,7 +32,7 @@ def convert_labID_to_PSC2_with_timepoint(labID):
                     psc1=line[psc1_index]
                 psc2 = PSC2_FROM_PSC1[psc1]
                 return (psc2, line[timepoint_index])
-            except:
+            except Exception:
                 print("invalid PSC1 code:", line[psc1_index])
                 #return ("###", line[timepoint_index])
 
@@ -113,7 +113,7 @@ if __name__ == "__main__":
                             data_psc2_FU3[i].append(data[i][col_index])
                     else:
                         print("invalid timepoint:",timepoint)
-                except:
+                except Exception:
                     continue
             print("BL", count_BL)
             print("FU2", count_FU2)

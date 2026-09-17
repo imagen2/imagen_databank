@@ -228,7 +228,7 @@ def cantab_timepoint(path):
                                                 reader = csv.DictReader(csvfile, delimiter=';')
                                                 if 'Gender' not in reader.fieldnames:
                                                     reader = None
-                                        except:
+                                        except Exception:
                                             logging.error('bad cantab datasheet for %s', psc1)
                                         for row in reader:
                                             if 'Gender' in row:
