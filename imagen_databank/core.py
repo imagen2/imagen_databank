@@ -147,10 +147,10 @@ def _initialize_dob():
                     month = int(match.group(2))
                     day = int(match.group(3))
                     if year > 2012 or year < 1987:
-                        raise Exception('unexpected date of birth: {0} ({1}-{2}-{3})'.format(dob, year, month, day))
+                        raise Exception('unexpected date of birth: {} ({}-{}-{})'.format(dob, year, month, day))
                     dob_from_psc1[psc1] = datetime.date(year, month, day)
                 else:
-                    raise Exception('unexpected line in DOB.csv: {0}'.format(line))
+                    raise Exception('unexpected line in DOB.csv: {}'.format(line))
     return dob_from_psc1
 
 
@@ -281,8 +281,8 @@ class Error:
                 sample = repr(self.sample)
                 if len(sample) > self._SAMPLE_LEN:
                     sample = sample[:self._SAMPLE_LEN] + '...'
-                return '{0}: <{1}>: {2}'.format(self.message, sample, self.path)
+                return '{}: <{}>: {}'.format(self.message, sample, self.path)
             else:
-                return '{0}: {1}'.format(self.message, self.path)
+                return '{}: {}'.format(self.message, self.path)
         else:
-            return '{0}'.format(self.message)
+            return '{}'.format(self.message)

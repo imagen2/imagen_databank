@@ -191,24 +191,24 @@ def _check_psc1(subject_id, suffix=None, psc1=None):
         if subject_id.endswith(suffix):
             subject_id = subject_id[:-len(suffix)]
         elif len(subject_id) <= 12 or subject_id.isdigit():
-            yield 'PSC1 code "{0}" should end with suffix "{1}"'.format(subject_id, suffix)
+            yield 'PSC1 code "{}" should end with suffix "{}"'.format(subject_id, suffix)
     if subject_id.isdigit():
         if len(subject_id) != 12:
-            yield 'PSC1 code "{0}" contains {1} digits instead of 12'.format(subject_id, len(subject_id))
+            yield 'PSC1 code "{}" contains {} digits instead of 12'.format(subject_id, len(subject_id))
     elif len(subject_id) > 12 and subject_id[:12].isdigit() and not subject_id[12].isdigit():
-        yield 'PSC1 code "{0}" ends with unexpected suffix "{1}"'.format(subject_id, subject_id[12:])
+        yield 'PSC1 code "{}" ends with unexpected suffix "{}"'.format(subject_id, subject_id[12:])
         subject_id = subject_id[:12]
     if not subject_id.isdigit():
-        yield 'PSC1 code "{0}" should contain 12 digits'.format(subject_id)
+        yield 'PSC1 code "{}" should contain 12 digits'.format(subject_id)
     elif len(subject_id) != 12:
-        yield 'PSC1 code "{0}" contains {1} characters instead of 12'.format(subject_id, len(subject_id))
+        yield 'PSC1 code "{}" contains {} characters instead of 12'.format(subject_id, len(subject_id))
     elif subject_id not in PSC2_FROM_PSC1:
-        yield 'PSC1 code "{0}" is not valid'.format(subject_id)
+        yield 'PSC1 code "{}" is not valid'.format(subject_id)
     elif psc1:
         if suffix and psc1.endswith(suffix):
             psc1 = psc1[:-len(suffix)]
         if subject_id != psc1:
-            yield'PSC1 code "{0}" was expected to be "{1}"'.format(subject_id, psc1)
+            yield'PSC1 code "{}" was expected to be "{}"'.format(subject_id, psc1)
 
 
 def _check_name(path, prefix, extension, suffix=None, psc1=None):
@@ -347,7 +347,7 @@ def _simple_check_subject_id(path, subject_ids, suffix=None, psc1=None):
     else:
         if len(subject_ids) > 1:
             yield Error(basename,
-                        'Multiple PSC1 codes inside file: {0}'
+                        'Multiple PSC1 codes inside file: {}'
                         .format(', '.join(subject_ids)))
         for subject_id in subject_ids:
             for message in _check_psc1(subject_id, suffix, psc1):
@@ -392,7 +392,7 @@ def _simple_check_content(path, function, suffix=None, psc1=None):
     else:
         if len(subject_ids) > 1:
             error_list.append(Error(basename,
-                                    'Multiple PSC1 codes inside file: {0}'
+                                    'Multiple PSC1 codes inside file: {}'
                                     .format(', '.join(subject_ids))))
         for subject_id in subject_ids:
             for message in _check_psc1(subject_id, suffix, psc1):
@@ -430,7 +430,7 @@ def _zip_check_content(path, function, suffix=None, psc1=None):
         return _simple_check_content(path, function, suffix, psc1)
     except BadZipFile as e:
         basename = os.path.basename(path)
-        return ([], [Error(basename, 'Cannot unzip file: {0}'.format(e))])
+        return ([], [Error(basename, 'Cannot unzip file: {}'.format(e))])
 
 
 def _datasheet_check_content(path, function, suffix='FU2', psc1=None, date=None):
@@ -462,27 +462,27 @@ def _datasheet_check_content(path, function, suffix='FU2', psc1=None, date=None)
     try:
         contents = function(path)
     except TypeError as e:  # "delimiter" must be an 1-character string
-        return (None, [Error(basename, 'Cannot read CSV file: {0}'.format(e))])
+        return (None, [Error(basename, 'Cannot read CSV file: {}'.format(e))])
     except UnicodeDecodeError as e:
         return ([], [Error(basename,
-                           'File is seriously damaged: {0}'
+                           'File is seriously damaged: {}'
                            .format(e))])
     errors = list(_simple_check_subject_id(path, contents[0], suffix, psc1))
     if date and date not in {x.date() for x in contents[1]}:
         errors.append(Error(basename,
-                            'Date {0} was expected to be {1}'
+                            'Date {} was expected to be {}'
                             .format('/'.join(str(x.date()) for x in contents[1]), date)))
     rows = contents[2]
     if rows != 2:
         errors.append(Error(basename,
-                            'Found {0} rows instead of 2'
+                            'Found {} rows instead of 2'
                             .format(rows)))
     columns = set(contents[4])
     if suffix in _COLUMN_NAMES:
         for column in _COLUMN_NAMES[suffix]['REQUIRED']:
             if column not in columns:
                 errors.append(Error(basename,
-                                    'Missing required column "{0}"'
+                                    'Missing required column "{}"'
                                     .format(column)))
         for column in columns:
             if column and column not in (_COLUMN_NAMES[suffix]['REQUIRED'] +
@@ -490,11 +490,11 @@ def _datasheet_check_content(path, function, suffix='FU2', psc1=None, date=None)
                 if column.startswith('Warning'):  # FIXME: hardcoded!
                     continue
                 errors.append(Error(basename,
-                                    'Found unknown column "{0}"'
+                                    'Found unknown column "{}"'
                                     .format(column)))
     else:
         errors.append(Error(basename,
-                            'We are unable to check datasheet_*.csv files for timepoint "{0}"'
+                            'We are unable to check datasheet_*.csv files for timepoint "{}"'
                             .format(suffix)))
     return (contents, errors)
 

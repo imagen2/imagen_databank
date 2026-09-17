@@ -73,7 +73,7 @@ def main():
             continue
         psc2 = PSC2_FROM_PSC1[psc1]
 
-        print('{0},{1}'.format(psc2, age))
+        print('{},{}'.format(psc2, age))
 
 
 if __name__ == "__main__":
