@@ -96,7 +96,7 @@ def process_psytools_timepoint(arguments):
                         id_check_dob = row['IdCheckDob']
                         try:
                             id_check_dob = datetime.strptime(id_check_dob, '%Y-%m-%d %H:%M:%S')
-                        except ValueError as e:
+                        except ValueError:
                             if id_check_dob:
                                 logging.error("%s: %s: invalid 'IdCheckDob': %s",
                                               name, psc1, id_check_dob)
@@ -149,7 +149,7 @@ def process_psytools_timepoint(arguments):
                                 month, year = trial_result.rsplit('_')
                                 month = int(month)
                                 year = int(year)
-                            except ValueError as e:
+                            except ValueError:
                                 logging.error("%s: invalid 'id_check_dob': %s",
                                               psc1, id_check_dob)
                             else:
