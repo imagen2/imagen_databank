@@ -1,5 +1,3 @@
-# noqa
-
 # Copyright (c) 2014-2017 CEA
 #
 # This software is governed by the CeCILL license under French law and
