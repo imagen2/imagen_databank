@@ -66,7 +66,7 @@ def _recruitment_psc1(s, center):
         else:
             logging.error('%s: incorrect PSC1 code', s)
     elif s:
-        logging.warn('%s: cannot interpret as PSC1 code', s)
+        logging.warning('%s: cannot interpret as PSC1 code', s)
     else:
         logging.debug('empty PSC1 code')
 

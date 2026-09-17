@@ -216,7 +216,7 @@ def process_dataset_BL(arguments):
                     cantab_sex = _sex_from_cantab(path)
                     break
             else:
-                logging.warn('%s: missing Cantab file', psc1)
+                logging.warning('%s: missing Cantab file', psc1)
 
             # QualityReport.txt
             quality_report_sex = None
@@ -228,7 +228,7 @@ def process_dataset_BL(arguments):
                     quality_report_sex = _sex_from_quality_report(path)
                     break
             else:
-                logging.warn('%s: missing QualityReport.txt', psc1)
+                logging.warning('%s: missing QualityReport.txt', psc1)
 
             # MRI DICOM files
             dicom_sex = None
@@ -263,11 +263,11 @@ def process_dataset_BL(arguments):
                                     logging.error('%s: invalid patient sex in DICOM file: %s',
                                                   dicom_path, patient_sex)
                             else:
-                                    logging.warn('%s: missing patient sex in DICOM file',
+                                    logging.warning('%s: missing patient sex in DICOM file',
                                                  dicom_path)
                             break
             else:
-                logging.warn('%s: missing DICOM file', psc1)
+                logging.warning('%s: missing DICOM file', psc1)
 
     logging.info('%s: processed compressed BL dataset', psc1)
 
@@ -290,7 +290,7 @@ def process_dataset_FU2(arguments):
                          psc1, cantab_sex)
             break
     else:
-        logging.warn('%s: missing Cantab file', psc1)
+        logging.warning('%s: missing Cantab file', psc1)
 
     # MRI DICOM files
     dicom_sex = None
@@ -325,11 +325,11 @@ def process_dataset_FU2(arguments):
                             logging.error('%s: invalid patient sex in DICOM file: %s',
                                           psc1, patient_sex)
                     else:
-                            logging.warn('%s: missing patient sex in DICOM file',
+                            logging.warning('%s: missing patient sex in DICOM file',
                                          psc1)
                     break
     else:
-        logging.warn('%s: missing DICOM file', psc1)
+        logging.warning('%s: missing DICOM file', psc1)
 
     logging.info('%s: processed FU2 dataset', psc1)
 
@@ -376,11 +376,11 @@ def process_dataset_FU3(arguments):
                                     logging.error('%s: invalid patient sex in DICOM file: %s',
                                                   dicom_path, patient_sex)
                             else:
-                                    logging.warn('%s: missing patient sex in DICOM file',
+                                    logging.warning('%s: missing patient sex in DICOM file',
                                                  dicom_path)
                             break
             else:
-                logging.warn('%s: missing DICOM file', psc1)
+                logging.warning('%s: missing DICOM file', psc1)
 
     logging.info('%s: processed zipped FU3 dataset', psc1)
 

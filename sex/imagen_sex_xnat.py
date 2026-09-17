@@ -94,7 +94,7 @@ def process_xnat_BL(arguments):
     xnat_sex = None
     xnat_gender = root.find('.//{http://nrg.wustl.edu/xnat}gender')
     if xnat_gender is None:
-        logging.warn("%s: missing 'gender' in XML file", psc2)
+        logging.warning("%s: missing 'gender' in XML file", psc2)
     else:
         xnat_gender = xnat_gender.text
         if xnat_gender in _XNAT_GENDER_MAPPING:
@@ -106,7 +106,7 @@ def process_xnat_BL(arguments):
     xnat_experiment_sex = None
     xnat_experiment_gender = root.find('.//{http://nrg.wustl.edu/xnat}experiment[@gender]')
     if xnat_experiment_gender is None:
-        logging.warn("%s: missing 'experiment[@gender]' in XML file", psc2)
+        logging.warning("%s: missing 'experiment[@gender]' in XML file", psc2)
     else:
         xnat_experiment_gender = xnat_experiment_gender.attrib['gender']
         xnat_experiment_gender = xnat_experiment_gender.strip()

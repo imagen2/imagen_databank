@@ -489,7 +489,7 @@ def main():
     results_NIfTI = dataset_FU2(FU2_NIFTI_DATASETS) # NIfTI
     duplicates = results_DICOM.keys() & results_NIfTI.keys()
     for duplicate in duplicates:
-        logging.warn('%s: duplicate DICOM and NIfTI data', duplicate)
+        logging.warning('%s: duplicate DICOM and NIfTI data', duplicate)
     results = results_NIfTI.copy()
     results.update(results_DICOM)
     results = cleanup('FU2', results, fields_FU2)

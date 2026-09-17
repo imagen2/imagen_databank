@@ -97,7 +97,7 @@ def list_datasets(path):
             logger.debug('%s: this is not a ZIP file ', zip_file)
             continue
         elif not zipfile.is_zipfile(zip_path):
-            logger.warn('%s: skip invalid ZIP file ', zip_file)
+            logger.warning('%s: skip invalid ZIP file ', zip_file)
             continue
 
         # Unix timestamp of the ZIP file
