@@ -78,8 +78,10 @@ def process_cantab(path):
                     logging.error('%s: %d columns in line %d', path, len(row), i)
                     break
             else:
-                for row in rows:
-                    ret.append(_process_row(row))
+                ret.extend(
+                    _process_row(row)
+                    for row in rows
+                )
 
     return ret
 

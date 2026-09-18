@@ -291,9 +291,10 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
     error_list = []
 
     if ziptree.directories:
-        for z in ziptree.directories.values():
-            error_list.append(Error(z.filename,
-                                    'Folder "Scanning" should not contain subfolders'))
+        error_list.extend(
+            Error(z.filename, 'Folder "Scanning" should not contain subfolders')
+            for z in ziptree.directories.values()
+        )
 
     for f, z in ziptree.files.items():
         behavioral_type, subject_id = _check_behavioral_name(f)
@@ -400,9 +401,10 @@ def _check_scanning(path, ziptree, suffix, psc1, date, expected):
 
     if expected_tests:
         missing_tests = expected_tests - actual_tests
-        for x in missing_tests:
-            error_list.append(Error(ziptree.filename,
-                                    f"Missing behavioral file '{x}_*.csv'"))
+        error_list.extend(
+            Error(ziptree.filename, f"Missing behavioral file '{x}_*.csv'")
+            for x in missing_tests
+        )
 
     return subject_ids, error_list
 
@@ -438,10 +440,11 @@ def _check_additional_data(path, ziptree, suffix, psc1, date, expected):
     error_list = []
 
     if len(ziptree.directories) > 1:
-        for d, z in ziptree.directories.items():
-            if d != 'Scanning':
-                error_list.append(Error(z.filename,
-                                        'Folder "AdditionalData" should contain only a "Scanning" folder'))
+        error_list.extend(
+            Error(z.filename, 'Folder "AdditionalData" should contain only a "Scanning" folder')
+            for d, z in ziptree.directories.items()
+            if d != 'Scanning'
+        )
     if 'Scanning' in ziptree.directories:
         s, e = _check_scanning(path, ziptree.directories['Scanning'],
                                suffix, psc1, date, expected)
@@ -609,9 +612,10 @@ def _check_ziptree(path, ziptree, suffix=None, psc1=None, date=None, expected=No
     error_list = []
 
     basename = os.path.basename(path)
-    for f, zipinfo in ziptree.files.items():
-        error_list.append(Error(zipinfo.filename,
-                                'Unexpected file at the root of the ZIP file'))
+    error_list.extend(
+        Error(zipinfo.filename, 'Unexpected file at the root of the ZIP file')
+        for f, zipinfo in ziptree.files.items()
+    )
 
     if len(ziptree.directories) < 1:
         error_list.append(Error(basename,
@@ -620,14 +624,19 @@ def _check_ziptree(path, ziptree, suffix=None, psc1=None, date=None, expected=No
     for d, z in ziptree.directories.items():
         # uppermost directory
         subject_id = d
-        error_list.extend([Error(z.filename, 'Incorrect uppermost folder name: ' + message)
-                           for message in _check_psc1(subject_id, suffix, psc1)])
-        for f in z.files:
-            error_list.append(Error(f, 'Unexpected file in the uppermost folder'))
-        for d in z.directories:
-            if d != 'AdditionalData' and d != 'ImageData':
-                error_list.append(Error(z.filename,
-                                        'Unexpected folder subfolder in the uppermost folder'))
+        error_list.extend(
+            Error(z.filename, 'Incorrect uppermost folder name: ' + message)
+            for message in _check_psc1(subject_id, suffix, psc1)
+        )
+        error_list.extend(
+            Error(f, 'Unexpected file in the uppermost folder')
+            for f in z.files
+        )
+        error_list.extend(
+            Error(z.filename, 'Unexpected folder subfolder in the uppermost folder')
+            for d in z.directories
+            if d != 'AdditionalData' and d != 'ImageData'
+        )
         # AdditionalData
         if 'AdditionalData' in z.directories:
             if psc1:

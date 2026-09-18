@@ -401,8 +401,10 @@ def _simple_check_content(path, function, suffix=None, psc1=None):
                                     'Multiple PSC1 codes inside file: {}'
                                     .format(', '.join(subject_ids))))
         for subject_id in subject_ids:
-            for message in _check_psc1(subject_id, suffix, psc1):
-                error_list.append(Error(basename, message))
+            error_list.extend(
+                Error(basename, message)
+                for message in _check_psc1(subject_id, suffix, psc1)
+            )
 
     return (subject_ids, error_list)
 
@@ -485,11 +487,11 @@ def _datasheet_check_content(path, function, suffix='FU2', psc1=None, date=None)
                             ))
     columns = set(contents[4])
     if suffix in _COLUMN_NAMES:
-        for column in _COLUMN_NAMES[suffix]['REQUIRED']:
-            if column not in columns:
-                errors.append(Error(basename,
-                                    f'Missing required column "{column}"'
-                                    ))
+        errors.extend(
+            Error(basename, f'Missing required column "{column}"')
+            for column in _COLUMN_NAMES[suffix]['REQUIRED']
+            if column not in columns
+        )
         for column in columns:
             if column and column not in (_COLUMN_NAMES[suffix]['REQUIRED'] +
                                          _COLUMN_NAMES[suffix]['OPTIONAL']):
