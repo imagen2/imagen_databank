@@ -103,7 +103,7 @@ def _initialize_psc1_dawba_psc2():
     psc2_from_psc1 = {}
     psc1_from_dawba = {}
     for psc2psc in (_PSC2PSC, _PSC2PSC_STRATIFY):
-        with open(psc2psc, 'r') as f:
+        with open(psc2psc) as f:
             for line in f:
                 psc1, dawba, psc2 = line.strip('\n').split('=')
                 # 1st line is: PSC1=DAWBA=PSC2
@@ -138,7 +138,7 @@ def _initialize_dob():
     """
     dob_from_psc1 = {}
     for dob in (_DOB, _DOB_STRATIFY):
-        with open(dob, 'r') as f:
+        with open(dob) as f:
             for line in f:
                 psc1, dob, dummy_when = line.strip('\n').split(',')
                 match = _REGEX_DOB.match(dob)

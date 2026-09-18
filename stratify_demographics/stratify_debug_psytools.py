@@ -71,7 +71,7 @@ def process_psytools_timepoint(arguments):
     sex_counter = {}
     dob_counter = {}
 
-    with open(path, 'r') as f:
+    with open(path) as f:
         reader = csv.DictReader(f, dialect='excel')
         for row in reader:
             if lsrc2:
@@ -250,13 +250,13 @@ def main():
     cantab_sex = cantab_timepoint('/neurospin/imagen/STRATIFY/RAW/PSC1')
 
     validated_dob = {}
-    with open(STRATIFY_DOB, 'r') as f:
+    with open(STRATIFY_DOB) as f:
         reader = csv.reader(f, dialect='excel')
         for row in reader:
             validated_dob[row[0]] = datetime.strptime(row[1], '%Y-%m-%d').date()
 
     validated_sex = {}
-    with open(STRATIFY_SEX, 'r') as f:
+    with open(STRATIFY_SEX) as f:
         reader = csv.reader(f, dialect='excel')
         for row in reader:
             validated_sex[row[0]] = row[1]

@@ -159,7 +159,7 @@ def _create_psc2_file(dawba_path, psc2_path):
         Output: PSC2-encoded CSV file.
 
     """
-    with open(dawba_path, 'r') as dawba_file:
+    with open(dawba_path) as dawba_file:
         # identify columns to anonymize/remove in header
         header = next(iter(dawba_file))
         items = header.split('\t')

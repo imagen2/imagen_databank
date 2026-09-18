@@ -81,7 +81,7 @@ def process_psytools_timepoint(arguments):
 
     result = {}
 
-    with open(path, 'r') as f:
+    with open(path) as f:
         reader = csv.DictReader(f, dialect='excel')
         for row in reader:
             if lsrc2:

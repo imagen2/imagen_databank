@@ -44,7 +44,7 @@ def convert_labID_to_PSC2_with_timepoint(labID,tab_conv_labID_psc1):
 
 def convert_file_to_PSC2(file_labID_PSC1_conv, input_dir_PSC1, output_dir_PSC2, delimiter_metadata):
     print("converting ", input_dir_PSC1, " to PSC2...")
-    with open(file_labID_PSC1_conv, 'r', errors='ignore') as file_labID_PSC1:
+    with open(file_labID_PSC1_conv, errors='ignore') as file_labID_PSC1:
         reader = csv.reader(file_labID_PSC1, delimiter=delimiter_metadata)
         tab_conv_labID_psc1 = list(reader)
         headers = tab_conv_labID_psc1[0]
@@ -52,7 +52,7 @@ def convert_file_to_PSC2(file_labID_PSC1_conv, input_dir_PSC1, output_dir_PSC2, 
         print(headers)
         # print(convert_labID_to_PSC2_with_timepoint("GB97ENVKCLR301518"))
 
-        with open(input_dir_PSC1, 'r', newline='',errors='ignore') as labID_infile:
+        with open(input_dir_PSC1, newline='',errors='ignore') as labID_infile:
             reader_input = csv.reader(labID_infile, delimiter='\t')
 
             data = list(reader_input)

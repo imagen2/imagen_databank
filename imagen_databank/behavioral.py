@@ -207,7 +207,7 @@ def _read_generic_behavioral(path, task, strict=True):
     sequence = []
     errors = []
 
-    with open(path, 'r') as behavioral:  # add newline='' in Python 3
+    with open(path) as behavioral:  # add newline='' in Python 3
         lines = behavioral.readlines()
 
     # attempt to handle broken CSV files with fully quoted lines

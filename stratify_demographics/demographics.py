@@ -219,7 +219,7 @@ def read_demographic_records(paths):
 def main():
     demographics = read_demographic_records(_DEMOGRAPHIC_RECORDS)
 
-    with open(_DEBUG_PSYTOOLS_SEX, 'r') as sex_file:
+    with open(_DEBUG_PSYTOOLS_SEX) as sex_file:
         sex_reader = reader(sex_file, dialect='excel')
 
         with open('STRATIFY_participants.csv', 'w') as demographics_file:

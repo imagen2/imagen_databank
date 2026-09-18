@@ -30,12 +30,12 @@ def validation_FU3(path):
 
 def main():
     # read different sources
-    with open('imagen_sex_recruitment.csv', 'r') as f:
+    with open('imagen_sex_recruitment.csv') as f:
         reader = csv.DictReader(f, dialect='excel')
         recruitment = {row['PSC1']: row['Recruitment']
                        for row in reader}
 
-    with open('imagen_sex_dataset.csv', 'r') as f:
+    with open('imagen_sex_dataset.csv') as f:
         reader = csv.DictReader(f, dialect='excel')
         dataset = {row['PSC1']:
                    (row.get('QualityReport.txt', None),
@@ -47,7 +47,7 @@ def main():
                     row.get('FU3 Cantab', None))
                    for row in reader}
 
-    with open('imagen_sex_psytools.csv', 'r') as f:
+    with open('imagen_sex_psytools.csv') as f:
         reader = csv.DictReader(f, dialect='excel')
         psytools = {row['PSC1']:
                     (row.get('Psytools BL', None),
@@ -56,12 +56,12 @@ def main():
                      row.get('Psytools FU3', None))
                     for row in reader}
 
-    with open('imagen_sex_xnat.csv', 'r') as f:
+    with open('imagen_sex_xnat.csv') as f:
         reader = csv.DictReader(f, dialect='excel')
         xnat = {row['PSC1']: row.get('XNAT gender', None)
                 for row in reader}
 
-    with open('imagen_sex_methylation.csv', 'r') as f:
+    with open('imagen_sex_methylation.csv') as f:
         reader = csv.DictReader(f, dialect='excel')
         methylation = {row['PSC1']:
                        (row.get('Methylation BL', None),

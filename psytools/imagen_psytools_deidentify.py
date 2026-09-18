@@ -96,7 +96,7 @@ def _deidentify_legacy(psc2_from_psc1, psytools_path, psc2_path):
         Output: PSC2-encoded Psytools file.
 
     """
-    with open(psytools_path, 'r') as psc1_file:
+    with open(psytools_path) as psc1_file:
         psc1_reader = DictReader(psc1_file, dialect='excel')
 
         # de-identify columns with timestamps
@@ -264,7 +264,7 @@ def _deidentify_lsrc2(psc2_from_psc1, psytools_path, psc2_path):
         'submitdate',
     }
 
-    with open(psytools_path, 'r') as psc1_file:
+    with open(psytools_path) as psc1_file:
         psc1_reader = DictReader(psc1_file, dialect='excel')
         # columns to remove entirely
         fieldnames = [x for x in psc1_reader.fieldnames

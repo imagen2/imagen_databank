@@ -362,7 +362,7 @@ def main():
 
         root, ext = os.path.splitext(psc2psc)
         output = root + '_' + datetime.date.today().isoformat() + ext
-        with open(psc2psc, 'r') as p, open(output, 'w') as o:
+        with open(psc2psc) as p, open(output, 'w') as o:
             # skip header line
             line = next(p).strip('\n')
             print(line, file=o)

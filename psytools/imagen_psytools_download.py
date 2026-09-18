@@ -286,7 +286,7 @@ def download_legacy(base_url, netrc_file, datasets, psytools_dir):
             # skip files that have not changed since last update
             psytools_path = os.path.join(psytools_dir, dataset)
             if os.path.isfile(psytools_path):
-                with open(psytools_path, 'r') as uncompressed_file:
+                with open(psytools_path) as uncompressed_file:
                     if uncompressed_file.read() == data:
                         logging.info('skip unchanged file: %s', psytools_path)
                         continue
@@ -562,7 +562,7 @@ def download_lsrc2(base_url, netrc_file, dispatch):
 
             # skip files that have not changed since last update
             if os.path.isfile(psytools_path):
-                with open(psytools_path, 'r') as psytools:
+                with open(psytools_path) as psytools:
                     if psytools.read() == data:
                         logging.info('skip unchanged file: %s', psytools_path)
                         continue

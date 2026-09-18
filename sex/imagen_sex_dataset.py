@@ -165,7 +165,7 @@ def _sex_from_quality_report(path):
     """
     result = None
 
-    with open(path, 'r', encoding='latin1') as f:
+    with open(path, encoding='latin1') as f:
         for line in f:
             line = [x.strip() for x in line.split('=')]
             if line[0] == 'Gender':
