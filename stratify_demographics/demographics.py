@@ -249,7 +249,7 @@ def main():
                         'sex': sex, 
                         'recruitment site': center,
                     }
-                row = {x: data.get(x, None)
+                row = {x: data.get(x)
                        for x in _FINAL_COLUMNS}
                 demographics_writer.writerow(row)
 
