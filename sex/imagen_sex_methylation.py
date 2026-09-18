@@ -49,7 +49,7 @@ def methylation_process(path, psc1_from_chip):
                 sex = 'M'
             else:
                 logging.error('%s: incorrect sex (%s) in prediction CSV file: %s',
-                              chip, sex, f)
+                              chip, sex, csvfile)
                 continue
             if chip in psc1_from_chip:
                 psc1, timepoint = psc1_from_chip[chip]
