@@ -51,7 +51,7 @@ def convert_labID_to_PSC2_with_timepoint(labID):
 if __name__ == "__main__":
     with open(file_labID_PSC1_conv, 'r', errors='ignore') as file_labID_PSC1:
         reader = csv.reader(file_labID_PSC1, delimiter=',')
-        tab_conv_labID_psc1 = [row for row in reader]
+        tab_conv_labID_psc1 = list(reader)
         headers=tab_conv_labID_psc1[0]
         #headers = list(next(reader))
         print(headers)
@@ -60,7 +60,7 @@ if __name__ == "__main__":
         with open(input_dir_imagen_PSC1, 'r', newline='',errors='ignore') as labID_infile:
             reader_input = csv.reader(labID_infile, delimiter='\t')
 
-            data = [row for row in reader_input]
+            data = list(reader_input)
 
             #print(data[0])
             #intialize list of lists that will be written in the output file
