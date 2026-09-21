@@ -71,8 +71,7 @@ def read_cant(path):
     for name in cantfile.namelist():
         if name.endswith('index.xml'):
             root = etree.fromstring(cantfile.read(name))
-            for element in root.findall(_ID_XPATH):
-                subject_ids.add(element.attrib['value'])
+            subject_ids.update(element.attrib['value'] for element in root.findall(_ID_XPATH))
     cantfile.close()
     return subject_ids
 
