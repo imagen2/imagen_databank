@@ -614,7 +614,7 @@ def _check_ziptree(path, ziptree, suffix=None, psc1=None, date=None, expected=No
     basename = os.path.basename(path)
     error_list.extend(
         Error(zipinfo.filename, 'Unexpected file at the root of the ZIP file')
-        for f, zipinfo in ziptree.files.items()
+        for zipinfo in ziptree.files.values()
     )
 
     if len(ziptree.directories) < 1:
