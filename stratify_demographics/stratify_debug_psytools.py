@@ -323,7 +323,7 @@ def main():
                                     today.strftime('%Y-%m-%d_%H:%M:%S.0'))),
                           file=f)
                 else:
-                    logging.error('%s: skipping incomplete date: %s', psc1, str(value))
+                    logging.error('%s: skipping incomplete date: %s', psc1, value)
 
 
 if __name__ == "__main__":

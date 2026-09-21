@@ -242,10 +242,10 @@ def process_dataset_BL(arguments):
                             dataset = dicom.read_file(dicom_path, force=True)
                         except OSError as e:
                             logging.error('%s: cannot read file: %s',
-                                          psc1, str(e))
+                                          psc1, e)
                         except dicom.filereader.InvalidDicomError as e:
                             logging.error('%s: cannot read nonstandard DICOM file: %s',
-                                          psc1, str(e))
+                                          psc1, e)
                         else:
                             if 'PatientSex' in dataset:
                                 patient_sex = dataset.PatientSex
@@ -304,10 +304,10 @@ def process_dataset_FU2(arguments):
                     dataset = dicom.read_file(dicom_path, force=True)
                 except OSError as e:
                     logging.error('%s: cannot read file: %s',
-                                  psc1, str(e))
+                                  psc1, e)
                 except dicom.filereader.InvalidDicomError as e:
                     logging.error('%s: cannot read nonstandard DICOM file: %s',
-                                  psc1, str(e))
+                                  psc1, e)
                 else:
                     if 'PatientSex' in dataset:
                         patient_sex = dataset.PatientSex
@@ -354,10 +354,10 @@ def process_dataset_FU3(arguments):
                             dataset = dicom.read_file(dicom_path, force=True)
                         except OSError as e:
                             logging.error('%s: cannot read file: %s',
-                                          psc1, str(e))
+                                          psc1, e)
                         except dicom.filereader.InvalidDicomError as e:
                             logging.error('%s: cannot read nonstandard DICOM file: %s',
-                                          psc1, str(e))
+                                          psc1, e)
                         else:
                             if 'PatientSex' in dataset:
                                 patient_sex = dataset.PatientSex

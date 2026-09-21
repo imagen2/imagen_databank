@@ -165,7 +165,7 @@ def deidentify(timepoint, psc1, zip_path, bids_path):
             zip_file.extractall(tempdir)
         except (zipfile.BadZipFile, OSError, EOFError, zlib.error) as e:
             logger.error('%s/%s: corrupt ZIP file: %s',
-                         psc1, timepoint,  str(e))
+                         psc1, timepoint,  e)
             return
 
         os.makedirs(out_ses_path)

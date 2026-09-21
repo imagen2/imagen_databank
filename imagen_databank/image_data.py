@@ -251,11 +251,11 @@ def walk_image_data(path, force=False):
             try:
                 metadata = read_metadata(abspath, force=force)
             except OSError as e:
-                logger.error('cannot read file (%s): %s', str(e), relpath)
+                logger.error('cannot read file (%s): %s', e, relpath)
             except InvalidDicomError as e:
-                logger.error('cannot read nonstandard DICOM file: %s: %s', str(e), relpath)
+                logger.error('cannot read nonstandard DICOM file: %s: %s', e, relpath)
             except AttributeError as e:
-                logger.error('missing attribute: %s: %s', str(e), relpath)
+                logger.error('missing attribute: %s: %s', e, relpath)
             else:
                 yield (metadata, relpath)
 

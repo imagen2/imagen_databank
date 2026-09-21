@@ -509,7 +509,7 @@ def download_lsrc2(base_url, netrc_file, dispatch):
             except LimeSurveyError as e:
                 # skip surveys missing token tables (should not happen!)
                 logging.error('skip survey without token table ("%s"): %s"',
-                              str(e), title)
+                              e, title)
                 continue
 
             for participant in participants:
